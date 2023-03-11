@@ -1,13 +1,13 @@
-import { Button, Card, Col, Row } from "antd";
+import { Avatar, Button, Card, Col, Dropdown, Menu, Row } from "antd";
 import Footer from "../component/footer/Footer";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import GenieHeader from "../component/header/GenieHeader";
 import Chat from "./chat/Chat";
 
-
 const Home: React.FC = (props) => {
 
+  const [currentPage, setCurrentPage] = useState("chat");
 
   const handleMenuClick = (menu:string) => {
     renderBody(menu);
@@ -16,6 +16,7 @@ const Home: React.FC = (props) => {
   const renderChat=()=>{
     return (<Chat></Chat>);
   }
+
 
   const renderAccountBuy=()=>{
       return(<Row>
@@ -37,17 +38,19 @@ const Home: React.FC = (props) => {
     if(menu === "account"){
       return renderAccountBuy();
     }
+    if(menu === "about"){
+      return (<div>about</div>);
+    }
     return (<div></div>);
   }
 
 
     return(<div>
       <GenieHeader onMenuClick = { (value) =>{
-        debugger
-        // handleMenuClick(value);
+        setCurrentPage(value.toString());
       }}/>
       <div className="content">
-        {renderBody("chat")}
+        {renderBody(currentPage)}
       </div>
       <Footer></Footer>
     </div>);
