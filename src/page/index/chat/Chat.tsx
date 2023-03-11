@@ -1,9 +1,110 @@
-import { Input } from "antd";
-import React from "react";
+import { Button, Input } from "antd";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./Chat.css"
+import dayjs from 'dayjs';
 
 const Chat: React.FC = (props) => {
+
+    const [inputValue, setInputValue] = useState('');
+    const [webSocketStore, setWebSocketStore] = useState<WebSocket | null>(null);
+    const [myMap, setMyMap] = useState(new Map());
+
+    const handleChange = (e:any) => {
+      setInputValue(e.target.value);
+    };
+    
+    function getCurrentTime() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = padLeftZero(now.getMonth() + 1);
+        const date = padLeftZero(now.getDate());
+        const hour = padLeftZero(now.getHours());
+        const minute = padLeftZero(now.getMinutes());
+        const second = padLeftZero(now.getSeconds());
+        const millisecond = padLeftZero(now.getMilliseconds(), 3);
+        return `${year}${month}${date} ${hour}:${minute}:${second} ${millisecond}`;
+      }
+      
+      // 左边补零
+      function padLeftZero(val: number, len: number = 2) {
+        return (Array(len).join('0') + val).slice(-len);
+      }
+
+    React.useEffect(() => {
+        var websocket:any = null;
+
+        //判断当前浏览器是否支持WebSocket
+        if('WebSocket' in window) {
+            //改成你的地址
+            websocket = new WebSocket("wss://ai.poemhub.top/api/websocket/1");
+        } else {
+            alert('当前浏览器 Not support websocket')
+        }
+
+           //连接发生错误的回调方法
+        websocket.onerror = function(e:any) {
+            console.log("WebSocket连接发生错误",e);
+        };
+        
+        //连接成功建立的回调方法
+        websocket.onopen = function() {
+            console.log("WebSocket连接成功");
+        }
+
+        //接收到消息的回调方法
+        websocket.onmessage = function(event:any) {
+            console.log("接收到消息",event);
+            const now = getCurrentTime();
+            const newMap = new Map(myMap);
+            newMap.set(now, event.data.toString());
+            // setMyMap(newMap);
+            setMyMap((prevMapState) => {
+                const newMapState = new Map<string, any>(prevMapState);
+                newMapState.set(now, event.data.toString());
+                return newMapState;
+              });
+        }
+        
+        //连接关闭的回调方法
+        websocket.onclose = function() {
+            console.log("WebSocket closed");
+        }
+        
+        //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+        window.onbeforeunload = function() {
+            closeWebSocket();
+        }
+        
+        //关闭WebSocket连接
+        function closeWebSocket() {
+            websocket.close();
+        }
+
+        setWebSocketStore(websocket);
+
+      }, []);
+
+    const handleSend = () => {
+        if(inputValue){
+            if(webSocketStore == null){
+                return ;
+            }
+            //发送消息
+            webSocketStore.send(inputValue);
+        }
+    };
+
+    const renderChat = () => {
+        const tagList: JSX.Element[] = [];
+        myMap.forEach((value,key)=>{
+            tagList.push(<div className="chat-message">
+            <div className="message-time">{key}</div>
+            <div className="message-text">{value}</div>
+            </div>);
+        });
+        return tagList;
+    };
 
     return(
         <div className="chat-container">
@@ -11,26 +112,11 @@ const Chat: React.FC = (props) => {
                 <h2>对话</h2>
             </div>
             <div className="chat-body">
-                <div className="chat-message">
-                <div className="message-time">10:00 AM</div>
-                <div className="message-text">Hello, how can I help you today?</div>
-                </div>
-                <div className="chat-message">
-                <div className="message-time">10:05 AM</div>
-                <div className="message-text">I have a question about React.</div>
-                </div>
-                <div className="chat-message">
-                <div className="message-time">10:07 AM</div>
-                <div className="message-text">Sure, what's your question?</div>
-                </div>
-                <div className="chat-message">
-                <div className="message-time">10:10 AM</div>
-                <div className="message-text">How do I pass data from a child component to a parent component in React?</div>
-                </div>
+                {renderChat()}
             </div>
             <div className="chat-form">
-                <Input type="text" placeholder="Type your message here..."/>
-                <button>发送</button>
+                <Input id="talkInput" value={inputValue} onChange={handleChange} type="text" placeholder="输入会话内容"/>
+                <Button onClick={handleSend}>发送</Button>
             </div>
         </div>
     );
