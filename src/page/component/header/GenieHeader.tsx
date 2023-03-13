@@ -75,7 +75,7 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
         <div>
             <nav>
                 <a onClick={()=>handleMenuClick('chat')}>聊天</a>
-                <a onClick={()=>handleMenuClick('account')}>账号购买</a>
+                <a onClick={()=>handleMenuClick('account')}>订阅</a>
                 <a onClick={()=>handleMenuClick('about')}>关于</a>
                 {renderLogin()}
             </nav>

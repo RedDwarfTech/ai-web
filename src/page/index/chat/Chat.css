@@ -23,6 +23,7 @@
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     width: 1400px;
+    font-size: 20px;
   }
   
   .chat-body {
@@ -37,13 +38,11 @@
   }
   
   .chat-message .message-time {
-    font-size: 20px;
     color: #aaa;
     margin-bottom: 5px;
   }
   
   .chat-message .message-text {
-    font-size: 20px;
     padding: 10px;
     background-color: #f2f2f2;
     border-radius: 5px;
@@ -52,6 +51,7 @@
   
   .chat-form {
     display: flex;
+    padding: 20px;
     background-color: #f2f2f2;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -59,6 +59,7 @@
   
   .chat-form input[type="text"] {
     width: 95%;
+    padding: 10px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
@@ -67,13 +68,15 @@
   }
   
   .chat-form button {
+    background-color: #4d4d4d;
     color: #fff;
-    font-size: 18px;
+    padding: 5px 20px;
+    font-size: 16px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-left: 5px;
     margin-top: 5px;
+    margin-left: 10px;
   }
   
   .chat-form button:hover {

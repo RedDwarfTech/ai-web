@@ -109,7 +109,7 @@ const Chat: React.FC = (props) => {
     return(
         <div className="chat-container">
             <div className="chat-header">
-                <h4>对话</h4>
+                <span>会话</span>
             </div>
             <div className="chat-body">
                 {renderChat()}

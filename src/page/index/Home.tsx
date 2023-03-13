@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import GenieHeader from "../component/header/GenieHeader";
 import Chat from "./chat/Chat";
 import Goods from "./goods/Goods";
+import About from "../about/About";
 
 const Home: React.FC = (props) => {
 
@@ -29,7 +30,7 @@ const Home: React.FC = (props) => {
       return renderAccountBuy();
     }
     if(menu === "about"){
-      return (<div>about</div>);
+      return (<About></About>);
     }
     return (<div></div>);
   }

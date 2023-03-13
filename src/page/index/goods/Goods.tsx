@@ -10,14 +10,14 @@ const Chat: React.FC = (props) => {
     const dataSource = [
         {
           key: '4',
-          name: 'ChatGPT/OpenAi独享成品账号',
-          age: 30,
-          address: '1',
+          name: 'Genie会员1月',
+          age: "9.9/月",
+          address: '--',
         },
         {
           key: '5',
           name: '支付测试/补差价',
-          age: 0.01,
+          age: '0.01/月',
           address: '10',
         },
       ];
@@ -43,7 +43,7 @@ const Chat: React.FC = (props) => {
           dataIndex: 'address',
           key: 'address',
           render: (record:any) => {
-            return (<div><Button onClick={()=>handlePay(record)} type="primary" style={{marginTop:20}}>购买</Button></div>);
+            return (<div><Button onClick={()=>handlePay(record)} type="primary">购买</Button></div>);
           }
         },
       ];
