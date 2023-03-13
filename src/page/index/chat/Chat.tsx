@@ -37,7 +37,7 @@ const Chat: React.FC = (props) => {
         //判断当前浏览器是否支持WebSocket
         if('WebSocket' in window) {
             //改成你的地址
-            websocket = new WebSocket("wss://ai.poemhub.top/post/websocket/1");
+            websocket = new WebSocket("wss://ai.poemhub.top/post/websocket");
         } else {
             alert('当前浏览器 Not support websocket')
         }
@@ -109,14 +109,14 @@ const Chat: React.FC = (props) => {
     return(
         <div className="chat-container">
             <div className="chat-header">
-                <h2>对话</h2>
+                <h4>对话</h4>
             </div>
             <div className="chat-body">
                 {renderChat()}
             </div>
             <div className="chat-form">
                 <Input id="talkInput" value={inputValue} onChange={handleChange} type="text" placeholder="输入会话内容"/>
-                <Button onClick={handleSend}>发送</Button>
+                <Button onClick={handleSend}><span>发送</span></Button>
             </div>
         </div>
     );
