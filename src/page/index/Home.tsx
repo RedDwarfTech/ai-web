@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import GenieHeader from "../component/header/GenieHeader";
 import Chat from "./chat/Chat";
+import Goods from "./goods/Goods";
 
 const Home: React.FC = (props) => {
 
@@ -19,16 +20,11 @@ const Home: React.FC = (props) => {
 
 
   const renderAccountBuy=()=>{
-      return(<Row>
-          <Col>
-          <Card style={{ width: 200 }}>
-            <p>ChatGPT账号</p>
-            <p><Button type="primary" style={{
-                marginTop:20
-              }}>购买</Button></p>
-          </Card>
-          </Col>
-        </Row>);
+      return(
+        <div>    
+            <Goods></Goods>
+        </div>
+        );
   }
 
   const renderBody=(menu: string)=>{

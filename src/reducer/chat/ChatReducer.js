@@ -1,12 +1,12 @@
 
 const initState = {
-    article: {}
+    chat: {}
 };
 
 const ChatReducer = (state=initState, action) => {
     switch (action.type) {
         case "GET_ARTICLE":
-            state = action.article;
+            state = action.chat;
             break;
         default:
             break;
