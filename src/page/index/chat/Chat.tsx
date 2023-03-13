@@ -23,7 +23,7 @@ const Chat: React.FC = (props) => {
         const minute = padLeftZero(now.getMinutes());
         const second = padLeftZero(now.getSeconds());
         const millisecond = padLeftZero(now.getMilliseconds(), 3);
-        return `${year}${month}${date} ${hour}:${minute}:${second} ${millisecond}`;
+        return `${year}-${month}-${date} ${hour}:${minute}:${second} ${millisecond}`;
       }
       
       // 左边补零

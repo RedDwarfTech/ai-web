@@ -24,17 +24,17 @@ const Chat: React.FC = (props) => {
       
       const columns = [
         {
-          title: '商品名称',
+          title: '名称',
           dataIndex: 'name',
           key: 'name',
         },
         {
-          title: '商品单价',
+          title: '单价',
           dataIndex: 'age',
           key: 'age',
         },
         {
-          title: '商品库存',
+          title: '库存',
           dataIndex: 'address',
           key: 'address',
         },
