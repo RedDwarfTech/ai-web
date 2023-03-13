@@ -1,4 +1,3 @@
-import { Avatar, Button, Card, Col, Dropdown, Menu, Row } from "antd";
 import Footer from "../component/footer/Footer";
 import React, { useState } from "react";
 import { connect } from "react-redux";
@@ -10,14 +9,9 @@ const Home: React.FC = (props) => {
 
   const [currentPage, setCurrentPage] = useState("chat");
 
-  const handleMenuClick = (menu:string) => {
-    renderBody(menu);
-  };
-
   const renderChat=()=>{
     return (<Chat></Chat>);
   }
-
 
   const renderAccountBuy=()=>{
       return(

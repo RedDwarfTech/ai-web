@@ -37,7 +37,7 @@ const Chat: React.FC = (props) => {
         //判断当前浏览器是否支持WebSocket
         if('WebSocket' in window) {
             //改成你的地址
-            websocket = new WebSocket("wss://ai.poemhub.top/api/websocket/1");
+            websocket = new WebSocket("wss://ai.poemhub.top/post/websocket/1");
         } else {
             alert('当前浏览器 Not support websocket')
         }
