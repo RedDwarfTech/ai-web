@@ -9,13 +9,13 @@ const Chat: React.FC = (props) => {
 
     const dataSource = [
         {
-          key: '4',
+          id: '4',
           name: 'Genie会员1月',
           age: "9.9/月",
           address: '--',
         },
         {
-          key: '5',
+          id: '5',
           name: '支付测试/补差价',
           age: '0.01/月',
           address: '10',
@@ -23,6 +23,12 @@ const Chat: React.FC = (props) => {
       ];
       
       const columns = [
+        {
+          title: 'ID',
+          dataIndex: 'id',
+          key: 'id',
+          
+        },
         {
           title: '名称',
           dataIndex: 'name',
@@ -42,15 +48,17 @@ const Chat: React.FC = (props) => {
           title: '操作',
           dataIndex: 'address',
           key: 'address',
-          render: (record:any) => {
+          render: (text:string,record:any,index:number) => {
             return (<div><Button onClick={()=>handlePay(record)} type="primary">购买</Button></div>);
           }
         },
       ];
 
       const handlePay = (row:any) => {
-        alert("d");
-        doPay(row.id);
+        let param = {
+          productId: row.id
+        };
+        doPay(param);
       };
       
     return(

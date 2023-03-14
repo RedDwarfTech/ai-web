@@ -17,9 +17,10 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
     };
 
     const handleLogout=()=>{
-        localStorage.removeItem('isAiLoggedIn');
+        localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('aiAccessToken');
-        localStorage.removeItem('aiAvatarUrl');
+        localStorage.removeItem('aiRefreshToken');
+        localStorage.removeItem('avatarUrl');
         window.location.href="https://ai.poemhub.top";
     }
 

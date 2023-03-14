@@ -11,3 +11,7 @@ export function doPay(params: any) {
     };
     return requestWithAction(config, createOrder);
 }
+
+export function createQrCodeImpl(params: { cruiseProductId: string | undefined; }) {
+  throw new Error("Function not implemented.");
+}
