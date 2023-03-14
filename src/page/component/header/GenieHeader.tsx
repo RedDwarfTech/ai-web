@@ -2,8 +2,6 @@ import { Avatar, Button, Dropdown, Menu } from "antd";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./GenieHeader.css"
-import queryString from 'query-string';
-import { useLocation } from "react-router-dom";
 import { userLoginImpl } from "../../../service/user/UserService";
 
 export type HeaderFormProps = {
@@ -13,7 +11,6 @@ export type HeaderFormProps = {
 const GenieHeader: React.FC<HeaderFormProps> = (props) => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isAiLoggedIn') || false);
-    const location = useLocation();
 
     const handleMenuClick = (menu:string) => {
         props.onMenuClick(menu);
@@ -61,12 +58,14 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
               </a>);
           }
         }
-        const parsed = queryString.parse(location.search);
-        if(parsed != null && parsed.access_token && parsed.avatar_url){
-          localStorage.setItem('isAiLoggedIn', "true");
-          localStorage.setItem('aiAccessToken', parsed.access_token.toString());
-          localStorage.setItem('aiAvatarUrl',parsed.avatar_url.toString());
-          window.location.href="https://ai.poemhub.top";
+        const accessTokenCookie = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
+        if(accessTokenCookie){
+          const refreshTokenCookie = document.cookie.split('; ').find(row => row.startsWith('refreshToken='));
+          const avatarUrlCookie = document.cookie.split('; ').find(row => row.startsWith('avatarUrl='));
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('aiAccessToken', accessTokenCookie);
+          localStorage.setItem('aiRefreshToken', refreshTokenCookie?refreshTokenCookie:"");
+          localStorage.setItem('avatarUrl',avatarUrlCookie?avatarUrlCookie:"");
         }
         return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
       }
