@@ -5,15 +5,18 @@ import * as payService  from '../../service/pay/PayService';
 import { connect } from "react-redux";
 import { createOrder } from "../../action/pay/PayAction";
 
+export type PayProps = {
+  payFormText: string;
+};
 
-const Pay: React.FC = (props:any) => {
+const Pay: React.FC<PayProps> = (props) => {
 
   const [selectedKey, setSelectedKey] = useState(null);
 
   React.useEffect(() => {
     
   }, []);
-  const formText = props.pay.formText;
+  const formText = props.payFormText;
 
   const handleSelect = () => {
     //setSelectedKey(key);
@@ -107,14 +110,14 @@ const Pay: React.FC = (props:any) => {
   );
 }
 
-const mapStateToProps = (state: { pay: any; }) => ({
-  pay: state.pay
+const mapStateToProps = (state: { formText: any; }) => ({
+  formText: state.formText
 });
 
-const mapDispatchToProps = (dispatch: (arg0: { type: string; order: string; }) => void) => {
+const mapDispatchToProps = (dispatch:any) => {
   return {
-    createOrder: (pay: any) => {
-      dispatch(createOrder())
+    createOrder: (formText: String) => {
+      dispatch(createOrder(formText))
     }
   };
 };

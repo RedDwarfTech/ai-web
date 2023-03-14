@@ -4,7 +4,6 @@ import "./PaySuccess.css"
 import queryString from 'query-string';
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router-dom';
-import { createOrder } from "../../../action/pay/PayAction";
 
 const PaySuccess: React.FC = (props) => {
 
@@ -44,7 +43,7 @@ pay: state.pay
 const mapDispatchToProps = (dispatch: (arg0: any) => void) => {
 return {
     createOrder: () => {
-    dispatch(createOrder())
+    
     }
 };
 };

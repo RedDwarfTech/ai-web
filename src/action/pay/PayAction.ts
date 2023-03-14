@@ -1,6 +1,6 @@
-export function createOrder() {
+export function createOrder(pay: any) {
     return {
         type: "CREATE_ORDER",
-        order: ''
+        formText: pay.formText
     };
 }

@@ -1,6 +1,6 @@
 
 const initState = {
-    order: {}
+    formText:""
 };
 
 const PayReducer = (state=initState, action) => {
@@ -8,7 +8,7 @@ const PayReducer = (state=initState, action) => {
         case "CREATE_ORDER":
             return {
                 ...state,
-                order: action.order
+                formText: action.formText 
             };
         default:
             break;

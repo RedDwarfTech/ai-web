@@ -10,7 +10,7 @@ instance.defaults.headers.post['Content-Type'] = 'application/json'
 
 instance.interceptors.request.use(
     (config) => {
-      const accessToken = localStorage.getItem('aiAccessToken');
+      const accessToken = "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOjY3LCJkZXZpY2VJZCI6IjAiLCJhcHBJZCI6InZPZ2hvbzEwTDkiLCJleHAiOjE2Nzg4OTQwMTF9.rn532z6RroWiC5UrQonzJ3SICX_wR_TO_Wr29m-9X6W32fnz5Aj5i5OmDrrgkcRJzVXsyBzbvng4ZiJ1_6xGAg";//localStorage.getItem('aiAccessToken');
       accessToken && (config.headers['x-access-token'] = accessToken);
       config.headers['x-request-id'] = uuid();
       return config

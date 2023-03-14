@@ -2,8 +2,10 @@ import { Button, Table } from "antd";
 import { connect } from "react-redux";
 import "./Goods.css"
 import { doPay } from "../../../service/pay/PayService";
+import Pay from "../../pay/Pay";
+import { createOrder } from "../../../action/pay/PayAction";
 
-const Chat: React.FC = (props) => {
+const Goods: React.FC = (props:any) => {
 
     const dataSource = [
         {
@@ -59,22 +61,28 @@ const Chat: React.FC = (props) => {
         doPay(param);
       };
       
+    let generateFormText = props.formText;
+      debugger
     return(
         <div>
              <Table dataSource={dataSource} columns={columns} />
+             <Pay payFormText={generateFormText}></Pay>
+             <div>{props.formText}</div>
         </div>
     );
 }
 
-const mapStateToProps = (state: any) => ({
-    robot: state.robot
+  const mapStateToProps = (state: any) => ({
+    pay: state.pay
   });
   
   const mapDispatchToProps = (dispatch: any) => {
     return {
-      
+      createOrder: (pay: any) => {
+        dispatch(createOrder(pay))
+      }
     };
   };
   
-  export default connect(mapStateToProps, mapDispatchToProps)(Chat);
+  export default connect(mapStateToProps, mapDispatchToProps)(Goods);
   
