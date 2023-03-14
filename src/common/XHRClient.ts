@@ -10,7 +10,7 @@ instance.defaults.headers.post['Content-Type'] = 'application/json'
 
 instance.interceptors.request.use(
     (config) => {
-      const accessToken = localStorage.getItem('cruiseAccessToken');
+      const accessToken = localStorage.getItem('aiAccessToken');
       accessToken && (config.headers['x-access-token'] = accessToken);
       config.headers['x-request-id'] = uuid();
       return config
