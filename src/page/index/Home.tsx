@@ -35,6 +35,7 @@ const Home: React.FC = (props) => {
     return (<div></div>);
   }
 
+  const accessTokenCookie = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
 
     return(<div>
       <GenieHeader onMenuClick = { (value) =>{
