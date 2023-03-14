@@ -61,7 +61,7 @@ const Goods: React.FC = (props:any) => {
         doPay(param);
       };
       
-    let generateFormText = props.formText;
+    let generateFormText = props.pay.formText;
       debugger
     return(
         <div>
