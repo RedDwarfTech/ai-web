@@ -59,10 +59,11 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
               </a>);
           }
         }
-        const accessTokenCookie = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
-        if(accessTokenCookie){
-          const refreshTokenCookie = document.cookie.split('; ').find(row => row.startsWith('refreshToken='));
-          const avatarUrlCookie = document.cookie.split('; ').find(row => row.startsWith('avatarUrl='));
+        const accessTokenOrigin = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
+        if(accessTokenOrigin){
+          const accessTokenCookie = accessTokenOrigin.split("=")[1];
+          const refreshTokenCookie = document.cookie.split('; ').find(row => row.startsWith('refreshToken='))?.split("=")[1];
+          const avatarUrlCookie = document.cookie.split('; ').find(row => row.startsWith('avatarUrl='))?.split("=")[1];
           localStorage.setItem('isLoggedIn', 'true');
           localStorage.setItem('aiAccessToken', accessTokenCookie);
           localStorage.setItem('aiRefreshToken', refreshTokenCookie?refreshTokenCookie:"");

@@ -2,7 +2,6 @@ import { Button, Input } from "antd";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import "./Chat.css"
-import dayjs from 'dayjs';
 
 const Chat: React.FC = (props) => {
 

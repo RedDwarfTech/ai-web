@@ -1,8 +1,6 @@
-import { Button, Input, Table } from "antd";
-import React, { useState } from "react";
+import { Button, Table } from "antd";
 import { connect } from "react-redux";
 import "./Goods.css"
-import dayjs from 'dayjs';
 import { doPay } from "../../../service/pay/PayService";
 
 const Chat: React.FC = (props) => {
