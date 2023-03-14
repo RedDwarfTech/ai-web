@@ -10,7 +10,7 @@ export type HeaderFormProps = {
 
 const GenieHeader: React.FC<HeaderFormProps> = (props) => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isAiLoggedIn') || false);
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
 
     const handleMenuClick = (menu:string) => {
         props.onMenuClick(menu);
