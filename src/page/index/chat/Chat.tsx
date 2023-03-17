@@ -9,6 +9,8 @@ const Chat: React.FC = (props) => {
     const [inputValue, setInputValue] = useState('');
     const [webSocketStore, setWebSocketStore] = useState<WebSocket | null>(null);
     const [myMap, setMyMap] = useState(new Map());
+    const HEARTBEAT_INTERVAL_MS = 20000; // 心跳间隔，单位为毫秒
+
 
     const handleChange = (e:any) => {
       setInputValue(e.target.value);
@@ -48,16 +50,7 @@ const Chat: React.FC = (props) => {
         }
 
         websocket.onmessage = function(event:any) {
-            console.log("接收到消息",event);
-            const now = getCurrentTime();
-            const newMap = new Map(myMap);
-            newMap.set(now, event.data.toString());
-            // setMyMap(newMap);
-            setMyMap((prevMapState) => {
-                const newMapState = new Map<string, any>(prevMapState);
-                newMapState.set(now, event.data.toString());
-                return newMapState;
-              });
+            appenMsg(event.data.toString());
         }
         
         websocket.onclose = function() {
@@ -75,6 +68,17 @@ const Chat: React.FC = (props) => {
 
         setWebSocketStore(websocket);
 
+        // 设置心跳定时器
+        const heartbeatInterval = setInterval(() => {
+            if (websocket.readyState === WebSocket.OPEN) {
+                websocket.send(JSON.stringify({ type: 'ping' }));
+            }
+        }, HEARTBEAT_INTERVAL_MS);
+
+        return () => {
+            clearInterval(heartbeatInterval);
+            websocket.close();
+        };
       }, []);
 
     const handleSend = () => {
@@ -82,6 +86,8 @@ const Chat: React.FC = (props) => {
             if(webSocketStore == null){
                 return ;
             }
+            appenMsg(inputValue);
+            setInputValue('');
             if(webSocketStore.readyState === WebSocket.OPEN){
                 webSocketStore.send(inputValue);
             } else if (webSocketStore.readyState === WebSocket.CLOSED){
@@ -90,12 +96,25 @@ const Chat: React.FC = (props) => {
         }
     };
 
+    const appenMsg =(data:string)=>{
+        const now = getCurrentTime();
+        const newMap = new Map(myMap);
+        newMap.set(now, data);
+        setMyMap((prevMapState) => {
+            const newMapState = new Map<string, any>(prevMapState);
+            newMapState.set(now, data);
+            return newMapState;
+          });
+    }
+
     const renderChat = () => {
         const tagList: JSX.Element[] = [];
         myMap.forEach((value,key)=>{
             tagList.push(<div className="chat-message">
             <div className="message-time">{key}</div>
-            <div className="message-text">{value}</div>
+            <div className="message-text">
+                <div dangerouslySetInnerHTML={{__html: value}}></div>
+            </div>
             </div>);
         });
         return tagList;
