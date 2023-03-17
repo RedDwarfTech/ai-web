@@ -1,6 +1,7 @@
 import { Button, Input } from "antd";
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { readConfig } from "../../../config/app/config-reader";
 import "./Chat.css"
 
 const Chat: React.FC = (props) => {
@@ -32,26 +33,20 @@ const Chat: React.FC = (props) => {
 
     React.useEffect(() => {
         var websocket:any = null;
-
-        //判断当前浏览器是否支持WebSocket
         if('WebSocket' in window) {
-            //改成你的地址
-            websocket = new WebSocket("wss://ai.poemhub.top/post/websocket");
+            websocket = new WebSocket(readConfig('wssUrl'));
         } else {
             alert('当前浏览器 Not support websocket')
         }
 
-           //连接发生错误的回调方法
         websocket.onerror = function(e:any) {
             console.log("WebSocket连接发生错误",e);
         };
         
-        //连接成功建立的回调方法
         websocket.onopen = function() {
             console.log("WebSocket连接成功");
         }
 
-        //接收到消息的回调方法
         websocket.onmessage = function(event:any) {
             console.log("接收到消息",event);
             const now = getCurrentTime();
@@ -65,7 +60,6 @@ const Chat: React.FC = (props) => {
               });
         }
         
-        //连接关闭的回调方法
         websocket.onclose = function() {
             console.log("WebSocket closed");
         }
@@ -75,7 +69,6 @@ const Chat: React.FC = (props) => {
             closeWebSocket();
         }
         
-        //关闭WebSocket连接
         function closeWebSocket() {
             websocket.close();
         }
@@ -89,8 +82,11 @@ const Chat: React.FC = (props) => {
             if(webSocketStore == null){
                 return ;
             }
-            //发送消息
-            webSocketStore.send(inputValue);
+            if(webSocketStore.readyState === WebSocket.OPEN){
+                webSocketStore.send(inputValue);
+            } else if (webSocketStore.readyState === WebSocket.CLOSED){
+                console.log("WebSocket连接已经关闭");
+            }
         }
     };
 
