@@ -122,6 +122,12 @@ const Chat: React.FC = (props) => {
         return tagList;
     };
 
+    const handleEnterKey = (e:any) => {
+        if(e.nativeEvent.keyCode === 13){ 
+            handleSend();
+        }
+    }
+
     return (
         <div className="chat-container">
             <div className="chat-header">
@@ -131,7 +137,11 @@ const Chat: React.FC = (props) => {
                 {renderChat()}
             </div>
             <div className="chat-form">
-                <Input id="talkInput" value={inputValue} onChange={handleChange} type="text" placeholder="输入会话内容" />
+                <Input id="talkInput" 
+                value={inputValue} 
+                onChange={handleChange} 
+                onKeyPress={handleEnterKey}
+                type="text" placeholder="输入会话内容" />
                 <Button loading={loadings} onClick={handleSend}><span>发送</span></Button>
             </div>
         </div>
