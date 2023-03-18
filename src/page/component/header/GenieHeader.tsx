@@ -1,6 +1,7 @@
 import { Avatar, Button, Dropdown, Menu } from "antd";
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import type { MenuProps } from 'antd';
 import "./GenieHeader.css"
 import { userLoginImpl } from "../../../service/user/UserService";
 
@@ -37,23 +38,38 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
       });
     }
 
-    const menuItems = [
-        <Menu.Item key="1"><span onClick={handleCruisePro}>Cruise Pro</span></Menu.Item>,
-        <Menu.Item key="2"><span onClick={handleLogout}>登出</span></Menu.Item>
-      ];
+    const items: MenuProps['items'] = [
+      {
+        key: '1',
+        onClick: handleCruisePro,
+        label: (
+          <a>
+            Cruise Pro
+          </a>
+        )},
+        {
+        key: '2',
+        onClick: handleLogout,
+        label: (
+          <a>
+            登出
+          </a>
+        )
+      }]
+    
 
     const renderLogin=()=>{
         if(isLoggedIn){
           var avatarUrl = localStorage.getItem('aiAvatarUrl');
           if(avatarUrl){
             return (<a>
-              <Dropdown overlay={<Menu>{menuItems}</Menu>} trigger={['click']}>
+              <Dropdown menu={{ items }} trigger={['click']}>
                 <Avatar size={40} src={avatarUrl} />
               </Dropdown>
               </a>);
           }else{
             return (<a>
-              <Dropdown overlay={<Menu>{menuItems}</Menu>} trigger={['click']}>
+              <Dropdown menu={{ items }} trigger={['click']}>
                 <Avatar size={40} >Me</Avatar>
               </Dropdown>
               </a>);
