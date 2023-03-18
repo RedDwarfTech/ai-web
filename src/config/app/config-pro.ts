@@ -1,5 +1,5 @@
 let proConfigMap = new Map([
-  ["wssUrl", "wss://ai.poemhub.top/post/websocket"],
+  ["wssUrl", "https://ai.poemhub.top/post/websocket"],
   ["key2", "value2"]
 ]); 
 

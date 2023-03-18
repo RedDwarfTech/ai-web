@@ -1,5 +1,5 @@
 let devConfigMap = new Map([
-    ["wssUrl", "ws://192.168.10.93:58080/post1/websocket"],
+    ["wssUrl", "ws://192.168.10.93:58080/post/websocket"],
     ["key2", "value2"]
 ]); 
 
