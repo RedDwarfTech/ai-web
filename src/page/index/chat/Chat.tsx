@@ -7,6 +7,10 @@ import { v4 as uuid } from 'uuid';
 import { doCloseWebsocket, getCurrentTime } from "./WebSocketClient";
 import { IWebsocketMsg } from "../../../models/chat/WebSocketMsg";
 import { WebSocketMsgType } from "../../../models/chat/WebSocketMsgType";
+import { Base64 } from "js-base64";
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+
 
 const Chat: React.FC = (props) => {
 
@@ -53,7 +57,10 @@ const Chat: React.FC = (props) => {
             chatWebsocket.onmessage = function (event: any) {
                 const msg: IWebsocketMsg = JSON.parse(event.data);
                 if(msg.msgType === WebSocketMsgType[WebSocketMsgType.USER_CHAT]){
-                    appenMsg(msg.msg);
+                    // const decoded = atob(msg.msg)
+                    
+                    const decoded = Base64.decode(msg.msg);
+                    appenMsg(decoded.toString());
                     setLoadings(false);
                 }
             }
@@ -71,6 +78,7 @@ const Chat: React.FC = (props) => {
 
     const appenMsg = (data: string) => {
         const now = getCurrentTime();
+        debugger
         const newMap = new Map(myMap);
         newMap.set(now, data);
         setMyMap((prevMapState) => {
@@ -106,9 +114,9 @@ const Chat: React.FC = (props) => {
             tagList.push(
                 <div key={uuid()} className="chat-message">
                     <div key={uuid()} className="message-time">{key}</div>
-                    <div key={uuid()} className="message-text">
-                        <div key={uuid()} dangerouslySetInnerHTML={{ __html: value }}></div>
-                    </div>
+                        <SyntaxHighlighter language="javascript" style={docco}>
+                        {value}
+                        </SyntaxHighlighter>
                 </div>);
         });
         return tagList;
