@@ -11,3 +11,16 @@ export function userLoginImpl(params: any) {
     };
     return requestWithAction(config, userLogin);
 }
+
+export function doLoginOut() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('aiAccessToken');
+    localStorage.removeItem('aiRefreshToken');
+    localStorage.removeItem('avatarUrl');
+    localStorage.removeItem('userInfo');
+
+    document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = 'avatarUrl=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    window.location.href="https://ai.poemhub.top";
+}

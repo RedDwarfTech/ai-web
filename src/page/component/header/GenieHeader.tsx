@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import type { MenuProps } from 'antd';
 import "./GenieHeader.css"
-import { userLoginImpl } from "../../../service/user/UserService";
+import { doLoginOut, userLoginImpl } from "../../../service/user/UserService";
 
 export type HeaderFormProps = {
     onMenuClick: (menu: String) => void;
@@ -17,15 +17,8 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
         props.onMenuClick(menu);
     };
 
-    const handleLogout=()=>{
-        localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('aiAccessToken');
-        localStorage.removeItem('aiRefreshToken');
-        localStorage.removeItem('avatarUrl');
-        window.location.href="https://ai.poemhub.top";
-    }
 
-    const handleCruisePro=()=>{
+    const handleGeniePro=()=>{
         // showTabImpl(4);
     }
 
@@ -41,7 +34,7 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
     const items: MenuProps['items'] = [
       {
         key: '1',
-        onClick: handleCruisePro,
+        onClick: handleGeniePro,
         label: (
           <a>
             Cruise Pro
@@ -49,7 +42,7 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
         )},
         {
         key: '2',
-        onClick: handleLogout,
+        onClick: doLoginOut,
         label: (
           <a>
             登出
@@ -60,7 +53,7 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
 
     const renderLogin=()=>{
         if(isLoggedIn){
-          var avatarUrl = localStorage.getItem('aiAvatarUrl');
+          var avatarUrl = localStorage.getItem('avatarUrl');
           if(avatarUrl){
             return (<a>
               <Dropdown menu={{ items }} trigger={['click']}>
