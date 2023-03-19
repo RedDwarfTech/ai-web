@@ -1,0 +1,15 @@
+.qa-content {
+    background-color: whitesmoke;
+    border-radius: 3px;
+    align-items: center;     /* 垂直居中 */
+    word-wrap: break-word; 
+    word-break: normal;
+    min-height: 40px;
+
+   
+}
+
+.qa-content p {
+    text-align: left;
+    font-size: 17px;
+}

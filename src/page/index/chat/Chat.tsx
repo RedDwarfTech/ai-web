@@ -1,5 +1,5 @@
-import { Button, Input } from "antd";
-import React, { useState } from "react";
+import { Button, Input, message, notification } from "antd";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { readConfig } from "../../../config/app/config-reader";
 import "./Chat.css"
@@ -10,10 +10,11 @@ import { WebSocketMsgType } from "../../../models/chat/WebSocketMsgType";
 import { Base64 } from "js-base64";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-
+import ChatContext from "./component/ChatContext";
 
 const Chat: React.FC = (props) => {
 
+    const [api, contextHolder] = notification.useNotification();
     const [inputValue, setInputValue] = useState('');
     const [webSocketStore, setWebSocketStore] = useState<WebSocket | null>(null);
     const [myMap, setMyMap] = useState(new Map());
@@ -56,11 +57,8 @@ const Chat: React.FC = (props) => {
 
             chatWebsocket.onmessage = function (event: any) {
                 const msg: IWebsocketMsg = JSON.parse(event.data);
-                if(msg.msgType === WebSocketMsgType[WebSocketMsgType.USER_CHAT]){
-                    // const decoded = atob(msg.msg)
-                    
-                    const decoded = Base64.decode(msg.msg);
-                    appenMsg(decoded.toString());
+                if(msg.msgType === WebSocketMsgType[WebSocketMsgType.USER_CHAT]){                    
+                    appenMsg(msg.msg);
                     setLoadings(false);
                 }
             }
@@ -78,7 +76,6 @@ const Chat: React.FC = (props) => {
 
     const appenMsg = (data: string) => {
         const now = getCurrentTime();
-        debugger
         const newMap = new Map(myMap);
         newMap.set(now, data);
         setMyMap((prevMapState) => {
@@ -103,7 +100,7 @@ const Chat: React.FC = (props) => {
                 };
                 webSocketStore.send(JSON.stringify(parms));
             } else if (webSocketStore.readyState === WebSocket.CLOSED) {
-                console.log("WebSocket连接已经关闭");
+                message.error("WebSocket连接已经关闭");
             }
         }
     };
@@ -114,9 +111,7 @@ const Chat: React.FC = (props) => {
             tagList.push(
                 <div key={uuid()} className="chat-message">
                     <div key={uuid()} className="message-time">{key}</div>
-                        <SyntaxHighlighter language="javascript" style={docco}>
-                        {value}
-                        </SyntaxHighlighter>
+                        <ChatContext msg={value}></ChatContext>
                 </div>);
         });
         return tagList;
