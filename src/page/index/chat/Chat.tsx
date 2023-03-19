@@ -26,6 +26,14 @@ const Chat: React.FC = (props) => {
         setInputValue(e.target.value);
     };
 
+    useEffect(()=>{
+        message.info("myMap Updated");
+        var element = document.querySelector('.chat-body');
+        if(element){
+            element.scrollTop = element.scrollHeight - element.clientHeight;
+        }
+    },[myMap]);
+
     React.useEffect(() => {
         doConnectWebsocket();
         const heartbeatInterval = setInterval(() => {
