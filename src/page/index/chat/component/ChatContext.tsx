@@ -3,7 +3,6 @@ import "./ChatContext.css"
 import ReactMarkdown from 'react-markdown';
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { dark, oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { CodeProps } from "react-markdown/lib/ast-to-react";
 
 export interface IChatMsg {
     msg: string
