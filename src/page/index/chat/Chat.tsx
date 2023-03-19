@@ -27,7 +27,6 @@ const Chat: React.FC = (props) => {
     };
 
     useEffect(()=>{
-        message.info("myMap Updated");
         var element = document.querySelector('.chat-body');
         if(element){
             element.scrollTop = element.scrollHeight - element.clientHeight;
