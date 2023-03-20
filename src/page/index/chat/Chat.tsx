@@ -58,19 +58,20 @@ const Chat: React.FC = (props) => {
     const handleSend = () => {
         if (!isLoggedIn()) {
             message.warning("请登录后再开启聊天");
+            setLoadings(false);
+            return;
         }
-        if (inputValue) {
-            if (webSocketStore != null) {
-                appenMsg(inputValue);
-                setInputValue('');
-                setLoadings(true);
-                let parms = {
-                    msgType: 'USER_CHAT',
-                    msg: inputValue
-                };
-                webSocketStore.send(JSON.stringify(parms));
-            }
+        if (!inputValue||webSocketStore == null) {
+            return;
         }
+        appenMsg(inputValue);
+        setInputValue('');
+        setLoadings(true);
+        let parms = {
+            msgType: 'USER_CHAT',
+            msg: inputValue
+        };
+        webSocketStore.send(JSON.stringify(parms));
     };
 
     const renderChat = () => {

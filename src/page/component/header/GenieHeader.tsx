@@ -65,6 +65,7 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
           localStorage.setItem('aiAccessToken', accessTokenCookie);
           localStorage.setItem('aiRefreshToken', refreshTokenCookie?refreshTokenCookie:"");
           localStorage.setItem('avatarUrl',avatarUrlCookie?avatarUrlCookie:"");
+          setIsLoggedIn(true);
         }
         return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
       }
