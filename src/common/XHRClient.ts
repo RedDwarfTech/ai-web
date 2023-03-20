@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 import store from '../store/store';
-import { ResponseHandler } from 'js-wheel';
+import { ResponseHandler, WheelGlobal } from 'js-wheel';
 
 const instance = axios.create({
   timeout: 15000
@@ -10,7 +10,7 @@ const instance = axios.create({
 instance.defaults.headers.post['Content-Type'] = 'application/json'
 
 instance.interceptors.request.use((request) => {
-      const accessToken = localStorage.getItem('aiAccessToken');
+      const accessToken = localStorage.getItem(WheelGlobal.ACCESS_TOKEN_NAME);
       accessToken && (request.headers['x-access-token'] = accessToken);
       request.headers['x-request-id'] = uuid();
       return request

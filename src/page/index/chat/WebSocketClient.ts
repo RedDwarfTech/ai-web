@@ -1,3 +1,4 @@
+import { WheelGlobal } from 'js-wheel';
 import WebsocketHeartbeatJs from 'websocket-heartbeat-js';
 import { readConfig } from '../../../config/app/config-reader';
 import { isLoggedIn } from '../../../service/user/UserService';
@@ -14,7 +15,7 @@ export function doWebsocketConnect(chatWebsocket: WebSocket) {
             if (!isLoggedIn()) {
                 return;
             }
-            const accessToken = localStorage.getItem('aiAccessToken');
+            const accessToken = localStorage.getItem(WheelGlobal.ACCESS_TOKEN_NAME);
             chatWebsocket = new WebSocket(readConfig('wssUrl') + "?a=1");
             //chatWebsocket = new WebSocket(readConfig('wssUrl'));
         } else {
@@ -48,7 +49,7 @@ export function doConnectWebsocketJs(
     onMessage: (msg: string) => void,
     onOpen:(chatWebsocket: WebsocketHeartbeatJs)=> void
 ): void {
-    const accessToken = localStorage.getItem('aiAccessToken');
+    const accessToken = localStorage.getItem(WheelGlobal.ACCESS_TOKEN_NAME);
     const options = {
         url: readConfig('wssUrl') + "?accessToken=" + accessToken,
         pingTimeout: 15000,

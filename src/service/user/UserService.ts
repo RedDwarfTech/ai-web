@@ -1,3 +1,4 @@
+import { WheelGlobal } from 'js-wheel';
 import { userLogin } from '../../action/user/UserAction';
 import { requestWithAction } from '../../common/XHRClient';
 import { readConfig } from '../../config/app/config-reader';
@@ -14,7 +15,7 @@ export function userLoginImpl(params: any) {
 }
 
 export function isLoggedIn(){
-    const accessToken = localStorage.getItem('aiAccessToken');
+    const accessToken = localStorage.getItem(WheelGlobal.ACCESS_TOKEN_NAME);
     if(accessToken == null){
         return false;
     }else{
@@ -24,8 +25,8 @@ export function isLoggedIn(){
 
 export function doLoginOut() {
     localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('aiAccessToken');
-    localStorage.removeItem('aiRefreshToken');
+    localStorage.removeItem(WheelGlobal.ACCESS_TOKEN_NAME);
+    localStorage.removeItem(WheelGlobal.REFRESH_TOKEN_NAME);
     localStorage.removeItem('avatarUrl');
     localStorage.removeItem('userInfo');
 

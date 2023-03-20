@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import type { MenuProps } from 'antd';
 import "./GenieHeader.css"
 import { doLoginOut, userLoginImpl } from "../../../service/user/UserService";
+import { WheelGlobal } from "js-wheel";
+import { readConfig } from "../../../config/app/config-reader";
 
 export type HeaderFormProps = {
     onMenuClick: (menu: String) => void;
@@ -62,9 +64,11 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
           const refreshTokenCookie = document.cookie.split('; ').find(row => row.startsWith('refreshToken='))?.split("=")[1];
           const avatarUrlCookie = document.cookie.split('; ').find(row => row.startsWith('avatarUrl='))?.split("=")[1];
           localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('aiAccessToken', accessTokenCookie);
-          localStorage.setItem('aiRefreshToken', refreshTokenCookie?refreshTokenCookie:"");
+          localStorage.setItem(WheelGlobal.ACCESS_TOKEN_NAME,accessTokenCookie);
+          localStorage.setItem(WheelGlobal.REFRESH_TOKEN_NAME,refreshTokenCookie?refreshTokenCookie:"");
           localStorage.setItem('avatarUrl',avatarUrlCookie?avatarUrlCookie:"");
+          localStorage.setItem(WheelGlobal.BASE_AUTH_URL,readConfig("baseAuthUrl"));
+          localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH,readConfig("accessTokenUrlPath"));
           setIsLoggedIn(true);
         }
         return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
