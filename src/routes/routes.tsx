@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../page/index/Home';
 import PaySuccess from '../page/pay/success/PaySuccess';
+import Login from '../page/user/login/Login';
 
 const routes = createBrowserRouter([
   {
@@ -10,6 +11,10 @@ const routes = createBrowserRouter([
   {
     path: "/product/pay/success",
     element: <PaySuccess />
+  },
+  {
+    path: "/user/login",
+    element: <Login />
   }
 ]);
 

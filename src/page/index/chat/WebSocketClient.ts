@@ -1,6 +1,8 @@
-import { WheelGlobal } from 'js-wheel';
+import { ResponseHandler, REST, WheelGlobal } from 'js-wheel';
 import WebsocketHeartbeatJs from 'websocket-heartbeat-js';
 import { readConfig } from '../../../config/app/config-reader';
+import { IWebsocketMsg } from '../../../models/chat/WebSocketMsg';
+import { WebSocketMsgType } from '../../../models/chat/WebSocketMsgType';
 import { isLoggedIn } from '../../../service/user/UserService';
 
 export function doCloseWebsocket(chatWebsocket: WebSocket) {
@@ -65,6 +67,17 @@ export function doConnectWebsocketJs(
     }
     websocketHeartbeatJs.onmessage = function (e) {
         if(e.data === 'pong'){
+            return;
+        }
+        const msgModel: IWebsocketMsg = JSON.parse(e.data);
+        if(msgModel.msgType === WebSocketMsgType[WebSocketMsgType.ACCESS_TOKEN_EXPIRED]){
+            const res: REST.ApiResponse = {
+                result:"any",
+                msg: "string",
+                resultCode: "00100100004016",
+                statusCode: "200"
+            };
+            ResponseHandler.handleWebCommonFailure(res);
             return;
         }
         onMessage(e.data);
