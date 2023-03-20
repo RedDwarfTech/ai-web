@@ -22,7 +22,7 @@ instance.interceptors.request.use((request) => {
 let isRefreshing = false
 instance.interceptors.response.use((response) => {
   if(!isRefreshing) {
-    ResponseHandler.handleCommonFailure(response);
+    ResponseHandler.handleCommonFailure(response.data);
   }
   return response;
 },
