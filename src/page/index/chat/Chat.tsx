@@ -1,23 +1,21 @@
 import { Button, Input, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { readConfig } from "../../../config/app/config-reader";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
-import { doCloseWebsocket, getCurrentTime } from "./WebSocketClient";
+import { doConnectWebsocketJs, getCurrentTime } from "./WebSocketClient";
 import { IWebsocketMsg } from "../../../models/chat/WebSocketMsg";
 import { WebSocketMsgType } from "../../../models/chat/WebSocketMsgType";
 import ChatContext from "./component/ChatContext";
+import { isLoggedIn } from "../../../service/user/UserService";
+import WebsocketHeartbeatJs from "websocket-heartbeat-js";
 
 const Chat: React.FC = (props) => {
 
     const [inputValue, setInputValue] = useState('');
-    const [webSocketStore, setWebSocketStore] = useState<WebSocket | null>(null);
+    const [webSocketStore, setWebSocketStore] = useState<WebsocketHeartbeatJs | null>(null);
     const [myMap, setMyMap] = useState(new Map());
-    const HEARTBEAT_INTERVAL_MS = 20000; // 心跳间隔，单位为毫秒
-    var chatWebsocket: WebSocket;
     const [loadings, setLoadings] = useState<boolean>(false);
-    //const [inputValue, setInputValue] = useState(0);
 
     const handleChange = (e: any) => {
         setInputValue(e.target.value);
@@ -31,52 +29,20 @@ const Chat: React.FC = (props) => {
     }, [myMap]);
 
     React.useEffect(() => {
-        doWebsocketConnect();
-        window.onbeforeunload = function () {
-            doCloseWebsocket(chatWebsocket);
-        }
-        
+        doConnectWebsocketJs(onMessage, onOpen);
     }, []);
 
-    const doWebsocketConnect=() => {
-        if (!chatWebsocket || (chatWebsocket && chatWebsocket.readyState === WebSocket.CLOSED)) {
-            if ('WebSocket' in window) {
-                chatWebsocket = new WebSocket(readConfig('wssUrl'));
-            } else {
-                alert('当前浏览器 Not support websocket')
-            }
-            chatWebsocket.onerror = function (e: any) {
-                console.log("WebSocket连接发生错误", e);
-            };
-    
-            chatWebsocket.onclose = function (event: any) {
-                console.log(`WebSocket closed with code ${event.code} and reason "${event.reason}"`);
-                console.log(`WebSocket was clean: ${event.wasClean}`);
-            }
-    
-            
-            chatWebsocket.onmessage = function (event: any) {
-                const msg: IWebsocketMsg = JSON.parse(event.data);
-                if (msg.msgType === WebSocketMsgType[WebSocketMsgType.USER_CHAT]) {
-                    appenMsg(msg.msg);
-                    setLoadings(false);
-                }
-            }
-    
-            if (chatWebsocket) {
-                chatWebsocket.onopen = function () {
-                    console.log("WebSocket连接成功");
-                    setWebSocketStore(chatWebsocket);
-                }
-            }
-            const heartbeatInterval = setInterval(() => {
-                if (chatWebsocket.readyState === WebSocket.OPEN) {
-                    chatWebsocket.send("ping");
-                }
-            }, HEARTBEAT_INTERVAL_MS);
-        }
+    const onOpen = (chatWebsocket: WebsocketHeartbeatJs) => {
+        setWebSocketStore(chatWebsocket);
     }
 
+    const onMessage = (msg: string) => {
+        const msgModel: IWebsocketMsg = JSON.parse(msg);
+        if (msgModel.msgType === WebSocketMsgType[WebSocketMsgType.USER_CHAT]) {
+            appenMsg(msgModel.msg);
+        }
+        setLoadings(false);
+    }
 
     const appenMsg = (data: string) => {
         const now = getCurrentTime();
@@ -90,23 +56,19 @@ const Chat: React.FC = (props) => {
     }
 
     const handleSend = () => {
+        if (!isLoggedIn()) {
+            message.warning("请登录后再开启聊天");
+        }
         if (inputValue) {
-            if (webSocketStore == null||webSocketStore.readyState === WebSocket.CLOSED) {
-                doWebsocketConnect();
-            }
-            if(webSocketStore != null) {
+            if (webSocketStore != null) {
                 appenMsg(inputValue);
                 setInputValue('');
-                if (webSocketStore.readyState === WebSocket.OPEN) {
-                    setLoadings(true);
-                    let parms = {
-                        msgType: 'USER_CHAT',
-                        msg: inputValue
-                    };
-                    webSocketStore.send(JSON.stringify(parms));
-                } else if (webSocketStore.readyState === WebSocket.CLOSED) {
-                    message.error("WebSocket连接已经关闭");
-                }
+                setLoadings(true);
+                let parms = {
+                    msgType: 'USER_CHAT',
+                    msg: inputValue
+                };
+                webSocketStore.send(JSON.stringify(parms));
             }
         }
     };

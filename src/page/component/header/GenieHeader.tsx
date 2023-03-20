@@ -18,10 +18,6 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
     };
 
 
-    const handleGeniePro=()=>{
-        // showTabImpl(4);
-    }
-
     const userLogin =() => {
       let param = {
         appId: 'vOghoo10L9'
@@ -32,14 +28,6 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
     }
 
     const items: MenuProps['items'] = [
-      {
-        key: '1',
-        onClick: handleGeniePro,
-        label: (
-          <a>
-            Cruise Pro
-          </a>
-        )},
         {
         key: '2',
         onClick: doLoginOut,

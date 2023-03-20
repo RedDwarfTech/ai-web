@@ -12008,6 +12008,11 @@
   "resolved" "https://registry.npmmirror.com/websocket-extensions/-/websocket-extensions-0.1.4.tgz"
   "version" "0.1.4"
 
+"websocket-heartbeat-js@^1.1.1":
+  "integrity" "sha512-4QVymCk7ekCi8qbkgykV7jTIlDQEhUY+nUqOO+8dGh/8fTbN73yb2fNNG9003kSxZxoGSfSuOuiWvNUI/t+Umg=="
+  "resolved" "https://registry.npmmirror.com/websocket-heartbeat-js/-/websocket-heartbeat-js-1.1.1.tgz"
+  "version" "1.1.1"
+
 "whatwg-encoding@^1.0.5":
   "integrity" "sha512-b5lim54JOPN9HtzvK9HFXvBma/rnfFeqsic0hSpjtDbVxR3dJKLc+KB4V6GgiGOvl7CY/KNh8rxSo9DKQrnUEw=="
   "resolved" "https://registry.npmmirror.com/whatwg-encoding/-/whatwg-encoding-1.0.5.tgz"

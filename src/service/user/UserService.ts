@@ -12,6 +12,15 @@ export function userLoginImpl(params: any) {
     return requestWithAction(config, userLogin);
 }
 
+export function isLoggedIn(){
+    const accessToken = localStorage.getItem('aiAccessToken');
+    if(accessToken == null){
+        return false;
+    }else{
+        return true;
+    }
+}
+
 export function doLoginOut() {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('aiAccessToken');

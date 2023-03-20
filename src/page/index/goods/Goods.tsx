@@ -62,7 +62,6 @@ const Goods: React.FC = (props:any) => {
       };
       
     let generateFormText = props.pay.formText;
-      debugger
     return(
         <div>
              <Table dataSource={dataSource} columns={columns} />

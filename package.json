@@ -27,7 +27,8 @@
     "redux": "^4.2.1",
     "typescript": "^4.9.5",
     "uuid": "^9.0.0",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "websocket-heartbeat-js": "^1.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
