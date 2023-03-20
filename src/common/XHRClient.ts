@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
 import store from '../store/store';
+import { ResponseHandler } from 'js-wheel';
 
 const instance = axios.create({
   timeout: 15000
@@ -8,16 +9,24 @@ const instance = axios.create({
 
 instance.defaults.headers.post['Content-Type'] = 'application/json'
 
-instance.interceptors.request.use(
-    (config) => {
-      const accessToken = "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VySWQiOjY3LCJkZXZpY2VJZCI6IjAiLCJhcHBJZCI6InZPZ2hvbzEwTDkiLCJleHAiOjE2Nzg4OTQwMTF9.rn532z6RroWiC5UrQonzJ3SICX_wR_TO_Wr29m-9X6W32fnz5Aj5i5OmDrrgkcRJzVXsyBzbvng4ZiJ1_6xGAg";//localStorage.getItem('aiAccessToken');
-      accessToken && (config.headers['x-access-token'] = accessToken);
-      config.headers['x-request-id'] = uuid();
-      return config
+instance.interceptors.request.use((request) => {
+      const accessToken = localStorage.getItem('aiAccessToken');
+      accessToken && (request.headers['x-access-token'] = accessToken);
+      request.headers['x-request-id'] = uuid();
+      return request
   },
-    (  error: any) => {
-      return Promise.reject(error)
+    (  error: any) => {return Promise.reject(error)
   }
+)
+
+let isRefreshing = false
+instance.interceptors.response.use((response) => {
+  if(!isRefreshing) {
+    ResponseHandler.handleCommonFailure(response);
+  }
+  return response;
+},
+(  error: any) => {return Promise.reject(error)}
 )
 
 export function requestWithAction(config: any, action: (arg0: any) => any) {

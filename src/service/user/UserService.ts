@@ -1,5 +1,6 @@
 import { userLogin } from '../../action/user/UserAction';
 import { requestWithAction } from '../../common/XHRClient';
+import { readConfig } from '../../config/app/config-reader';
 
 
 export function userLoginImpl(params: any) {
@@ -31,5 +32,5 @@ export function doLoginOut() {
     document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     document.cookie = 'avatarUrl=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    window.location.href="https://ai.poemhub.top";
+    window.location.href=  readConfig("logoutUrl");;
 }

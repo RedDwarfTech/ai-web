@@ -29,7 +29,9 @@ const Chat: React.FC = (props) => {
     }, [myMap]);
 
     React.useEffect(() => {
-        doConnectWebsocketJs(onMessage, onOpen);
+        if(isLoggedIn()){
+            doConnectWebsocketJs(onMessage, onOpen);
+        }
     }, []);
 
     const onOpen = (chatWebsocket: WebsocketHeartbeatJs) => {

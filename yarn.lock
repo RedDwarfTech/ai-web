@@ -7063,7 +7063,7 @@
   "version" "4.0.0"
 
 "js-wheel@https://github.com/jiangxiaoqiang/js-wheel.git":
-  "resolved" "git+ssh://git@github.com/jiangxiaoqiang/js-wheel.git#468644be7eea0724423e2defaa1162a76154df17"
+  "resolved" "git+ssh://git@github.com/jiangxiaoqiang/js-wheel.git#9ab1e1ffa4dfa7795dea7047e266ffe1242afb51"
   "version" "1.0.0"
   dependencies:
     "@babel/cli" "^7.17.6"
