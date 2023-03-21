@@ -16,9 +16,7 @@ jobs:
       - name: Build React App
         run: |
           git config --global url."https://github".insteadOf ssh://git@github 
-          npm install yarn -g
-          yarn
-          yarn build
+          npm build
         env:
           CI: false
 
