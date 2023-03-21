@@ -86,11 +86,11 @@ export function doConnectWebsocketJs(
     websocketHeartbeatJs.onreconnect = function () {
         console.log('reconnecting...');
     }
-    websocketHeartbeatJs.onerror = function () {
-        console.log('error...');
+    websocketHeartbeatJs.onerror = function (e: Event) {
+        console.log('error...', e);
     }
-    websocketHeartbeatJs.onclose = function () {
-        console.log('close......');
+    websocketHeartbeatJs.onclose = function (e: CloseEvent) {
+        console.log('close......,' + e.code + ', message:' + e.reason);
     }
 }
 

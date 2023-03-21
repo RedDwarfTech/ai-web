@@ -39,6 +39,7 @@
   .chat-message .message-time {
     color: #aaa;
     margin-bottom: 5px;
+    height: 20px;
   }
   
   .chat-message .message-text {

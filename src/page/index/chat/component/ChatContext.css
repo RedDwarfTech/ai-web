@@ -5,12 +5,9 @@
     word-wrap: break-word; 
     word-break: normal;
     min-height: 40px;
-
-   
 }
 
 .qa-content p {
     text-align: left;
     font-size: 17px;
 }
-
