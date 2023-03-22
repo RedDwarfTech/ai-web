@@ -69,7 +69,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     }
 
     const handleSend = () => {
-        if (isLoggedIn()) {
+        if (!isLoggedIn()) {
             message.warning("请登录后再开启聊天");
             setLoadings(false);
             return;
