@@ -1,13 +1,15 @@
 
 const initState = {
-    chat: {}
+    chatResp: ''
 };
 
 const ChatReducer = (state=initState, action) => {
     switch (action.type) {
-        case "GET_ARTICLE":
-            state = action.chat;
-            break;
+        case "CHAT_ASK":
+            return {
+                ...state,
+                chatResp: action.chatResp 
+            };
         default:
             break;
     }

@@ -4,7 +4,7 @@ import store from '../store/store';
 import { ResponseHandler, WheelGlobal } from 'js-wheel';
 
 const instance = axios.create({
-  timeout: 15000
+  timeout: 30000
 })
 
 instance.defaults.headers.post['Content-Type'] = 'application/json'

@@ -3,14 +3,18 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
-import { doConnectWebsocketJs, getCurrentTime } from "./WebSocketClient";
+import { getCurrentTime } from "./WebSocketClient";
 import { IWebsocketMsg } from "../../../models/chat/WebSocketMsg";
 import { WebSocketMsgType } from "../../../models/chat/WebSocketMsgType";
 import ChatContext from "./component/ChatContext";
 import { isLoggedIn } from "../../../service/user/UserService";
 import WebsocketHeartbeatJs from "websocket-heartbeat-js";
+import { IChatAsk } from "../../../models/chat/ChatAsk";
+import { doChatAsk } from "../../../service/chat/ChatService";
+import { chatAskAction } from "../../../action/chat/ChatAction";
+import { IChatAskResp } from "../../../models/chat/ChatAskResp";
 
-const Chat: React.FC = (props) => {
+const Chat: React.FC<IChatAskResp> = (props) => {
 
     const [inputValue, setInputValue] = useState('');
     const [webSocketStore, setWebSocketStore] = useState<WebsocketHeartbeatJs | null>(null);
@@ -30,7 +34,7 @@ const Chat: React.FC = (props) => {
 
     React.useEffect(() => {
         if(isLoggedIn()){
-            doConnectWebsocketJs(onMessage, onOpen);
+            // doConnectWebsocketJs(onMessage, onOpen);
         }
     }, []);
 
@@ -57,23 +61,30 @@ const Chat: React.FC = (props) => {
         });
     }
 
+    if(props.chatProps.chatResp){
+        if(!(new Set(myMap.values()).has(props.chatProps.chatResp))){
+            setLoadings(false);
+            appenMsg(props.chatProps.chatResp)
+        }
+    }
+
     const handleSend = () => {
-        if (!isLoggedIn()) {
+        if (isLoggedIn()) {
             message.warning("请登录后再开启聊天");
             setLoadings(false);
             return;
         }
-        if (!inputValue||webSocketStore == null) {
+        if (!inputValue) {
             return;
         }
         appenMsg(inputValue);
         setInputValue('');
         setLoadings(true);
-        let parms = {
-            msgType: 'USER_CHAT',
-            msg: inputValue
+        // webSocketStore.send(JSON.stringify(parms));
+        let ask: IChatAsk = {
+            prompt: inputValue
         };
-        webSocketStore.send(JSON.stringify(parms));
+        doChatAsk(ask);
     };
 
     const renderChat = () => {
@@ -115,12 +126,15 @@ const Chat: React.FC = (props) => {
 }
 
 const mapStateToProps = (state: any) => ({
-    robot: state.robot
+    chatProps: state.chat
 });
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-
+        respContentFuc: (prompt: any) => {
+          debugger
+          dispatch(chatAskAction(prompt))
+        }
     };
 };
 
