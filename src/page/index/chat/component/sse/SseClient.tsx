@@ -9,7 +9,7 @@ const SseClient: React.FC = (props) => {
     useEffect(() => {
         const accessToken = localStorage.getItem("x-access-token");
         // https://stackoverflow.com/questions/6623232/eventsource-and-basic-http-authentication
-        const eventSource = new EventSourcePolyfill('/ai/stream/chat/ask?q=hello', {
+        const eventSource = new EventSourcePolyfill('/ai/stream/chat/ask?question=hello', {
             headers: {
                 'x-access-token': accessToken ?? "",
                 'x-request-id': uuid(),
