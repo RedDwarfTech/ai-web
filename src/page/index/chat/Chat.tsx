@@ -13,6 +13,7 @@ import { IChatAsk } from "../../../models/chat/ChatAsk";
 import { doChatAsk } from "../../../service/chat/ChatService";
 import { chatAskAction } from "../../../action/chat/ChatAction";
 import { IChatAskResp } from "../../../models/chat/ChatAskResp";
+import SseClient from "./component/sse/SseClient";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
 
@@ -120,6 +121,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                     onKeyPress={handleEnterKey}
                     type="text" placeholder="输入会话内容" />
                 <Button loading={loadings} onClick={handleSend}><span>发送</span></Button>
+                <SseClient></SseClient>
             </div>
         </div>
     );
