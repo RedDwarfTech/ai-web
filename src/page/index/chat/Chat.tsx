@@ -10,10 +10,10 @@ import ChatContext from "./component/ChatContext";
 import { isLoggedIn } from "../../../service/user/UserService";
 import WebsocketHeartbeatJs from "websocket-heartbeat-js";
 import { IChatAsk } from "../../../models/chat/ChatAsk";
-import { doChatAsk } from "../../../service/chat/ChatService";
 import { chatAskAction } from "../../../action/chat/ChatAction";
 import { IChatAskResp } from "../../../models/chat/ChatAskResp";
-import SseClient from "./component/sse/SseClient";
+import { doSseChatAsk } from "../../../service/chat/SseClientService";
+import { ISseMsg } from "../../../models/chat/SseMsg";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
 
@@ -51,13 +51,50 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         setLoadings(false);
     }
 
+    const onSseMessage = (msg: string) => {
+        const msg1:ISseMsg = JSON.parse(msg);
+        appenSseMsg(msg1);
+    }
+
     const appenMsg = (data: string) => {
         const now = getCurrentTime();
         const newMap = new Map(myMap);
         newMap.set(now, data);
         setMyMap((prevMapState) => {
-            const newMapState = new Map<string, any>(prevMapState);
+            const newMapState = new Map<string, string>(prevMapState);
             newMapState.set(now, data);
+            return newMapState;
+        });
+    }
+
+    const appenSseMsg = (data: ISseMsg) => {
+        const now = getCurrentTime();
+        const newMap = new Map(myMap);
+        newMap.set(now, data);
+        setMyMap((prevMapState) => {
+            const newMapState = new Map<string, ISseMsg>(prevMapState);
+            if(newMapState.has(data.id)){
+                const legacyMsg = newMapState.get(data.id)!.msg;
+                let message;
+                if(data.choices!= undefined && data.choices.length>0){
+                    message = legacyMsg + "data.choices[0]"
+                }
+                const sseMsg:ISseMsg = {
+                    id: data.id,
+                    msg: legacyMsg + "dgwgewgw",
+                    created: data.created,
+                    choices: []
+                };
+                newMapState.set(data.id, sseMsg);
+            }else{
+                const sseMsg: ISseMsg = {
+                    id: data.id,
+                    created: data.created,
+                    choices: [],
+                    msg: "chioce"
+                };
+                newMapState.set(data.id, data);
+            }
             return newMapState;
         });
     }
@@ -78,23 +115,30 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         if (!inputValue) {
             return;
         }
-        appenMsg(inputValue);
+        let msg:ISseMsg = {
+            id: uuid(),
+            created: getCurrentTime(),
+            choices: [],
+            msg: inputValue
+        };
+        appenSseMsg(msg);
         setInputValue('');
         setLoadings(true);
         // webSocketStore.send(JSON.stringify(parms));
         let ask: IChatAsk = {
             prompt: inputValue
         };
-        doChatAsk(ask);
+        doSseChatAsk(ask,onSseMessage);
     };
 
     const renderChat = () => {
         const tagList: JSX.Element[] = [];
         myMap.forEach((value, key) => {
+            let chatValue:ISseMsg = value;     
             tagList.push(
                 <div key={uuid()} className="chat-message">
-                    <div key={uuid()} className="message-time">{key}</div>
-                    <ChatContext msg={value}></ChatContext>
+                    <div key={uuid()} className="message-time">{value.created}</div>
+                    <ChatContext msg={chatValue.msg}></ChatContext>
                 </div>);
         });
         return tagList;
@@ -121,7 +165,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                     onKeyPress={handleEnterKey}
                     type="text" placeholder="输入会话内容" />
                 <Button loading={loadings} onClick={handleSend}><span>发送</span></Button>
-                <SseClient></SseClient>
             </div>
         </div>
     );

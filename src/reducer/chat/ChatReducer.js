@@ -10,6 +10,11 @@ const ChatReducer = (state=initState, action) => {
                 ...state,
                 chatResp: action.chatResp 
             };
+        case "CHAT_SSE_ASK":
+            return {
+                ...state,
+                chatResp: action.chatResp 
+            };
         default:
             break;
     }
