@@ -14,6 +14,8 @@ import { chatAskAction } from "../../../action/chat/ChatAction";
 import { IChatAskResp } from "../../../models/chat/ChatAskResp";
 import { doSseChatAsk } from "../../../service/chat/SseClientService";
 import { ISseMsg } from "../../../models/chat/SseMsg";
+import { ISseServerMsg } from "../../../models/chat/SseServerMsg";
+import { text } from "stream/consumers";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
 
@@ -52,8 +54,9 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     }
 
     const onSseMessage = (msg: string) => {
-        const msg1:ISseMsg = JSON.parse(msg);
+        const msg1:ISseServerMsg = JSON.parse(msg);
         appenSseMsg(msg1);
+        setLoadings(false);
     }
 
     const appenMsg = (data: string) => {
@@ -67,7 +70,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         });
     }
 
-    const appenSseMsg = (data: ISseMsg) => {
+    const appenSseMsg = (data: ISseServerMsg) => {
         const now = getCurrentTime();
         const newMap = new Map(myMap);
         newMap.set(now, data);
@@ -77,23 +80,21 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                 const legacyMsg = newMapState.get(data.id)!.msg;
                 let message;
                 if(data.choices!= undefined && data.choices.length>0){
-                    message = legacyMsg + "data.choices[0]"
+                    message = legacyMsg + data.choices[0].text
                 }
                 const sseMsg:ISseMsg = {
                     id: data.id,
-                    msg: legacyMsg + "dgwgewgw",
+                    msg: message??"",
                     created: data.created,
-                    choices: []
                 };
                 newMapState.set(data.id, sseMsg);
             }else{
                 const sseMsg: ISseMsg = {
                     id: data.id,
                     created: data.created,
-                    choices: [],
-                    msg: "chioce"
+                    msg: data.choices[0].text
                 };
-                newMapState.set(data.id, data);
+                newMapState.set(data.id, sseMsg);
             }
             return newMapState;
         });
@@ -115,11 +116,12 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         if (!inputValue) {
             return;
         }
-        let msg:ISseMsg = {
+        let msg:ISseServerMsg = {
             id: uuid(),
             created: getCurrentTime(),
-            choices: [],
-            msg: inputValue
+            choices:[
+                {text: inputValue}
+            ]
         };
         appenSseMsg(msg);
         setInputValue('');

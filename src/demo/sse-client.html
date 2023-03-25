@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SSE Client</title>
+  </head>
+  <body>
+    <div id="sse"></div>
+    <script>
+      const sse = new EventSource('https://ai.poemhub.top/ai/stream/chat/test?question=1');
+
+      sse.onmessage = event => {
+        const data = JSON.parse(event.data);
+        document.getElementById('sse').innerText = data.message;
+      };
+      sse.onerror = event => {
+        console.log(event);
+      }
+    </script>
+  </body>
+</html>

@@ -6,7 +6,7 @@ export function doSseChatAsk(params: IChatAsk, onSseMessage: (msg: string) => vo
   let eventSource: EventSourcePolyfill;
   const accessToken = localStorage.getItem("x-access-token");
   // https://stackoverflow.com/questions/6623232/eventsource-and-basic-http-authentication
-  eventSource = new EventSourcePolyfill('/ai/stream/chat/ask?question=hello', {
+  eventSource = new EventSourcePolyfill('/ai/stream/chat/ask?question=' + params.prompt, {
     headers: {
       'x-access-token': accessToken ?? "",
       'x-request-id': uuid(),
@@ -29,4 +29,7 @@ export function doSseChatAsk(params: IChatAsk, onSseMessage: (msg: string) => vo
     console.log('Transfer of data is complete');
   });
   
+  eventSource.addEventListener('onclose', () => {
+    console.log('Transfer of data is complete');
+  });
 }
