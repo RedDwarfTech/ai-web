@@ -1,10 +1,10 @@
 import { Avatar, Button, Dropdown, Menu } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import type { MenuProps } from 'antd';
 import "./GenieHeader.css"
-import { doLoginOut, userLoginImpl } from "../../../service/user/UserService";
-import { WheelGlobal } from "js-wheel";
+import { doLoginOut, getCurrentUser, userLoginImpl } from "../../../service/user/UserService";
+import { IUserModel, WheelGlobal } from "js-wheel";
 import { readConfig } from "../../../config/app/config-reader";
 
 export type HeaderFormProps = {
@@ -14,11 +14,12 @@ export type HeaderFormProps = {
 const GenieHeader: React.FC<HeaderFormProps> = (props) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
+  const [isGetUserLoading, setIsGetUserLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState<IUserModel>();
 
   const handleMenuClick = (menu: string) => {
     props.onMenuClick(menu);
   };
-
 
   const userLogin = () => {
     let param = {
@@ -81,9 +82,21 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
       localStorage.setItem('avatarUrl', avatarUrlCookie ? avatarUrlCookie : "");
       localStorage.setItem(WheelGlobal.BASE_AUTH_URL, readConfig("baseAuthUrl"));
       localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH, readConfig("accessTokenUrlPath"));
+      loadCurrentUser();
       setIsLoggedIn(true);
     }
     return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
+  }
+
+  const loadCurrentUser = () => {
+    if(!localStorage.getItem("userInfo") && isGetUserLoading === false){
+      setIsGetUserLoading(true);
+      getCurrentUser().then((data:any)=>{
+        setUserInfo(data.result);
+        localStorage.setItem("userInfo",JSON.stringify(data.result));
+        setIsGetUserLoading(false);
+      });
+    }
   }
 
   return (<header>

@@ -1,8 +1,16 @@
 import { WheelGlobal } from 'js-wheel';
-import { userLogin } from '../../action/user/UserAction';
+import { getCurrentUserAction, userLogin } from '../../action/user/UserAction';
 import { requestWithAction } from '../../common/XHRClient';
 import { readConfig } from '../../config/app/config-reader';
 
+export function getCurrentUser() {
+    const config = {
+        method: 'get',
+        url: '/post/user/current-user',
+        headers: {'Content-Type': 'application/json'}
+    };
+    return requestWithAction(config, getCurrentUserAction);
+}
 
 export function userLoginImpl(params: any) {
     const config = {
