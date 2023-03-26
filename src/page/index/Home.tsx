@@ -5,10 +5,13 @@ import GenieHeader from "../component/header/GenieHeader";
 import Chat from "./chat/Chat";
 import Goods from "./goods/Goods";
 import About from "../about/About";
+import Profile from "../user/profile/Profile";
+import { IUserModel } from "js-wheel";
 
 const Home: React.FC = (props) => {
 
   const [currentPage, setCurrentPage] = useState("chat");
+  const [userInfo, setUserInfo] = useState<IUserModel>();
 
   const renderChat=()=>{
     return (<Chat></Chat>);
@@ -31,6 +34,9 @@ const Home: React.FC = (props) => {
     }
     if(menu === "about"){
       return (<About></About>);
+    }
+    if(menu === "profile"){
+      return (<Profile panelUserInfo={userInfo}></Profile>);
     }
     return (<div></div>);
   }

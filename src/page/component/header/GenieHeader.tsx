@@ -8,93 +8,105 @@ import { WheelGlobal } from "js-wheel";
 import { readConfig } from "../../../config/app/config-reader";
 
 export type HeaderFormProps = {
-    onMenuClick: (menu: String) => void;
+  onMenuClick: (menu: String) => void;
 };
 
 const GenieHeader: React.FC<HeaderFormProps> = (props) => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
 
-    const handleMenuClick = (menu:string) => {
-        props.onMenuClick(menu);
+  const handleMenuClick = (menu: string) => {
+    props.onMenuClick(menu);
+  };
+
+
+  const userLogin = () => {
+    let param = {
+      appId: 'vOghoo10L9'
     };
+    userLoginImpl(param).then((data: any) => {
+      window.location.href = data.result;
+    });
+  }
+
+  const showUserProfile = () => {
+    handleMenuClick('profile');
+  }
+
+  const items: MenuProps['items'] = [
+    {
+      key: '2',
+      onClick: doLoginOut,
+      label: (
+        <a>
+          登出
+        </a>
+      )
+    }, {
+      key: '3',
+      onClick: showUserProfile,
+      label: (
+        <a>
+          控制台
+        </a>
+      )
+    }]
 
 
-    const userLogin =() => {
-      let param = {
-        appId: 'vOghoo10L9'
-      };
-      userLoginImpl(param).then((data: any) => {
-        window.location.href=data.result;
-      });
-    }
-
-    const items: MenuProps['items'] = [
-        {
-        key: '2',
-        onClick: doLoginOut,
-        label: (
-          <a>
-            登出
-          </a>
-        )
-      }]
-    
-
-    const renderLogin=()=>{
-        if(isLoggedIn){
-          var avatarUrl = localStorage.getItem('avatarUrl');
-          if(avatarUrl){
-            return (<a>
-              <Dropdown menu={{ items }} trigger={['click']}>
-                <Avatar size={40} src={avatarUrl} />
-              </Dropdown>
-              </a>);
-          }else{
-            return (<a>
-              <Dropdown menu={{ items }} trigger={['click']}>
-                <Avatar size={40} >Me</Avatar>
-              </Dropdown>
-              </a>);
-          }
-        }
-        const accessTokenOrigin = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
-        if(accessTokenOrigin){
-          const accessTokenCookie = accessTokenOrigin.split("=")[1];
-          const refreshTokenCookie = document.cookie.split('; ').find(row => row.startsWith('refreshToken='))?.split("=")[1];
-          const avatarUrlCookie = document.cookie.split('; ').find(row => row.startsWith('avatarUrl='))?.split("=")[1];
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem(WheelGlobal.ACCESS_TOKEN_NAME,accessTokenCookie);
-          localStorage.setItem(WheelGlobal.REFRESH_TOKEN_NAME,refreshTokenCookie?refreshTokenCookie:"");
-          localStorage.setItem('avatarUrl',avatarUrlCookie?avatarUrlCookie:"");
-          localStorage.setItem(WheelGlobal.BASE_AUTH_URL,readConfig("baseAuthUrl"));
-          localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH,readConfig("accessTokenUrlPath"));
-          setIsLoggedIn(true);
-        }
-        return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
+  const renderLogin = () => {
+    if (isLoggedIn) {
+      var avatarUrl = localStorage.getItem('avatarUrl');
+      if (avatarUrl) {
+        return (<a>
+          <Dropdown menu={{ items }} trigger={['click']}>
+            <Avatar size={40} src={avatarUrl} />
+          </Dropdown>
+        </a>);
+      } else {
+        return (<a>
+          <Dropdown menu={{ items }} trigger={['click']}>
+            <Avatar size={40} >Me</Avatar>
+          </Dropdown>
+        </a>);
       }
+    }
+    const accessTokenOrigin = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
+    if (accessTokenOrigin) {
+      const accessTokenCookie = accessTokenOrigin.split("=")[1];
+      const refreshTokenCookie = document.cookie.split('; ').find(row => row.startsWith('refreshToken='))?.split("=")[1];
+      const avatarUrlCookie = document.cookie.split('; ').find(row => row.startsWith('avatarUrl='))?.split("=")[1];
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem(WheelGlobal.ACCESS_TOKEN_NAME, accessTokenCookie);
+      localStorage.setItem(WheelGlobal.REFRESH_TOKEN_NAME, refreshTokenCookie ? refreshTokenCookie : "");
+      localStorage.setItem('avatarUrl', avatarUrlCookie ? avatarUrlCookie : "");
+      localStorage.setItem(WheelGlobal.BASE_AUTH_URL, readConfig("baseAuthUrl"));
+      localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH, readConfig("accessTokenUrlPath"));
+      setIsLoggedIn(true);
+    }
+    return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
+  }
 
-    return(<header>
-        <div>
-            <nav>
-                <a onClick={()=>handleMenuClick('chat')}>聊天</a>
-                <a onClick={()=>handleMenuClick('account')}>订阅</a>
-                <a onClick={()=>handleMenuClick('about')}>关于</a>
-                {renderLogin()}
-            </nav>
-        </div>
-    </header>);
+  return (<header>
+    <div>
+      <nav>
+        <a onClick={() => handleMenuClick('chat')}>聊天</a>
+        <a onClick={() => handleMenuClick('account')}>订阅</a>
+        <a onClick={() => handleMenuClick('about')}>关于</a>
+        {renderLogin()}
+      </nav>
+    </div>
+  </header>);
 }
 
 const mapStateToProps = (state: any) => ({
-    robot: state.robot
-  });
-  
-  const mapDispatchToProps = (dispatch: any) => {
-    return {
-      
-    };
+  robot: state.robot
+});
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+
   };
-  
-  export default connect(mapStateToProps, mapDispatchToProps)(GenieHeader);
-  
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(GenieHeader);
+

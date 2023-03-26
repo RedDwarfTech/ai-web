@@ -1,0 +1,52 @@
+.panel-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    overflow: hidden;
+    width: 50%;
+}
+
+.panel-menu {
+    flex: 0 0 150px;
+    border-right: 1px solid rgb(218, 215, 215);
+}
+
+.menu-item {
+    display: flex;
+    cursor: pointer;
+    margin-top: 5px;
+    height: 50px;
+    width: 100%;
+    align-items: center;
+}
+
+.menu-item:hover {
+    background-color: lightgray;
+}
+
+.menu-item span {
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 20px;
+    align-items: center;
+}
+
+.panel-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.user-info {
+    font-size: 17px;
+    margin-top: 10px;
+}
+
+.feedback-submit {
+    padding: 12px 24px;
+    background-color: #418ed8;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity .25s ease;
+    height: 60px;
+}
