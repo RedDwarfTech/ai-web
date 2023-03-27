@@ -89,13 +89,13 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                 const sseMsg:ISseMsg = {
                     id: data.id,
                     msg: message??"",
-                    created: TimeUtils.getFormattedTime(data.created),
+                    created: TimeUtils.getFormattedTime(data.created * 1000),
                 };
                 newMapState.set(data.id, sseMsg);
             }else{
                 const sseMsg: ISseMsg = {
                     id: data.id,
-                    created: TimeUtils.getFormattedTime(data.created),
+                    created: TimeUtils.getFormattedTime(data.created * 1000),
                     msg: data.choices[0].delta.content
                 };
                 newMapState.set(data.id, sseMsg);
@@ -122,7 +122,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
         let msg:ISse35ServerMsg = {
             id: uuid(),
-            created: dayjs().valueOf(),
+            created: dayjs().valueOf()/1000,
             choices:[
                 {
                     delta:{
