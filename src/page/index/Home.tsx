@@ -29,6 +29,14 @@ const Home: React.FC = (props) => {
     return (<Chat></Chat>);
   }
 
+  const renderAbout=()=>{
+    return(
+          
+          <About></About>
+      
+      );
+  }
+
   const renderAccountBuy=()=>{
       return(
         <div>    
@@ -45,7 +53,7 @@ const Home: React.FC = (props) => {
       return renderAccountBuy();
     }
     if(menu === "about"){
-      return (<About></About>);
+      return renderAbout();
     }
     if(menu === "profile"){
       return (<Profile panelUserInfo={userInfo}></Profile>);

@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
 .about-container{
     font-size: 18px;
@@ -7,4 +11,3 @@
     width: 60%;
     margin: 0 auto;
 }
-
