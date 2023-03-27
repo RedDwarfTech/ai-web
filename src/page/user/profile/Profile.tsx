@@ -68,7 +68,7 @@ const Profile: React.FC<ProfileProps> = (props:any) => {
                 </Row>
                 <Row style={{ marginTop: '10px', marginBottom: '10px' }}>
                   <Col span={8}><span className="user-info">会员到期日</span></Col>
-                  <Col span={8}><span className="user-info">{userInfo&&userInfo.autoRenewProductExpireTimeMs?TimeUtils.getFormattedTime(userInfo.autoRenewProductExpireTimeMs):"--"}</span></Col>
+                  <Col span={8}><span className="user-info">{userInfo&&userInfo.autoRenewProductExpireTimeMs?TimeUtils.getFormattedTime(Number(userInfo.autoRenewProductExpireTimeMs)):"--"}</span></Col>
                   <Col span={8}></Col>
                 </Row>
               </Card>
