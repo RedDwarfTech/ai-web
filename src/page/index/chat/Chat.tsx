@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
-import { getCurrentTime } from "./WebSocketClient";
 import { IWebsocketMsg } from "../../../models/chat/WebSocketMsg";
 import { WebSocketMsgType } from "../../../models/chat/WebSocketMsgType";
 import ChatContext from "./component/ChatContext";
@@ -14,9 +13,9 @@ import { chatAskAction } from "../../../action/chat/ChatAction";
 import { IChatAskResp } from "../../../models/chat/ChatAskResp";
 import { doSseChatAsk } from "../../../service/chat/SseClientService";
 import { ISseMsg } from "../../../models/chat/SseMsg";
-import { ISseServerMsg } from "../../../models/chat/SseServerMsg";
-import { text } from "stream/consumers";
 import { ISse35ServerMsg } from "../../../models/chat/3.5/Sse35ServerMsg";
+import dayjs from "dayjs";
+import { TimeUtils } from "js-wheel";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
 
@@ -65,7 +64,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     }
 
     const appenMsg = (data: string) => {
-        const now = getCurrentTime();
+        const now = dayjs().unix().toString();
         const newMap = new Map(myMap);
         newMap.set(now, data);
         setMyMap((prevMapState) => {
@@ -76,7 +75,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     }
 
     const appenSseMsg = (data: ISse35ServerMsg) => {
-        const now = getCurrentTime();
+        const now = dayjs().unix();
         const newMap = new Map(myMap);
         newMap.set(now, data);
         setMyMap((prevMapState) => {
@@ -90,13 +89,13 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                 const sseMsg:ISseMsg = {
                     id: data.id,
                     msg: message??"",
-                    created: data.created,
+                    created: TimeUtils.getFormattedTime(data.created),
                 };
                 newMapState.set(data.id, sseMsg);
             }else{
                 const sseMsg: ISseMsg = {
                     id: data.id,
-                    created: data.created,
+                    created: TimeUtils.getFormattedTime(data.created),
                     msg: data.choices[0].delta.content
                 };
                 newMapState.set(data.id, sseMsg);
@@ -123,7 +122,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
         let msg:ISse35ServerMsg = {
             id: uuid(),
-            created: getCurrentTime(),
+            created: dayjs().valueOf(),
             choices:[
                 {
                     delta:{

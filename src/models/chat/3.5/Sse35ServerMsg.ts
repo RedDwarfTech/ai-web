@@ -1,6 +1,6 @@
 export interface ISse35ServerMsg {
     id: string,
-    created: string,
+    created: number,
     choices: Choice35[],
 }
 
