@@ -60,7 +60,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             message.info("会员已到期");
             return;
         }
-        debugger
         if(msg1.choices[0].delta.content && msg1.choices[0].delta.content.length > 0) {
             appenSseMsg(msg1);
         }
@@ -195,7 +194,6 @@ const mapStateToProps = (state: any) => ({
 const mapDispatchToProps = (dispatch: any) => {
     return {
         respContentFuc: (prompt: any) => {
-          debugger
           dispatch(chatAskAction(prompt))
         }
     };

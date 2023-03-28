@@ -15,7 +15,6 @@ const Home: React.FC = (props) => {
 
   useEffect(() =>{
     if(currentPage === 'profile'){
-      debugger
       if(!userInfo){
         const storeUser = localStorage.getItem("userInfo");
         if(storeUser){

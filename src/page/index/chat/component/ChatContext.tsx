@@ -38,8 +38,11 @@ const ChatContext: React.FC<IChatMsg> = (props) => {
     }
 
     return (
+        // 采用2层嵌套，第一层采用flex布局，是为了使内部的组件垂直居中
         <div className="qa-content">
+            <div className="qa-container">
                 {msgRender()}
+            </div>
         </div>
     );
 }
