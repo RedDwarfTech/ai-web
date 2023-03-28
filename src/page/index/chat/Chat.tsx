@@ -55,10 +55,12 @@ const Chat: React.FC<IChatAskResp> = (props) => {
 
     const onSseMessage = (msg: string) => {
         const msg1:ISse35ServerMsg = JSON.parse(msg);
-        if(msg1.choices[0].delta.content && msg1.choices[0].delta.content==="vip-expired"){
+        if(msg1.choices[0] && msg1.choices[0].finish_reason==="vip-expired"){
+            setLoadings(false);
             message.info("会员已到期");
             return;
         }
+        debugger
         if(msg1.choices[0].delta.content && msg1.choices[0].delta.content.length > 0) {
             appenSseMsg(msg1);
         }
