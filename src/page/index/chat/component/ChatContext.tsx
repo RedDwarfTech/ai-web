@@ -39,9 +39,7 @@ const ChatContext: React.FC<IChatMsg> = (props) => {
 
     return (
         <div className="qa-content">
-            <div className="qa-container">
                 {msgRender()}
-            </div>
         </div>
     );
 }
