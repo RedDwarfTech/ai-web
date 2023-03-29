@@ -1,8 +1,6 @@
 import React from "react";
 import "./ChatContext.css"
 import ReactMarkdown from 'react-markdown';
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { dark, oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import OmsSyntaxHighlight from "./OmsSyntaxHighlight";
 
 export interface IChatMsg {

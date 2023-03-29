@@ -64,9 +64,7 @@ const Home: React.FC = (props) => {
       <GenieHeader onMenuClick = { (value) =>{
         setCurrentPage(value.toString());
       }}/>
-      <div className="content">
-        {renderBody(currentPage)}
-      </div>
+      {renderBody(currentPage)}
       <Footer></Footer>
     </div>);
 

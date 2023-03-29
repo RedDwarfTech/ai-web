@@ -1,8 +1,8 @@
 import { chatAskAction } from '../../action/chat/ChatAction';
 import { requestWithAction } from '../../common/XHRClient';
-import { IChatAsk } from '../../models/chat/ChatAsk';
+import { ChatAsk } from '../../models/request/chat/ChatAsk';
 
-export function doChatAsk(params: IChatAsk) {
+export function doChatAsk(params: ChatAsk) {
     const config = {
         method: 'post',
         url: '/ai/chat/ask',
@@ -10,8 +10,4 @@ export function doChatAsk(params: IChatAsk) {
         data: JSON.stringify(params)
     };
     return requestWithAction(config, chatAskAction);
-}
-
-export function createQrCodeImpl(params: { cruiseProductId: string | undefined; }) {
-  throw new Error("Function not implemented.");
 }

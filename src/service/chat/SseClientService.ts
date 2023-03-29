@@ -1,12 +1,13 @@
-import { IChatAsk } from '../../models/chat/ChatAsk';
+import { ChatAsk } from '../../models/request/chat/ChatAsk';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import { v4 as uuid } from 'uuid';
 
-export function doSseChatAsk(params: IChatAsk, onSseMessage: (msg: string) => void,) {
+export function doSseChatAsk(params: ChatAsk, onSseMessage: (msg: string) => void,) {
   let eventSource: EventSourcePolyfill;
   const accessToken = localStorage.getItem("x-access-token");
   // https://stackoverflow.com/questions/6623232/eventsource-and-basic-http-authentication
-  eventSource = new EventSourcePolyfill('/ai/stream/chat/ask?question=' + encodeURIComponent(params.prompt), {
+  var queryString = Object.keys(params).map(key => key + '=' + params[key as keyof ChatAsk]).join('&');
+  eventSource = new EventSourcePolyfill('/ai/stream/chat/ask?' + queryString, {
     headers: {
       'x-access-token': accessToken ?? "",
       'x-request-id': uuid(),
