@@ -160,7 +160,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                     if(item.questionTime){
                         const sseMsg: ISseMsg = {
                             id: "x",
-                            created: "x",
+                            created: item.questionTime,
                             msg: item.question
                         };
                         newMap.set(item.questionTime, sseMsg);
@@ -168,7 +168,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                     if(item.answerTime){
                         const sseMsg: ISseMsg = {
                             id: "x1",
-                            created: "x1",
+                            created: item.answerTime,
                             msg: item.answer
                         };
                         newMap.set(item.answerTime, sseMsg);
