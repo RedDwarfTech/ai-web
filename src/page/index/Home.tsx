@@ -1,12 +1,12 @@
 import Footer from "../component/footer/Footer";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import GenieHeader from "../component/header/GenieHeader";
 import Chat from "./chat/Chat";
 import Goods from "./goods/Goods";
 import About from "../about/About";
 import Profile from "../user/profile/Profile";
 import { IUserModel } from "js-wheel";
+import "./Home.css";
 
 const Home: React.FC = (props) => {
 
@@ -25,7 +25,9 @@ const Home: React.FC = (props) => {
   });
 
   const renderChat=()=>{
-    return (<Chat></Chat>);
+    return (<Chat onMenuClick = { (value) =>{
+      setCurrentPage(value.toString());
+    }}></Chat>);
   }
 
   const renderAbout=()=>{
@@ -60,13 +62,12 @@ const Home: React.FC = (props) => {
     return (<div></div>);
   }
 
-    return(<div>
-      <GenieHeader onMenuClick = { (value) =>{
-        setCurrentPage(value.toString());
-      }}/>
-      {renderBody(currentPage)}
-      <Footer></Footer>
-    </div>);
+    return(
+      <div id="home-root">
+        {renderBody(currentPage)}
+        <Footer></Footer>
+      </div>
+    );
 
 }
 

@@ -1,0 +1,21 @@
+.cursor {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    background-color: white;
+    animation-name: blink;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

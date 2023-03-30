@@ -8,5 +8,6 @@ export interface IChatAskResp {
         conversations: {
             list: IConversation[]
         }
-    }
+    },
+    onMenuClick: (menu: String) => void;
 }

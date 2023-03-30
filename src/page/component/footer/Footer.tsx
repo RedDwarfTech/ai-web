@@ -9,7 +9,6 @@ const Footer: React.FC = (props) => {
   return (
     <div className="App-footer-float">
       <div id="footer" className="App-footer">
-        <Divider></Divider>
         <div>
           <Row className="custom-row" justify="center" align="middle">
             <Col>

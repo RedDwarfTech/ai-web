@@ -1,10 +1,10 @@
-import { Button, Input, message } from "antd";
+import { Avatar, Button, Divider, Dropdown, Input, MenuProps, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
 import ChatContext from "./component/ChatContext";
-import { isLoggedIn } from "../../../service/user/UserService";
+import { doLoginOut, getCurrentUser, isLoggedIn, userLoginImpl } from "../../../service/user/UserService";
 import WebsocketHeartbeatJs from "websocket-heartbeat-js";
 import { ChatAsk } from "../../../models/request/chat/ChatAsk";
 import { chatAskAction } from "../../../action/chat/ChatAction";
@@ -13,21 +13,25 @@ import { doSseChatAsk } from "../../../service/chat/SseClientService";
 import { ISseMsg } from "../../../models/chat/SseMsg";
 import { ISse35ServerMsg } from "../../../models/chat/3.5/Sse35ServerMsg";
 import dayjs from "dayjs";
-import { REST, TimeUtils } from "js-wheel";
+import { IUserModel, REST, TimeUtils, WheelGlobal } from "js-wheel";
 import { IConversation } from "@/models/chat/3.5/Conversation";
 import { getConversations } from "../../../service/chat/ConversationService";
 import { IConversationReq } from "@/models/request/conversation/ConversationReq";
 import BaseMethods from 'js-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "../../../service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
+import { readConfig } from "../../../config/app/config-reader";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
 
     const [inputValue, setInputValue] = useState('');
     const [webSocketStore, setWebSocketStore] = useState<WebsocketHeartbeatJs | null>(null);
-    const [myMap, setMyMap] = useState(new Map<string,ISseMsg>());
+    const [myMap, setMyMap] = useState(new Map<string, ISseMsg>());
     const [loadings, setLoadings] = useState<boolean>(false);
     const [cid, setCid] = useState<number>(0);
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
+    const [isGetUserLoading, setIsGetUserLoading] = useState(false);
+    const [userInfo, setUserInfo] = useState<IUserModel>();
 
     const handleChange = (e: any) => {
         setInputValue(e.target.value);
@@ -42,9 +46,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     }, [myMap]);
 
     React.useEffect(() => {
-        if (isLoggedIn()) {
-            // doConnectWebsocketJs(onMessage, onOpen);
-        }
+
     }, []);
 
     const fetchConversations = () => {
@@ -96,8 +98,12 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         });
     }
 
+    const handleMenuClick = (menu: string) => {
+        props.onMenuClick(menu);
+    };
+
     const handleSend = () => {
-        if (!isLoggedIn()) {
+        if (!isLoggedIn) {
             message.warning("请登录后再开启聊天");
             setLoadings(false);
             return;
@@ -154,21 +160,21 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         setCid(choosedCid);
         getConversationItems(items).then((resp: any) => {
             if (resp.result && resp.result.list && resp.result.list.length > 0) {
-                const newMap = new Map<string,ISseMsg>();
+                const newMap = new Map<string, ISseMsg>();
                 const itemList = resp.result.list;
                 itemList.forEach((item: any) => {
-                    if(item.questionTime){
+                    if (item.questionTime) {
                         const sseMsg: ISseMsg = {
                             id: "x",
-                            created: item.questionTime,
+                            created: TimeUtils.getFormattedTime(Number(item.questionTime)),
                             msg: item.question
                         };
                         newMap.set(item.questionTime, sseMsg);
                     }
-                    if(item.answerTime){
+                    if (item.answerTime) {
                         const sseMsg: ISseMsg = {
                             id: "x1",
-                            created: item.answerTime,
+                            created: TimeUtils.getFormattedTime(Number(item.answerTime)),
                             msg: item.answer
                         };
                         newMap.set(item.answerTime, sseMsg);
@@ -191,11 +197,98 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         return conversationList;
     }
 
+    const loadCurrentUser = () => {
+        if (!localStorage.getItem("userInfo") && isGetUserLoading === false) {
+            setIsGetUserLoading(true);
+            getCurrentUser().then((data: any) => {
+                setUserInfo(data.result);
+                localStorage.setItem("userInfo", JSON.stringify(data.result));
+                setIsGetUserLoading(false);
+            });
+        }
+    }
+
+    const showUserProfile = () => {
+        handleMenuClick('profile');
+    }
+    const items: MenuProps['items'] = [
+        {
+            key: '2',
+            onClick: doLoginOut,
+            label: (
+                <a>
+                    登出
+                </a>
+            )
+        }, {
+            key: '3',
+            onClick: showUserProfile,
+            label: (
+                <a>
+                    控制台
+                </a>
+            )
+        }]
+
+    const userLogin = () => {
+        let param = {
+            appId: 'vOghoo10L9'
+        };
+        userLoginImpl(param).then((data: any) => {
+            window.location.href = data.result;
+        });
+    }
+
+    const renderLogin = () => {
+        if (isLoggedIn) {
+            var avatarUrl = localStorage.getItem('avatarUrl');
+            if (avatarUrl) {
+                return (<a>
+                    <Dropdown menu={{ items }} trigger={['click']}>
+                        <Avatar size={40} src={avatarUrl} />
+                    </Dropdown>
+                </a>);
+            } else {
+                return (<a>
+                    <Dropdown menu={{ items }} trigger={['click']}>
+                        <Avatar size={40} >Me</Avatar>
+                    </Dropdown>
+                </a>);
+            }
+        }
+        const accessTokenOrigin = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
+        if (accessTokenOrigin) {
+            const accessTokenCookie = accessTokenOrigin.split("=")[1];
+            const refreshTokenCookie = document.cookie.split('; ').find(row => row.startsWith('refreshToken='))?.split("=")[1];
+            const avatarUrlCookie = document.cookie.split('; ').find(row => row.startsWith('avatarUrl='))?.split("=")[1];
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem(WheelGlobal.ACCESS_TOKEN_NAME, accessTokenCookie);
+            localStorage.setItem(WheelGlobal.REFRESH_TOKEN_NAME, refreshTokenCookie ? refreshTokenCookie : "");
+            localStorage.setItem('avatarUrl', avatarUrlCookie ? avatarUrlCookie : "");
+            localStorage.setItem(WheelGlobal.BASE_AUTH_URL, readConfig("baseAuthUrl"));
+            localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH, readConfig("accessTokenUrlPath"));
+            loadCurrentUser();
+            setIsLoggedIn(true);
+        }
+        return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
+    }
+
     return (
         <div className="chat-main-body">
             <div className="conversation">
                 <div className="conversation-list">
                     {conversationRender(props.conversations.conversations)}
+                </div>
+                <div>
+                    <Divider></Divider>
+                    <div className="conversation-action">
+                        <nav>
+                            <div className="conversation-item" onClick={() => handleMenuClick('chat')}>聊天</div>
+                            <div className="conversation-item" onClick={() => handleMenuClick('account')}>订阅</div>
+                            <div className="conversation-item" onClick={() => handleMenuClick('about')}>关于</div>
+                            {renderLogin()}
+                        </nav>
+                    </div>
                 </div>
             </div>
             <div className="chat-container">

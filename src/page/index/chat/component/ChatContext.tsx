@@ -15,7 +15,6 @@ const ChatContext: React.FC<IChatMsg> = (props) => {
                 components={{
                     code({ node, inline, className, children}) {
                         const match = /language-(\w+)/.exec(className || '')
-                        debugger
                         return !inline && match ? (
                             <OmsSyntaxHighlight textContent={String(children).replace(/\n$/, '')} language={match[1]} darkMode />
                         ) : (
