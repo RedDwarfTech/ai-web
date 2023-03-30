@@ -53,7 +53,7 @@ const Goods: React.FC = (props: any) => {
 
   const handlePay = (row: any) => {
     let param = {
-      productId: row.id
+      productId: row.productId
     };
     doPay(param);
   };
