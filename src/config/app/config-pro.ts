@@ -3,7 +3,8 @@ let proConfigMap = new Map([
   ["logoutUrl", "https://ai.poemhub.top"],
   ["baseAuthUrl","https://ai.poemhub.top"],
   ["accessTokenUrlPath","/ai/auth/access-token/refresh"],
-  ["appHome","https://ai.poemhub.top"]
+  ["appHome","https://ai.poemhub.top"],
+  ["appId" , "vOghoo10L9"]
 ]); 
 
 export default proConfigMap;

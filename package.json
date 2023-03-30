@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -35,7 +36,7 @@
     "websocket-heartbeat-js": "^1.1.1"
   },
   "scripts": {
-    "start": "react-app-rewired start --config-overrides ./src/config/build/config-overrides.js",
+    "start": "react-app-rewired start",
     "build": "react-scripts build",
     "test": "react-app test",
     "eject": "react-app eject"

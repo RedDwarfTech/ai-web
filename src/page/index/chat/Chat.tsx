@@ -21,6 +21,7 @@ import BaseMethods from 'js-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "../../../service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "../../../config/app/config-reader";
+import { DollarOutlined, InfoCircleOutlined, MessageOutlined } from "@ant-design/icons";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
     const [inputValue, setInputValue] = useState('');
@@ -230,7 +231,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
 
     const userLogin = () => {
         let param = {
-            appId: 'vOghoo10L9'
+            appId: readConfig("appId")
         };
         userLoginImpl(param).then((data: any) => {
             window.location.href = data.result;
@@ -242,13 +243,13 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             var avatarUrl = localStorage.getItem('avatarUrl');
             if (avatarUrl) {
                 return (<a>
-                    <Dropdown menu={{ items }} trigger={['click']}>
+                    <Dropdown className="action-item" menu={{ items }} trigger={['click']}>
                         <Avatar size={40} src={avatarUrl} />
                     </Dropdown>
                 </a>);
             } else {
                 return (<a>
-                    <Dropdown menu={{ items }} trigger={['click']}>
+                    <Dropdown className="action-item" menu={{ items }} trigger={['click']}>
                         <Avatar size={40} >Me</Avatar>
                     </Dropdown>
                 </a>);
@@ -281,9 +282,15 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                     <Divider></Divider>
                     <div className="conversation-action">
                         <nav>
-                            <div className="conversation-item" onClick={() => handleMenuClick('chat')}>聊天</div>
-                            <div className="conversation-item" onClick={() => handleMenuClick('account')}>订阅</div>
-                            <div className="conversation-item" onClick={() => handleMenuClick('about')}>关于</div>
+                            <div className="conversation-item" onClick={() => handleMenuClick('chat')}>
+                                <MessageOutlined /><span className="action-item">聊天</span>
+                            </div>
+                            <div className="conversation-item" onClick={() => handleMenuClick('account')}>
+                                <DollarOutlined /><span className="action-item">订阅</span>
+                            </div>
+                            <div className="conversation-item" onClick={() => handleMenuClick('about')}>
+                                <InfoCircleOutlined /><span className="action-item">关于</span>
+                            </div>
                             {renderLogin()}
                         </nav>
                     </div>

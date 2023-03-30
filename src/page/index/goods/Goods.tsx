@@ -4,8 +4,19 @@ import "./Goods.css"
 import { doPay } from "../../../service/pay/PayService";
 import Pay from "../../pay/Pay";
 import { createOrder } from "../../../action/pay/PayAction";
+import { ProductReq } from "js-wheel/dist/src/model/product/ProductReq";
+import { readConfig } from "../../../config/app/config-reader";
+import { doGetIapProduct } from "../../../service/goods/GoodsService";
 
 const Goods: React.FC = (props:any) => {
+
+
+  const getGoods = () => {
+    const req: ProductReq = {
+      appId: readConfig("appId")
+    };
+    doGetIapProduct(req);
+  }
 
     const dataSource = [
         {
