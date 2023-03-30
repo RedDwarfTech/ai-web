@@ -8,7 +8,7 @@ const IapProductReducer = (state=initState, action) => {
         case "GET_IAP_PRODUCT":
             return {
                 ...state,
-                iapproducts: action.iapproducts 
+                iapproducts: action.iapproducts.productDetails 
             };
         default:
             break;

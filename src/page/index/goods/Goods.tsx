@@ -5,11 +5,17 @@ import { doPay } from "../../../service/pay/PayService";
 import Pay from "../../pay/Pay";
 import { createOrder } from "../../../action/pay/PayAction";
 import { ProductReq } from "js-wheel/dist/src/model/product/ProductReq";
-import { readConfig } from "../../../config/app/config-reader";
-import { doGetIapProduct } from "../../../service/goods/GoodsService";
+import { readConfig } from "@/config/app/config-reader";
+import { doGetIapProduct } from "@/service/goods/GoodsService";
+import { useEffect } from "react";
+import { getIapProductsAction } from "@/action/iapproduct/IapProductAction";
+import BaseMethods from "js-wheel/dist/src/utils/data/BaseMethods";
 
-const Goods: React.FC = (props:any) => {
+const Goods: React.FC = (props: any) => {
 
+  useEffect(() => {
+    getGoods();
+  },[]);
 
   const getGoods = () => {
     const req: ProductReq = {
@@ -18,80 +24,71 @@ const Goods: React.FC = (props:any) => {
     doGetIapProduct(req);
   }
 
-    const dataSource = [
-        {
-          id: '4',
-          name: 'Genie会员1月',
-          age: "9.9/月",
-          address: '--',
-        },
-        {
-          id: '5',
-          name: '支付测试/补差价',
-          age: '0.01/月',
-          address: '10',
-        },
-      ];
-      
-      const columns = [
-        {
-          title: 'ID',
-          dataIndex: 'id',
-          key: 'id',
-          
-        },
-        {
-          title: '名称',
-          dataIndex: 'name',
-          key: 'name',
-        },
-        {
-          title: '单价',
-          dataIndex: 'age',
-          key: 'age',
-        },
-        {
-          title: '库存',
-          dataIndex: 'address',
-          key: 'address',
-        },
-        {
-          title: '操作',
-          dataIndex: 'address',
-          key: 'address',
-          render: (text:string,record:any,index:number) => {
-            return (<div><Button onClick={()=>handlePay(record)} type="primary">购买</Button></div>);
-          }
-        },
-      ];
+  const columns = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
 
-      const handlePay = (row:any) => {
-        let param = {
-          productId: row.id
-        };
-        doPay(param);
-      };
-      
-    let generateFormText = props.pay.formText;
-    return(
-        <div>
-             <Table dataSource={dataSource} columns={columns} />
-             <Pay payFormText={generateFormText}></Pay>
-        </div>
-    );
+    },
+    {
+      title: '名称',
+      dataIndex: 'productTitle',
+      key: 'productTitle',
+    },
+    {
+      title: '单价',
+      dataIndex: 'price',
+      key: 'price',
+    },
+    {
+      title: '操作',
+      dataIndex: 'address',
+      key: 'address',
+      render: (text: string, record: any, index: number) => {
+        return (<div><Button onClick={() => handlePay(record)} type="primary">购买</Button></div>);
+      }
+    },
+  ];
+
+  const handlePay = (row: any) => {
+    let param = {
+      productId: row.id
+    };
+    doPay(param);
+  };
+
+  let generateFormText = props.pay.formText;
+  let serverDataSource =[];
+  if(BaseMethods.isNull(props.iapproducts.iapproducts)){
+    
+  }else{
+    serverDataSource =props.iapproducts.iapproducts;
+  }
+  
+  return (
+    <div>
+      <Table dataSource={serverDataSource} columns={columns} />
+      <Pay payFormText={generateFormText}></Pay>
+    </div>
+  );
 }
 
-  const mapStateToProps = (state: any) => ({
-    pay: state.pay
-  });
-  
-  const mapDispatchToProps = (dispatch: any) => {
-    return {
-      createOrder: (pay: any) => {
-        dispatch(createOrder(pay))
-      }
-    };
+const mapStateToProps = (state: any) => ({
+  pay: state.pay,
+  iapproducts: state.iapproducts
+});
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    createOrder: (pay: any) => {
+      dispatch(createOrder(pay))
+    },
+    getIapProducts: (iapproducts: any) => {
+      dispatch(getIapProductsAction(iapproducts))
+    }
   };
-  
-  export default connect(mapStateToProps, mapDispatchToProps)(Goods);
-  
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Goods);
+
