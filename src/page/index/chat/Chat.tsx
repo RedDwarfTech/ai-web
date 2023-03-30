@@ -23,7 +23,6 @@ import { IConversationItemReq } from "@/models/request/conversation/Conversation
 import { readConfig } from "../../../config/app/config-reader";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
-
     const [inputValue, setInputValue] = useState('');
     const [webSocketStore, setWebSocketStore] = useState<WebsocketHeartbeatJs | null>(null);
     const [myMap, setMyMap] = useState(new Map<string, ISseMsg>());
@@ -38,7 +37,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     };
 
     useEffect(() => {
-        fetchConversations();
         var element = document.querySelector('.chat-body');
         if (element) {
             element.scrollTop = element.scrollHeight - element.clientHeight;
@@ -46,7 +44,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     }, [myMap]);
 
     React.useEffect(() => {
-
+        fetchConversations();
     }, []);
 
     const fetchConversations = () => {
