@@ -2,9 +2,6 @@ import Footer from "../component/footer/Footer";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Chat from "./chat/Chat";
-import Goods from "./goods/Goods";
-import About from "../about/About";
-import Profile from "../user/profile/Profile";
 import { IUserModel } from "js-wheel";
 import "./Home.css";
 
@@ -13,73 +10,34 @@ const Home: React.FC = (props) => {
   const [currentPage, setCurrentPage] = useState("chat");
   const [userInfo, setUserInfo] = useState<IUserModel>();
 
-  useEffect(() =>{
-    if(currentPage === 'profile'){
-      if(!userInfo){
+  useEffect(() => {
+    if (currentPage === 'profile') {
+      if (!userInfo) {
         const storeUser = localStorage.getItem("userInfo");
-        if(storeUser){
+        if (storeUser) {
           setUserInfo(JSON.parse(storeUser));
         }
       }
     }
   });
 
-  const renderChat=()=>{
-    return (<Chat onMenuClick = { (value) =>{
-      setCurrentPage(value.toString());
-    }}></Chat>);
-  }
-
-  const renderAbout=()=>{
-    return(
-          
-          <About></About>
-      
-      );
-  }
-
-  const renderAccountBuy=()=>{
-      return(
-        <div>    
-            <Goods></Goods>
-        </div>
-        );
-  }
-
-  const renderBody=(menu: string)=>{
-    if(menu === "chat"){
-      return renderChat();
-    }
-    if(menu === "account"){
-      return renderAccountBuy();
-    }
-    if(menu === "about"){
-      return renderAbout();
-    }
-    if(menu === "profile"){
-      return (<Profile panelUserInfo={userInfo}></Profile>);
-    }
-    return (<div></div>);
-  }
-
-    return(
-      <div id="home-root">
-        {renderBody(currentPage)}
-        <Footer></Footer>
-      </div>
-    );
-
+  return (
+    <div id="home-root">
+      <Chat menu={currentPage} onMenuClick={(value) => { setCurrentPage(value.toString()); }}></Chat>
+      <Footer></Footer>
+    </div>
+  );
 }
 
 const mapStateToProps = (state: any) => ({
-    robot: state.robot
-  });
-  
-  const mapDispatchToProps = (dispatch: any) => {
-    return {
-      
-    };
+  robot: state.robot
+});
+
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+
   };
-  
-  export default connect(mapStateToProps, mapDispatchToProps)(Home);
-  
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
+

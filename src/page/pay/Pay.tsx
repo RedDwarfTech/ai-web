@@ -14,18 +14,12 @@ const Pay: React.FC<PayProps> = (props) => {
 
   return (
     <div>
-      <div>
-        <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} >
-          <Col>
-            <iframe srcDoc={formText} 
-            width="600" 
+      <iframe srcDoc={formText}
+            width="600"
             height="600"
             frameBorder="no"
             scrolling="no"
-            ></iframe>
-          </Col>
-        </Row>
-      </div>
+          ></iframe>
     </div>
   );
 }
@@ -34,7 +28,7 @@ const mapStateToProps = (state: { formText: any; }) => ({
   formText: state.formText
 });
 
-const mapDispatchToProps = (dispatch:any) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
     createOrder: (formText: String) => {
       dispatch(createOrder(formText))

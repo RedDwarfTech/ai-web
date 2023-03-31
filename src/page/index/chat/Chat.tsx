@@ -6,22 +6,27 @@ import { v4 as uuid } from 'uuid';
 import ChatContext from "./component/ChatContext";
 import { doLoginOut, getCurrentUser, isLoggedIn, userLoginImpl } from "../../../service/user/UserService";
 import WebsocketHeartbeatJs from "websocket-heartbeat-js";
-import { ChatAsk } from "../../../models/request/chat/ChatAsk";
-import { chatAskAction } from "../../../action/chat/ChatAction";
-import { IChatAskResp } from "../../../models/chat/ChatAskResp";
-import { doSseChatAsk } from "../../../service/chat/SseClientService";
-import { ISseMsg } from "../../../models/chat/SseMsg";
-import { ISse35ServerMsg } from "../../../models/chat/3.5/Sse35ServerMsg";
+import { ChatAsk } from "@/models/request/chat/ChatAsk";
+import { chatAskAction } from "@/action/chat/ChatAction";
+import { IChatAskResp } from "@/models/chat/ChatAskResp";
+import { doSseChatAsk } from "@/service/chat/SseClientService";
+import { ISseMsg } from "@/models/chat/SseMsg";
+import { ISse35ServerMsg } from "@/models/chat/3.5/Sse35ServerMsg";
 import dayjs from "dayjs";
-import { IUserModel, REST, TimeUtils, WheelGlobal } from "js-wheel";
+import { IUserModel, TimeUtils, WheelGlobal } from "js-wheel";
 import { IConversation } from "@/models/chat/3.5/Conversation";
-import { getConversations } from "../../../service/chat/ConversationService";
+import { getConversations } from "@/service/chat/ConversationService";
 import { IConversationReq } from "@/models/request/conversation/ConversationReq";
 import BaseMethods from 'js-wheel/dist/src/utils/data/BaseMethods';
-import { getConversationItems } from "../../../service/chat/ConversationItemService";
+import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
-import { readConfig } from "../../../config/app/config-reader";
+import { readConfig } from "@/config/app/config-reader";
 import { DollarOutlined, InfoCircleOutlined, MessageOutlined } from "@ant-design/icons";
+import About from "@/page/about/About";
+import Goods from "../goods/Goods";
+import Profile from "@/page/user/profile/Profile";
+import Images from "../images/GenImages";
+import GenImages from "../images/GenImages";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
     const [inputValue, setInputValue] = useState('');
@@ -273,6 +278,55 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
     }
 
+    const renderRightContainer =(tab: String) =>{
+        if(tab === "chat"){
+            return (
+                <div className="chat-container">
+                    <div className="chat-body">
+                        {renderChat()}
+                    </div>
+                    <div className="chat-form">
+                        <Input id="talkInput"
+                            value={inputValue}
+                            onChange={handleChange}
+                            onKeyPress={handleEnterKey}
+                            type="text" placeholder="输入会话内容" />
+                        <Button loading={loadings} onClick={handleSend}><span>发送</span></Button>
+                    </div>
+                </div>
+            );
+        }
+        if(tab === "about"){
+            return (
+                <div className="chat-container">
+                    <About></About>
+                </div>
+            );
+        }
+        if(tab === "account"){
+            return (
+                <div className="chat-container">
+                    <Goods></Goods>
+                </div>
+            );
+        }
+        if(tab === "image"){
+            return (
+                <div className="chat-container">
+                    <GenImages></GenImages>
+                </div>
+            );
+        }
+        if(tab ==="profile"){
+            return (
+                <div className="chat-container">
+                    <Profile panelUserInfo={userInfo}></Profile>
+                </div>
+            );
+        }
+        return (<div></div>);
+    }
+
     return (
         <div className="chat-main-body">
             <div className="conversation">
@@ -286,6 +340,9 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                             <div className="conversation-item" onClick={() => handleMenuClick('chat')}>
                                 <MessageOutlined /><span className="action-item">聊天</span>
                             </div>
+                            <div className="conversation-item" onClick={() => handleMenuClick('image')}>
+                                <MessageOutlined /><span className="action-item">图片生成</span>
+                            </div>
                             <div className="conversation-item" onClick={() => handleMenuClick('account')}>
                                 <DollarOutlined /><span className="action-item">订阅</span>
                             </div>
@@ -297,19 +354,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                     </div>
                 </div>
             </div>
-            <div className="chat-container">
-                <div className="chat-body">
-                    {renderChat()}
-                </div>
-                <div className="chat-form">
-                    <Input id="talkInput"
-                        value={inputValue}
-                        onChange={handleChange}
-                        onKeyPress={handleEnterKey}
-                        type="text" placeholder="输入会话内容" />
-                    <Button loading={loadings} onClick={handleSend}><span>发送</span></Button>
-                </div>
-            </div>
+            {renderRightContainer(props.menu)}
         </div>
     );
 }
