@@ -190,6 +190,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
         const conversations: IConversation[] = con.list;
         const conversationList: JSX.Element[] = [];
+        conversations.sort((a, b) => a.created - b.created);
         conversations.forEach(item => {
             conversationList.push(<div onClick={() => getConverItems(item.id)} className="conversation-item">{item.title}</div>);
         });

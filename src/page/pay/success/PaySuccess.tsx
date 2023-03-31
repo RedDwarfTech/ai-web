@@ -4,6 +4,8 @@ import "./PaySuccess.css"
 import queryString from 'query-string';
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router-dom';
+import { RequestHandler } from "js-wheel";
+import { getCurrentUser } from "@/service/user/UserService";
 
 const PaySuccess: React.FC = (props) => {
 
@@ -21,6 +23,10 @@ const PaySuccess: React.FC = (props) => {
     // 现代浏览器已经不再需要将 & 编码为 &amp;，但一些较旧版本的浏览器和遗留系统可能仍然需要这样做。
     const parsed = queryString.parse(location.search.replace(/&amp;/g, '&'));
     if(parsed != null && parsed.orderId && parsed.payAmount){
+        RequestHandler.handleAccessTokenExpire();
+        getCurrentUser().then((data: any) => {
+            localStorage.setItem("userInfo", JSON.stringify(data.result));
+        });
       return (<div className="pay-success-container">
       <h1>支付成功！</h1>
       <p>您的订单已经成功支付。</p>

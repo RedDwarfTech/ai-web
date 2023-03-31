@@ -63,7 +63,7 @@ const Goods: React.FC = (props: any) => {
   if(BaseMethods.isNull(props.iapproducts.iapproducts)){
     
   }else{
-    serverDataSource =props.iapproducts.iapproducts;
+    serverDataSource = props.iapproducts.iapproducts;
   }
   
   return (
