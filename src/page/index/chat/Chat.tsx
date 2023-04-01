@@ -180,6 +180,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             if (resp.result && resp.result.list && resp.result.list.length > 0) {
                 const newMap = new Map<string, ISseMsg>();
                 const itemList = resp.result.list;
+                itemList.sort((a: any, b: any) => Number(a.createdTime) - Number(b.createdTime));
                 itemList.forEach((item: any) => {
                     if (item.questionTime) {
                         const sseMsg: ISseMsg = {
@@ -211,7 +212,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
         const conversations: IConversation[] = con.list;
         const conversationList: JSX.Element[] = [];
-        conversations.sort((a, b) => b.created - a.created);
         conversations.forEach(item => {
             conversationList.push(<div onClick={() => getConverItems(item.id)} className="conversation-item">{item.title}</div>);
         });
