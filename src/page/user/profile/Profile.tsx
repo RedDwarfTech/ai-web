@@ -44,9 +44,6 @@ const Profile: React.FC<ProfileProps> = (props:any) => {
       const params = {
         feedback: feedbackValue
       };
-      //submitFeedback(params).then((data) => {
-        // alert(data.msg);
-      //});
     }
   
     const userInfo = props.panelUserInfo;

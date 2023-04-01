@@ -334,9 +334,14 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             );
         }
         if (tab === "profile") {
+            const userInfoJson = localStorage.getItem("userInfo");
+            if(!userInfoJson){
+                return;
+            }
+            const uInfo: IUserModel = JSON.parse(userInfoJson);
             return (
                 <div className="chat-container">
-                    <Profile panelUserInfo={userInfo}></Profile>
+                    <Profile panelUserInfo={uInfo}></Profile>
                 </div>
             );
         }
