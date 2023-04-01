@@ -1,9 +1,8 @@
 import { ResponseHandler, REST, WheelGlobal } from 'js-wheel';
-import WebsocketHeartbeatJs from 'websocket-heartbeat-js';
-import { readConfig } from '../../../config/app/config-reader';
-import { IWebsocketMsg } from '../../../models/chat/WebSocketMsg';
-import { WebSocketMsgType } from '../../../models/chat/WebSocketMsgType';
-import { isLoggedIn } from '../../../service/user/UserService';
+import { readConfig } from '../src/config/app/config-reader';
+import { IWebsocketMsg } from '../src/models/chat/WebSocketMsg';
+import { WebSocketMsgType } from '../src/models/chat/WebSocketMsgType';
+import { isLoggedIn } from '../src/service/user/UserService';
 
 export function doCloseWebsocket(chatWebsocket: WebSocket) {
     if (chatWebsocket) {
