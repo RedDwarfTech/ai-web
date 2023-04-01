@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 //import { submitFeedback } from "@/service/user/FeedbackService";
 import { getCurrentUserAction } from "../../../action/user/UserAction";
 import "./Profile.css";
+import alipayPic from "@/asset/icon/alipay-circle.png";
 
 export type ProfileProps = {
     panelUserInfo: IUserModel|undefined;
@@ -72,7 +73,7 @@ const Profile: React.FC<ProfileProps> = (props:any) => {
               <Card title="登录凭据">
                 <Row style={{ marginTop: '10px', marginBottom: '10px' }}>
                   <Col span={8}>
-                    <Avatar></Avatar>
+                    <Avatar src={alipayPic}></Avatar>
                   </Col>
                   <Col span={8}><span>已绑定</span></Col>
                   <Col span={8}><span></span></Col>
