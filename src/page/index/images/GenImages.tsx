@@ -23,15 +23,13 @@ const GenImages: React.FC<IImageResp> = (props) => {
 
     const handleSend = () => {
         if (!isLoggedIn) {
-            message.warning("请登录后再开启聊天");
+            message.warning("请登录后再生成图片");
             setLoadings(false);
             return;
         }
         if (!inputValue) {
             return;
         }
-
-        setInputValue('');
         setLoadings(true);
         let params = {
             prompt: inputValue
@@ -59,12 +57,14 @@ const GenImages: React.FC<IImageResp> = (props) => {
 
     return (
         <div>
-            <Input id="talkInput"
-                value={inputValue}
-                onChange={handleChange}
-                onKeyPress={handleEnterKey}
-                type="text" placeholder="输入内容" />
-            <Button loading={loadings} onClick={handleSend}><span>生成</span></Button>
+            <div className="image-input">
+                <Input id="talkInput"
+                    value={inputValue}
+                    onChange={handleChange}
+                    onKeyPress={handleEnterKey}
+                    type="text" placeholder="输入描述，如: a beautiful cat" />
+                <Button type="primary" loading={loadings} onClick={handleSend}><span>生成</span></Button>
+            </div>
             <Divider></Divider>
             {renderImages()}
         </div>

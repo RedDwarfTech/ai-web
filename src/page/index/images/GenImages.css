@@ -7,3 +7,21 @@
     height: 360px;
     margin-left: 20px;
 }
+
+
+.image-input {
+    display: flex;
+    margin-top: 15px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.image-input Input {
+    height: 40px;
+    width: 70%;
+}
+
+.image-input Button {
+    height: 40px;
+    margin-left: 10px;
+}
