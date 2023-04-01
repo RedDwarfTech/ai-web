@@ -68,14 +68,14 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             return;
         }
         if (msg1.choices[0].delta.content && msg1.choices[0].delta.content.length > 0) {
-            appenSseMsg(msg1);
+            appenSseMsg(msg1, "chatgpt");
         }
         if (msg1.choices[0].finish_reason && msg1.choices[0].finish_reason === "stop") {
             setLoadings(false);
         }
     }
 
-    const appenSseMsg = (data: ISse35ServerMsg) => {
+    const appenSseMsg = (data: ISse35ServerMsg, msgType: string) => {
         setMyMap((prevMapState) => {
             const newMapState = new Map<string, ISseMsg>(prevMapState);
             if (newMapState.has(data.id)) {
@@ -88,7 +88,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                     id: data.id,
                     msg: message ?? "",
                     created: TimeUtils.getFormattedTime(data.created * 1000),
-                    type: "chatgpt"
+                    type: msgType
                 };
                 newMapState.set(data.id, sseMsg);
             } else {
@@ -96,7 +96,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                     id: data.id,
                     created: TimeUtils.getFormattedTime(data.created * 1000),
                     msg: data.choices[0].delta.content,
-                    type: "chatgpt"
+                    type: msgType
                 };
                 newMapState.set(data.id, sseMsg);
             }
@@ -130,7 +130,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                 }
             ]
         };
-        appenSseMsg(msg);
+        appenSseMsg(msg, "prompt");
         setInputValue('');
         setLoadings(true);
         let ask: ChatAsk = {
