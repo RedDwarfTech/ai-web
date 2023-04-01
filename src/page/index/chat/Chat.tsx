@@ -5,7 +5,6 @@ import "./Chat.css"
 import { v4 as uuid } from 'uuid';
 import ChatContext from "./component/ChatContext";
 import { doLoginOut, getCurrentUser, isLoggedIn, userLoginImpl } from "../../../service/user/UserService";
-import WebsocketHeartbeatJs from "websocket-heartbeat-js";
 import { ChatAsk } from "@/models/request/chat/ChatAsk";
 import { chatAskAction } from "@/action/chat/ChatAction";
 import { IChatAskResp } from "@/models/chat/ChatAskResp";
@@ -27,10 +26,11 @@ import Goods from "../goods/Goods";
 import Profile from "@/page/user/profile/Profile";
 import Images from "../images/GenImages";
 import GenImages from "../images/GenImages";
+import chatMeImage from "@/asset/icon/chat-me.png";
+import chatgpt from "@/asset/icon/chatgpt.svg";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
     const [inputValue, setInputValue] = useState('');
-    const [webSocketStore, setWebSocketStore] = useState<WebsocketHeartbeatJs | null>(null);
     const [myMap, setMyMap] = useState(new Map<string, ISseMsg>());
     const [loadings, setLoadings] = useState<boolean>(false);
     const [cid, setCid] = useState<number>(0);
@@ -88,13 +88,15 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                     id: data.id,
                     msg: message ?? "",
                     created: TimeUtils.getFormattedTime(data.created * 1000),
+                    type: "chatgpt"
                 };
                 newMapState.set(data.id, sseMsg);
             } else {
                 const sseMsg: ISseMsg = {
                     id: data.id,
                     created: TimeUtils.getFormattedTime(data.created * 1000),
-                    msg: data.choices[0].delta.content
+                    msg: data.choices[0].delta.content,
+                    type: "chatgpt"
                 };
                 newMapState.set(data.id, sseMsg);
             }
@@ -142,11 +144,23 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         const tagList: JSX.Element[] = [];
         myMap.forEach((value, key) => {
             let chatValue: ISseMsg = value;
-            tagList.push(
-                <div key={uuid()} className="chat-message">
-                    <div key={uuid()} className="message-time">{value.created}</div>
-                    <ChatContext msg={chatValue.msg}></ChatContext>
-                </div>);
+            if (value.type === "prompt") {
+                tagList.push(
+                    <div key={uuid()} className="chat-message">
+                        <div key={uuid()} className="message-time">
+                            <img className="chat-me" src={chatMeImage}></img>
+                            <span>{value.created}</span></div>
+                        <ChatContext msg={chatValue.msg}></ChatContext>
+                    </div>);
+            } else {
+                tagList.push(
+                    <div key={uuid()} className="chat-message">
+                        <div key={uuid()} className="message-time">
+                            <img className="chat-me" src={chatgpt}></img>
+                            <span>{value.created}</span></div>
+                        <ChatContext msg={chatValue.msg}></ChatContext>
+                    </div>);
+            }
         });
         return tagList;
     };
@@ -171,7 +185,8 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                         const sseMsg: ISseMsg = {
                             id: "x",
                             created: TimeUtils.getFormattedTime(Number(item.questionTime)),
-                            msg: item.question
+                            msg: item.question,
+                            type: "prompt"
                         };
                         newMap.set(item.questionTime, sseMsg);
                     }
@@ -179,7 +194,8 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                         const sseMsg: ISseMsg = {
                             id: "x1",
                             created: TimeUtils.getFormattedTime(Number(item.answerTime)),
-                            msg: item.answer
+                            msg: item.answer,
+                            type: "chatgpt"
                         };
                         newMap.set(item.answerTime, sseMsg);
                     }
@@ -195,7 +211,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
         const conversations: IConversation[] = con.list;
         const conversationList: JSX.Element[] = [];
-        conversations.sort((a, b) => a.created - b.created);
+        conversations.sort((a, b) => b.created - a.created);
         conversations.forEach(item => {
             conversationList.push(<div onClick={() => getConverItems(item.id)} className="conversation-item">{item.title}</div>);
         });
@@ -278,8 +294,8 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
     }
 
-    const renderRightContainer =(tab: String) =>{
-        if(tab === "chat"){
+    const renderRightContainer = (tab: String) => {
+        if (tab === "chat") {
             return (
                 <div className="chat-container">
                     <div className="chat-body">
@@ -296,28 +312,28 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                 </div>
             );
         }
-        if(tab === "about"){
+        if (tab === "about") {
             return (
                 <div className="chat-container">
                     <About></About>
                 </div>
             );
         }
-        if(tab === "account"){
+        if (tab === "account") {
             return (
                 <div className="chat-container">
                     <Goods></Goods>
                 </div>
             );
         }
-        if(tab === "image"){
+        if (tab === "image") {
             return (
                 <div className="chat-container">
                     <GenImages></GenImages>
                 </div>
             );
         }
-        if(tab ==="profile"){
+        if (tab === "profile") {
             return (
                 <div className="chat-container">
                     <Profile panelUserInfo={userInfo}></Profile>

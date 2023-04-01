@@ -18,9 +18,7 @@
     "dayjs": "^1.11.7",
     "event-source-polyfill": "^1.0.31",
     "hashmap": "^2.4.0",
-    "js-base64": "^3.7.5",
     "js-wheel": "https://github.com/jiangxiaoqiang/js-wheel.git",
-    "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.5",
@@ -32,8 +30,7 @@
     "tslib": "^2.5.0",
     "typescript": "^4.9.5",
     "uuid": "^9.0.0",
-    "web-vitals": "^2.1.4",
-    "websocket-heartbeat-js": "^1.1.1"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -60,7 +57,6 @@
     ]
   },
   "devDependencies": {
-    "@types/query-string": "^6.3.0",
     "@types/react": "^18.0.28",
     "@types/react-syntax-highlighter": "^15.5.6",
     "@types/uuid": "^9.0.1",

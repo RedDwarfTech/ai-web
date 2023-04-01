@@ -39,10 +39,16 @@
   margin-bottom: 20px;
 }
 
-.chat-message .message-time {
+.message-time {
   color: #aaa;
   margin-bottom: 5px;
-  height: 20px;
+  height: 29px;
+  display: flex;
+  align-items: center;
+}
+
+.message-time span {
+  margin-left: 5px;
 }
 
 .chat-message .message-text {
@@ -121,4 +127,9 @@
 
 .action-item {
   margin-left: 12px;
+}
+
+.chat-me {
+  width: 29px;
+  height: 29px;
 }
