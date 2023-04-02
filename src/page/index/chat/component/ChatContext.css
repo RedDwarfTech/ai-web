@@ -1,13 +1,15 @@
 .qa-content {
-    background-color: whitesmoke;
+    background-color: rgba(0,0,0,.05);
     border-radius: 3px;
     align-items: center;     /* 垂直居中 */
     word-wrap: break-word; 
     word-break: normal;
-    min-height: 40px;
+    min-height: 35px;
     display: flex;
-    margin-left: 33px;
-
+    margin-left: 16px;
+    border-radius: 10px;
+    border: 1px solid #dedede;
+    padding: 5px;
 }
 
 .qa-container p{

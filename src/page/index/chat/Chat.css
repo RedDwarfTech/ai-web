@@ -4,10 +4,6 @@
   height: 92vh;
 }
 
-.conversation {
-  width: 13%;
-}
-
 .chat-container {
   display: flex;
   width: 87%;
@@ -37,18 +33,8 @@
 
 .chat-message {
   margin-bottom: 20px;
-}
-
-.message-time {
-  color: #aaa;
-  margin-bottom: 5px;
-  height: 29px;
   display: flex;
-  align-items: center;
-}
-
-.message-time span {
-  margin-left: 5px;
+  align-items: flex-start;
 }
 
 .chat-message .message-text {
@@ -97,6 +83,7 @@
 }
 
 .conversation {
+  width: 13%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -132,4 +119,5 @@
 .chat-me {
   width: 29px;
   height: 29px;
+  margin-top: 5px;
 }

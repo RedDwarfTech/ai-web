@@ -20,7 +20,7 @@ import BaseMethods from 'js-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "@/config/app/config-reader";
-import { DollarOutlined, InfoCircleOutlined, MessageOutlined } from "@ant-design/icons";
+import { DollarOutlined, FileImageOutlined, InfoCircleOutlined, MessageOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
 import Goods from "../goods/Goods";
 import Profile from "@/page/user/profile/Profile";
@@ -147,17 +147,13 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             if (value.type === "prompt") {
                 tagList.push(
                     <div key={uuid()} className="chat-message">
-                        <div key={uuid()} className="message-time">
-                            <img className="chat-me" src={chatMeImage}></img>
-                            <span>{value.created}</span></div>
+                        <img className="chat-me" src={chatMeImage}></img>
                         <ChatContext msg={chatValue.msg}></ChatContext>
                     </div>);
             } else {
                 tagList.push(
                     <div key={uuid()} className="chat-message">
-                        <div key={uuid()} className="message-time">
-                            <img className="chat-me" src={chatgpt}></img>
-                            <span>{value.created}</span></div>
+                        <img className="chat-me" src={chatgpt}></img>
                         <ChatContext msg={chatValue.msg}></ChatContext>
                     </div>);
             }
@@ -362,7 +358,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                                 <MessageOutlined /><span className="action-item">聊天</span>
                             </div>
                             <div className="conversation-item" onClick={() => handleMenuClick('image')}>
-                                <MessageOutlined /><span className="action-item">图片生成</span>
+                                <FileImageOutlined /><span className="action-item">图片生成</span>
                             </div>
                             <div className="conversation-item" onClick={() => handleMenuClick('account')}>
                                 <DollarOutlined /><span className="action-item">订阅</span>
