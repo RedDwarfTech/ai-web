@@ -63,10 +63,10 @@
 }
 
 .chat-form button {
-  background-color: #4d4d4d;
+  background-color: #1d93ab;
   color: #fff;
   padding: 5px 20px;
-  font-size: 16px;
+  font-size: 17px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -80,6 +80,13 @@
 
 .chat-form button span {
   margin-bottom: 10px;
+}
+
+.chat-send-icon {
+  transform: rotate(-45deg);
+  margin-right: 0px;
+  height: 10px;
+  width: 10px;
 }
 
 .conversation {

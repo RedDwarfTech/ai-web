@@ -20,14 +20,15 @@ import BaseMethods from 'js-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "@/config/app/config-reader";
-import { DollarOutlined, FileImageOutlined, InfoCircleOutlined, MessageOutlined } from "@ant-design/icons";
+import { DollarOutlined, FileImageOutlined, InfoCircleOutlined, MessageOutlined, SendOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
 import Goods from "../goods/Goods";
 import Profile from "@/page/user/profile/Profile";
-import Images from "../images/GenImages";
 import GenImages from "../images/GenImages";
 import chatMeImage from "@/asset/icon/chat-me.png";
 import chatgpt from "@/asset/icon/chatgpt.svg";
+import chatsend from "@/asset/icon/chat-send.svg";
+import { transform } from "typescript";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
     const [inputValue, setInputValue] = useState('');
@@ -303,7 +304,9 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                             onChange={handleChange}
                             onKeyPress={handleEnterKey}
                             type="text" placeholder="输入会话内容" />
-                        <Button loading={loadings} onClick={handleSend}><span>发送</span></Button>
+                        <Button icon={<SendOutlined className="chat-send-icon"/>} loading={loadings} onClick={handleSend}>
+                            <span>发送</span>
+                        </Button>
                     </div>
                 </div>
             );
