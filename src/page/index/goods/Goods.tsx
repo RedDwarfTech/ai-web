@@ -37,7 +37,7 @@ const Goods: React.FC = (props: any) => {
       key: 'productTitle',
     },
     {
-      title: '单价',
+      title: '价格(元)',
       dataIndex: 'price',
       key: 'price',
     },

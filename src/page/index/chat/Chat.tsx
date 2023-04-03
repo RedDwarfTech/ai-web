@@ -299,11 +299,13 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                         {renderChat()}
                     </div>
                     <div className="chat-form">
-                        <Input id="talkInput"
+                        <Input.TextArea
+                            rows = {2}
+                            id="talkInput"
                             value={inputValue}
                             onChange={handleChange}
                             onKeyPress={handleEnterKey}
-                            type="text" placeholder="输入会话内容" />
+                            placeholder="输入会话内容" />
                         <Button icon={<SendOutlined className="chat-send-icon"/>} loading={loadings} onClick={handleSend}>
                             <span>发送</span>
                         </Button>
