@@ -1,5 +1,5 @@
 import { Avatar, Button, Divider, Dropdown, Input, MenuProps, message } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
@@ -27,8 +27,7 @@ import Profile from "@/page/user/profile/Profile";
 import GenImages from "../images/GenImages";
 import chatMeImage from "@/asset/icon/chat-me.png";
 import chatgpt from "@/asset/icon/chatgpt.svg";
-import chatsend from "@/asset/icon/chat-send.svg";
-import { transform } from "typescript";
+import ChatList from "./component/ChatList";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
     const [inputValue, setInputValue] = useState('');
@@ -39,7 +38,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const [isGetUserLoading, setIsGetUserLoading] = useState(false);
     const [userInfo, setUserInfo] = useState<IUserModel>();
 
-    const handleChange = (e: any) => {
+    const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
     };
 
@@ -296,17 +295,17 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             return (
                 <div className="chat-container">
                     <div className="chat-body">
-                        {renderChat()}
+                        <ChatList myMap={myMap}></ChatList>
                     </div>
                     <div className="chat-form">
                         <Input.TextArea
-                            rows = {2}
+                            rows={2}
                             id="talkInput"
                             value={inputValue}
-                            onChange={handleChange}
+                            onChange={handleChatInputChange}
                             onKeyPress={handleEnterKey}
                             placeholder="输入会话内容" />
-                        <Button icon={<SendOutlined className="chat-send-icon"/>} loading={loadings} onClick={handleSend}>
+                        <Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
                             <span>发送</span>
                         </Button>
                     </div>
@@ -336,7 +335,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
         if (tab === "profile") {
             const userInfoJson = localStorage.getItem("userInfo");
-            if(!userInfoJson){
+            if (!userInfoJson) {
                 return;
             }
             const uInfo: IUserModel = JSON.parse(userInfoJson);
