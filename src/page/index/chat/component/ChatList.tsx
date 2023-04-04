@@ -5,6 +5,7 @@ import React from "react";
 import ChatContext from "./ChatContext";
 import chatMeImage from "@/asset/icon/chat-me.png";
 import chatgpt from "@/asset/icon/chatgpt.svg";
+import './ChatList.css';
 
 export interface IChatAskList {
     myMap: Map<string, ISseMsg>,
