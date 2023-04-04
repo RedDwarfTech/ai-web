@@ -294,9 +294,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         if (tab === "chat") {
             return (
                 <div className="chat-container">
-                    <div className="chat-body">
-                        <ChatList myMap={myMap}></ChatList>
-                    </div>
+                    <ChatList myMap={myMap}></ChatList>
                     <div className="chat-form">
                         <Input.TextArea
                             rows={2}

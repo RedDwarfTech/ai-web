@@ -10,10 +10,13 @@ export interface IChatAskList {
     myMap: Map<string, ISseMsg>,
 }
 
+/**
+ * when the chat list increase, the chat list will rerender every time when user input words
+ * so add the React.memo to avoid the dulplicate rerender 
+ */
 const ChatList: React.FC<IChatAskList> = React.memo((props) => {
     
     const renderChat = () => {
-        debugger
         const tagList: JSX.Element[] = [];
         props.myMap.forEach((value, key) => {
             let chatValue: ISseMsg = value;
@@ -34,9 +37,8 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
         return tagList;
     };
     
-
     return(
-        <div>
+        <div className="chat-body">
           {renderChat()}
         </div>
     )

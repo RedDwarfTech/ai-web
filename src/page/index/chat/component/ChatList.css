@@ -1,0 +1,5 @@
+.chat-body {
+    padding: 20px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
