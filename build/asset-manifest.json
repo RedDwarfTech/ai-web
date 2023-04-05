@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.7498feb2.css",
-    "main.js": "/static/js/main.1937be5f.js",
+    "main.css": "/static/css/main.a07d3115.css",
+    "main.js": "/static/js/main.91f52285.js",
     "static/js/787.47393b9c.chunk.js": "/static/js/787.47393b9c.chunk.js",
     "static/media/chat-me.png": "/static/media/chat-me.0b982eddae0c4a296918.png",
     "static/media/alipay-circle.png": "/static/media/alipay-circle.09f8c38289547c861f34.png",
     "static/media/chatgpt.svg": "/static/media/chatgpt.56967454a39bc5b87344492200d7a6e7.svg",
     "index.html": "/index.html",
-    "main.7498feb2.css.map": "/static/css/main.7498feb2.css.map",
-    "main.1937be5f.js.map": "/static/js/main.1937be5f.js.map",
+    "main.a07d3115.css.map": "/static/css/main.a07d3115.css.map",
+    "main.91f52285.js.map": "/static/js/main.91f52285.js.map",
     "787.47393b9c.chunk.js.map": "/static/js/787.47393b9c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7498feb2.css",
-    "static/js/main.1937be5f.js"
+    "static/css/main.a07d3115.css",
+    "static/js/main.91f52285.js"
   ]
 }

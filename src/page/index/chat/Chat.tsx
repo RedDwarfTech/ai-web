@@ -1,5 +1,5 @@
 import { Avatar, Button, Divider, Dropdown, Input, MenuProps, message } from "antd";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
@@ -37,6 +37,8 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
     const [isGetUserLoading, setIsGetUserLoading] = useState(false);
     const [userInfo, setUserInfo] = useState<IUserModel>();
+    
+    const inputRef = useRef(null); // 保存Input.TextArea的实例引用
 
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
@@ -138,27 +140,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             cid: cid
         };
         doSseChatAsk(ask, onSseMessage);
-    };
-
-    const renderChat = () => {
-        const tagList: JSX.Element[] = [];
-        myMap.forEach((value, key) => {
-            let chatValue: ISseMsg = value;
-            if (value.type === "prompt") {
-                tagList.push(
-                    <div key={uuid()} className="chat-message">
-                        <img className="chat-me" src={chatMeImage}></img>
-                        <ChatContext msg={chatValue.msg}></ChatContext>
-                    </div>);
-            } else {
-                tagList.push(
-                    <div key={uuid()} className="chat-message">
-                        <img className="chat-me" src={chatgpt}></img>
-                        <ChatContext msg={chatValue.msg}></ChatContext>
-                    </div>);
-            }
-        });
-        return tagList;
     };
 
     const handleEnterKey = (e: any) => {
@@ -294,7 +275,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         var talkInput = document.getElementById("talkInput") as HTMLInputElement;
         if(talkInput){
             talkInput.focus();
-            // 将光标移动到文本框的开头
             talkInput.setSelectionRange(0, 0);
         }
     }
@@ -309,6 +289,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                             rows={2}
                             id="talkInput"
                             value={inputValue}
+                            ref={inputRef}
                             onChange={handleChatInputChange}
                             onKeyPress={handleEnterKey}
                             onFocus={handleInputFocused}
