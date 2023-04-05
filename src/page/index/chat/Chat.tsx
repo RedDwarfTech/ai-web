@@ -290,6 +290,15 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
     }
 
+    const handleInputFocused = () => {
+        var talkInput = document.getElementById("talkInput") as HTMLInputElement;
+        if(talkInput){
+            talkInput.focus();
+            // 将光标移动到文本框的开头
+            talkInput.setSelectionRange(0, 0);
+        }
+    }
+
     const renderRightContainer = (tab: String) => {
         if (tab === "chat") {
             return (
@@ -302,6 +311,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                             value={inputValue}
                             onChange={handleChatInputChange}
                             onKeyPress={handleEnterKey}
+                            onFocus={handleInputFocused}
                             placeholder="输入会话内容" />
                         <Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
                             <span>发送</span>
