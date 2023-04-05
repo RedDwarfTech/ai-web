@@ -312,7 +312,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                             onChange={handleChatInputChange}
                             onKeyPress={handleEnterKey}
                             onFocus={handleInputFocused}
-                            placeholder="输入会话内容" />
+                            placeholder="输入会话内容，按Enter快捷发送" />
                         <Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
                             <span>发送</span>
                         </Button>
