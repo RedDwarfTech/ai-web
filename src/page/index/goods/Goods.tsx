@@ -1,9 +1,9 @@
 import { Button, Table } from "antd";
 import { connect } from "react-redux";
 import "./Goods.css"
-import { doPay } from "../../../service/pay/PayService";
+import { doPay } from "@/service/pay/PayService";
 import Pay from "../../pay/Pay";
-import { createOrder } from "../../../action/pay/PayAction";
+import { createOrder } from "@/action/pay/PayAction";
 import { ProductReq } from "js-wheel/dist/src/model/product/ProductReq";
 import { readConfig } from "@/config/app/config-reader";
 import { doGetIapProduct } from "@/service/goods/GoodsService";

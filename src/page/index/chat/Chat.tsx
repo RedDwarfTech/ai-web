@@ -1,9 +1,8 @@
 import { Avatar, Button, Divider, Dropdown, Input, MenuProps, message } from "antd";
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
-import ChatContext from "./component/ChatContext";
 import { doLoginOut, getCurrentUser, isLoggedIn, userLoginImpl } from "../../../service/user/UserService";
 import { ChatAsk } from "@/models/request/chat/ChatAsk";
 import { chatAskAction } from "@/action/chat/ChatAction";
@@ -25,8 +24,6 @@ import About from "@/page/about/About";
 import Goods from "../goods/Goods";
 import Profile from "@/page/user/profile/Profile";
 import GenImages from "../images/GenImages";
-import chatMeImage from "@/asset/icon/chat-me.png";
-import chatgpt from "@/asset/icon/chatgpt.svg";
 import ChatList from "./component/ChatList";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
@@ -38,7 +35,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const [isGetUserLoading, setIsGetUserLoading] = useState(false);
     const [userInfo, setUserInfo] = useState<IUserModel>();
     
-    const inputRef = useRef(null); // 保存Input.TextArea的实例引用
+    const inputRef = useRef<HTMLInputElement>(null); // 保存Input.TextArea的实例引用
 
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
@@ -54,6 +51,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     React.useEffect(() => {
         fetchConversations();
     }, []);
+
 
     const fetchConversations = () => {
         const convReq: IConversationReq = {
@@ -116,7 +114,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             setLoadings(false);
             return;
         }
-        if (!inputValue) {
+        if (!inputValue && inputValue.trim().length === 0) {
             return;
         }
         let msg: ISse35ServerMsg = {
@@ -144,6 +142,8 @@ const Chat: React.FC<IChatAskResp> = (props) => {
 
     const handleEnterKey = (e: any) => {
         if (e.nativeEvent.keyCode === 13) {
+            e.preventDefault(); // 阻止默认换行行为
+            e.stopPropagation(); // 阻止事件继续传递
             handleSend();
         }
     }
@@ -271,14 +271,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
     }
 
-    const handleInputFocused = () => {
-        var talkInput = document.getElementById("talkInput") as HTMLInputElement;
-        if(talkInput){
-            talkInput.focus();
-            talkInput.setSelectionRange(0, 0);
-        }
-    }
-
     const renderRightContainer = (tab: String) => {
         if (tab === "chat") {
             return (
@@ -292,7 +284,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                             ref={inputRef}
                             onChange={handleChatInputChange}
                             onKeyPress={handleEnterKey}
-                            onFocus={handleInputFocused}
                             placeholder="输入会话内容，按Enter快捷发送" />
                         <Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
                             <span>发送</span>

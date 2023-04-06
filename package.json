@@ -17,8 +17,10 @@
     "crypto": "^1.0.1",
     "dayjs": "^1.11.7",
     "event-source-polyfill": "^1.0.31",
+    "gulp-connect": "^5.7.0",
     "hashmap": "^2.4.0",
     "js-wheel": "https://github.com/jiangxiaoqiang/js-wheel.git",
+    "query-string": "8.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^8.0.5",
@@ -30,8 +32,7 @@
     "tslib": "^2.5.0",
     "typescript": "^4.9.5",
     "uuid": "^9.0.0",
-    "web-vitals": "^2.1.4",
-    "query-string": "8.1.0"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -62,7 +63,11 @@
     "@types/react-syntax-highlighter": "^15.5.6",
     "@types/uuid": "^9.0.1",
     "babel-plugin-root-import": "^6.6.0",
+    "browser-sync": "^2.29.1",
     "customize-cra": "^1.0.0",
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.3.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "react-app-rewired": "^2.2.1"
   }
 }
