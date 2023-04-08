@@ -109,6 +109,9 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     };
 
     const handleSend = () => {
+        if(loadings){
+            return;
+        }
         if (!isLoggedIn) {
             message.warning("请登录后再开启聊天");
             setLoadings(false);
@@ -209,6 +212,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const showUserProfile = () => {
         handleMenuClick('profile');
     }
+
     const items: MenuProps['items'] = [
         {
             key: '2',
