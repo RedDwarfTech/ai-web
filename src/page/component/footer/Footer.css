@@ -17,6 +17,7 @@
 
 .App-footer-div{
   font-size: 15px;
+  display: flex;
 }
 
 .contact{

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
-import { doLoginOut, getCurrentUser, isLoggedIn, userLoginImpl } from "../../../service/user/UserService";
+import { doLoginOut, getCurrentUser, isLoggedIn, userLoginImpl } from "@/service/user/UserService";
 import { ChatAsk } from "@/models/request/chat/ChatAsk";
 import { chatAskAction } from "@/action/chat/ChatAction";
 import { IChatAskResp } from "@/models/chat/ChatAskResp";
