@@ -35,7 +35,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const [isGetUserLoading, setIsGetUserLoading] = useState(false);
     const [userInfo, setUserInfo] = useState<IUserModel>();
     
-    const inputRef = useRef<HTMLInputElement>(null); // 保存Input.TextArea的实例引用
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
@@ -52,27 +52,43 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         fetchConversations();
     }, []);
 
-
     const fetchConversations = () => {
         const convReq: IConversationReq = {
             title: 'React'
         };
-        getConversations(convReq);
+        return getConversations(convReq);
     }
 
     const onSseMessage = (msg: string) => {
-        const msg1: ISse35ServerMsg = JSON.parse(msg);
-        if (msg1.choices[0] && msg1.choices[0].finish_reason === "vip-expired") {
+        const serverMsg: ISse35ServerMsg = JSON.parse(msg);
+        if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "vip-expired") {
             setLoadings(false);
             message.info("会员已到期");
             return;
         }
-        if (msg1.choices[0].delta.content && msg1.choices[0].delta.content.length > 0) {
-            appenSseMsg(msg1, "chatgpt");
+        if (serverMsg.choices[0].delta.content && serverMsg.choices[0].delta.content.length > 0) {
+            appenSseMsg(serverMsg, "chatgpt");
         }
-        if (msg1.choices[0].finish_reason && msg1.choices[0].finish_reason === "stop") {
+        if (serverMsg.choices[0].finish_reason && serverMsg.choices[0].finish_reason === "stop") {
             setLoadings(false);
+            if(cid === 0){
+                fetchNewestCid();
+            }
         }
+    }
+
+    const fetchNewestCid = () => {
+        fetchConversations().then((data:any) =>{
+            if(data && data.result && data.result.list){
+                const newestConversations = data.result.list.reduce((previous:any, current:any) => {
+                    return (previous.createdTime > current.createdTime) ? previous : current;
+                });
+                const newestCid = newestConversations.id;
+                if(cid === 0){
+                    setCid(newestCid);
+                }
+            }
+        })
     }
 
     const appenSseMsg = (data: ISse35ServerMsg, msgType: string) => {
@@ -193,7 +209,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         const conversations: IConversation[] = con.list;
         const conversationList: JSX.Element[] = [];
         conversations.forEach(item => {
-            conversationList.push(<div onClick={() => getConverItems(item.id)} className="conversation-item">{item.title}</div>);
+            conversationList.push(<div key={uuid()} onClick={() => getConverItems(item.id)} className="conversation-item">{item.title}</div>);
         });
         return conversationList;
     }

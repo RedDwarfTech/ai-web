@@ -1,4 +1,4 @@
-import { ChatAsk } from '../../models/request/chat/ChatAsk';
+import { ChatAsk } from '@/models/request/chat/ChatAsk';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import { v4 as uuid } from 'uuid';
 
