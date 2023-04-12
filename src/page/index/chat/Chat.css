@@ -92,10 +92,16 @@
   justify-content: space-between;
 }
 
+.conversation-list {
+  width: 100%;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
 .conversation-item {
   display: flex;
   height: 40px;
-  overflow: hidden;
+  overflow-x: hidden;
   font-size: 17px;
   align-items: center;
   white-space: nowrap;
@@ -104,6 +110,7 @@
   padding-left: 15px;
   padding-right: 5px;
   flex: 8;
+  width: 80%;
 }
 
 .conversation-item:hover {
