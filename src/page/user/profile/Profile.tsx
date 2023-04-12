@@ -3,7 +3,7 @@ import { IUserModel, TimeUtils } from "js-wheel";
 import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 //import { submitFeedback } from "@/service/user/FeedbackService";
-import { getCurrentUserAction } from "../../../action/user/UserAction";
+import { getCurrentUserAction } from "@/action/user/UserAction";
 import "./Profile.css";
 import alipayPic from "@/asset/icon/alipay-circle.png";
 

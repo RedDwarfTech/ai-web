@@ -25,6 +25,7 @@ import Goods from "../goods/Goods";
 import Profile from "@/page/user/profile/Profile";
 import GenImages from "../images/GenImages";
 import ChatList from "./component/ChatList";
+import chatPic from "@/asset/icon/chat/chat.svg";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
     const [inputValue, setInputValue] = useState('');
@@ -209,7 +210,11 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         const conversations: IConversation[] = con.list;
         const conversationList: JSX.Element[] = [];
         conversations.forEach(item => {
-            conversationList.push(<div key={uuid()} onClick={() => getConverItems(item.id)} className="conversation-item">{item.title}</div>);
+            conversationList.push(
+            <div key={uuid()} onClick={() => getConverItems(item.id)} className="conversation-item">
+                <img src={chatPic}></img>
+                <span>{item.title}</span>
+            </div>);
         });
         return conversationList;
     }

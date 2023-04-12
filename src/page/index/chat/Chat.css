@@ -110,6 +110,10 @@
   background-color:gray;
 }
 
+.conversation-item span {
+  margin-left: 5px;
+}
+
 .conversation-action {
   margin-bottom: 10px;
   flex: 2;
