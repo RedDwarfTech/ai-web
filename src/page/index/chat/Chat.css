@@ -90,12 +90,21 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: stretch;
 }
 
 .conversation-list {
   width: 100%;
   overflow: hidden;
   overflow-y: scroll;
+  flex-grow: 1;
+  flex-shrink: 1;
+  align-self: stretch;
+}
+
+.chat-menu {
+  flex-shrink: 1;
+  align-self: stretch;
 }
 
 .conversation-item {
@@ -124,6 +133,7 @@
 .conversation-action {
   margin-bottom: 10px;
   flex: 2;
+  border-top: 2px solid #f2f2f2;
 }
 
 .action-item {

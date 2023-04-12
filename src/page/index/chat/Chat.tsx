@@ -359,8 +359,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                 <div className="conversation-list">
                     {conversationRender(props.conversations.conversations)}
                 </div>
-                <div>
-                    <Divider></Divider>
+                <div className="chat-menu" > 
                     <div className="conversation-action">
                         <nav>
                             <div className="conversation-item" onClick={() => handleMenuClick('chat')}>
