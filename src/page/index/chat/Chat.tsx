@@ -1,4 +1,4 @@
-import { Avatar, Button, Divider, Dropdown, Input, MenuProps, message } from "antd";
+import { Avatar, Button, Dropdown, Input, MenuProps, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import "./Chat.css"
@@ -50,7 +50,9 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     }, [myMap]);
 
     React.useEffect(() => {
-        fetchConversations();
+        if(isLoggedIn){
+            fetchConversations();
+        }
     }, []);
 
     const fetchConversations = () => {

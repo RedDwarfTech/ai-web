@@ -5,6 +5,7 @@ import conversation from '../reducer/conversation/ConversationReducer';
 import citem from '../reducer/conversation/ConversationItemReducer';
 import iapproducts from '../reducer/iapproduct/IapProductReducer';
 import image from '../reducer/images/ImageReducer';
+import user from '@/reducer/account/UserReducer';
 
 const rootReducer = combineReducers({
     chat,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     conversation,
     citem,
     iapproducts,
-    image
+    image,
+    user
 })
 
 export default rootReducer;

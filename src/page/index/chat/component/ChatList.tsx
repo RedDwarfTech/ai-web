@@ -1,13 +1,14 @@
 import { ISseMsg } from "@/models/chat/SseMsg";
 import withConnect from "@/page/component/hoc/withConnect";
 import { v4 as uuid } from 'uuid';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ChatContext from "./ChatContext";
 import chatMeImage from "@/asset/icon/chat-me.png";
 import chatgpt from "@/asset/icon/chatgpt.svg";
 import './ChatList.css';
 import { Steps } from "antd";
 import { isLoggedIn, isSubscribed } from "@/service/user/UserService";
+import { useSelector } from "react-redux";
 
 export interface IChatAskList {
     myMap: Map<string, ISseMsg>,
@@ -18,6 +19,15 @@ export interface IChatAskList {
  * so add the React.memo to avoid the dulplicate rerender 
  */
 const ChatList: React.FC<IChatAskList> = React.memo((props) => {
+    const [subscribed, setSubscribed] = useState(isSubscribed()||false);
+    const { user } = useSelector((state: any) => state.user)
+
+    useEffect(() => {
+        if (user) {
+            const sub: boolean = isSubscribed();
+            setSubscribed(sub);
+        }
+    }, [user]);
 
     const renderChat = () => {
         const tagList: JSX.Element[] = [];
@@ -59,12 +69,12 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
                             {
                                 title: '订阅',
                                 description: '点击订阅菜单，选择订阅套餐，最低1元试用',
-                                status: isSubscribed() ? 'finish' : 'wait'
+                                status: subscribed ? 'finish' : 'wait'
                             },
                             {
                                 title: '聊天',
                                 description: '页面底部输入会话内容，开启聊天',
-                                status: isLoggedIn() && isSubscribed() ? 'finish' : 'wait'
+                                status: isLoggedIn() && subscribed ? 'finish' : 'wait'
                             },
                         ]}
                     />
