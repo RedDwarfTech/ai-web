@@ -6,10 +6,8 @@ const initState: AppState = {
 };
 
 const UserReducer = (state=initState, action: UserAction) => {
-    debugger
     switch (action.type) {  
         case "GET_CURRENT_USER":
-            debugger
             const getUserAction = action as GetUserAction;
             return {
                 ...state,
