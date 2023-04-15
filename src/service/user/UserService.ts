@@ -1,4 +1,4 @@
-import { WheelGlobal } from 'js-wheel';
+import { IUserModel, TimeUtils, WheelGlobal } from 'js-wheel';
 import { getCurrentUserAction, userLogin } from '../../action/user/UserAction';
 import { requestWithAction } from '../../common/XHRClient';
 import { readConfig } from '../../config/app/config-reader';
@@ -29,6 +29,18 @@ export function isLoggedIn(){
     }else{
         return true;
     }
+}
+
+export function isSubscribed(): boolean {
+    const userInfoJson = localStorage.getItem("userInfo");
+    if (!userInfoJson) {
+        return false;
+    }
+    const uInfo: IUserModel = JSON.parse(userInfoJson);
+    if(uInfo.autoRenewProductExpireTimeMs > new Date().getTime()){
+        return true;
+    }
+    return false;
 }
 
 export function doLoginOut() {

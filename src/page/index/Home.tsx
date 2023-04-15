@@ -1,9 +1,9 @@
 import Footer from "../component/footer/Footer";
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
 import Chat from "./chat/Chat";
 import { IUserModel } from "js-wheel";
 import "./Home.css";
+import withConnect from "../component/hoc/withConnect";
 
 const Home: React.FC = (props) => {
 
@@ -29,15 +29,5 @@ const Home: React.FC = (props) => {
   );
 }
 
-const mapStateToProps = (state: any) => ({
-  robot: state.robot
-});
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default withConnect(Home);
 
