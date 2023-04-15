@@ -4,7 +4,7 @@
     align-items: center;     /* 垂直居中 */
     word-wrap: break-word; 
     word-break: normal;
-    min-height: 35px;
+    min-height: 30px;
     display: flex;
     margin-left: 10px;
     border-radius: 10px;
