@@ -31,8 +31,10 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
 
     const renderChat = () => {
         const tagList: JSX.Element[] = [];
-        if (props.myMap.size === 0) {
+        if (props.myMap.size === 0 && !subscribed) {
             return newGuide();
+        } else if(props.myMap.size === 0 && subscribed){
+            return genieHomeGuide();
         } else {
             props.myMap.forEach((value, key) => {
                 let chatValue: ISseMsg = value;
@@ -53,6 +55,19 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
             return tagList;
         }
     };
+
+    const genieHomeGuide =()=>{
+        return (
+        <div className="use-guide">
+            <div className="use-guide-container">
+                <div className="demo-faq">
+                    
+                </div>
+                <div className="tips chat-tips"><strong>提示：</strong>AI生成内容不一定正确，仅做参考，所有自动生成信息请谨慎鉴别。</div>
+            </div>
+        </div>
+        );
+    }
 
     const newGuide = () => {
         return (
