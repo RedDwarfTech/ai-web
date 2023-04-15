@@ -168,6 +168,11 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
     }
 
+    const handleConversation = (id: number) => {
+        handleMenuClick('chat');
+        getConverItems(id)
+    }
+
     const getConverItems = (choosedCid: number) => {
         let items: IConversationItemReq = {
             cid: choosedCid
@@ -211,7 +216,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         const conversationList: JSX.Element[] = [];
         conversations.forEach(item => {
             conversationList.push(
-            <div key={uuid()} onClick={() => getConverItems(item.id)} className="conversation-item">
+            <div key={uuid()} onClick={() => handleConversation(item.id)} className="conversation-item">
                 <img src={chatPic}></img>
                 <span>{item.title}</span>
             </div>);
