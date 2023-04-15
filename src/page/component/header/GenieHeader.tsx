@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import type { MenuProps } from 'antd';
 import "./GenieHeader.css"
-import { doLoginOut, getCurrentUser, userLoginImpl } from "../../../service/user/UserService";
+import { doLoginOut, getCurrentUser, userLoginImpl } from "@/service/user/UserService";
 import { IUserModel, WheelGlobal } from "js-wheel";
-import { readConfig } from "../../../config/app/config-reader";
+import { readConfig } from "@/config/app/config-reader";
 
 export type HeaderFormProps = {
   onMenuClick: (menu: String) => void;
@@ -23,7 +23,7 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
 
   const userLogin = () => {
     let param = {
-      appId: 'vOghoo10L9'
+      appId: readConfig("appId")
     };
     userLoginImpl(param).then((data: any) => {
       window.location.href = data.result;
@@ -58,13 +58,15 @@ const GenieHeader: React.FC<HeaderFormProps> = (props) => {
     if (isLoggedIn) {
       var avatarUrl = localStorage.getItem('avatarUrl');
       if (avatarUrl) {
-        return (<a>
+        return (
+        <a>
           <Dropdown menu={{ items }} trigger={['click']}>
             <Avatar size={40} src={avatarUrl} />
           </Dropdown>
         </a>);
       } else {
-        return (<a>
+        return (
+        <a>
           <Dropdown menu={{ items }} trigger={['click']}>
             <Avatar size={40} >Me</Avatar>
           </Dropdown>

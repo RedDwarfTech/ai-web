@@ -239,7 +239,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             key: '2',
             onClick: doLoginOut,
             label: (
-                <a>
+                <a className="user-action-item">
                     登出
                 </a>
             )
@@ -247,7 +247,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             key: '3',
             onClick: showUserProfile,
             label: (
-                <a>
+                <a className="user-action-item">
                     控制台
                 </a>
             )
@@ -266,17 +266,17 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         if (isLoggedIn) {
             var avatarUrl = localStorage.getItem('avatarUrl');
             if (avatarUrl) {
-                return (<a>
-                    <Dropdown className="action-item" menu={{ items }} trigger={['click']}>
+                return (
+                    <Dropdown className="user-menu" menu={{ items }} trigger={['click']} placement="topRight">
                         <Avatar size={40} src={avatarUrl} />
                     </Dropdown>
-                </a>);
+                );
             } else {
-                return (<a>
-                    <Dropdown className="action-item" menu={{ items }} trigger={['click']}>
+                return (
+                    <Dropdown className="user-menu" menu={{ items }} trigger={['click']} placement="topRight">
                         <Avatar size={40} >Me</Avatar>
                     </Dropdown>
-                </a>);
+                );
             }
         }
         const accessTokenOrigin = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
@@ -374,7 +374,9 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                             <div className="conversation-item" onClick={() => handleMenuClick('about')}>
                                 <InfoCircleOutlined /><span className="action-item">关于</span>
                             </div>
-                            {renderLogin()}
+                            <div className="conversation-item-login">
+                                {renderLogin()}
+                            </div>
                         </nav>
                     </div>
                 </div>
