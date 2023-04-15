@@ -62,17 +62,17 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
                         current={1}
                         items={[
                             {
-                                title: '登录',
-                                description: '点击左下侧按钮登录',
+                                title: '第一步：登录',
+                                description: `点击左下侧按钮登录`,
                                 status: isLoggedIn() ? 'finish' : 'wait'
                             },
                             {
-                                title: '订阅',
+                                title: '第二步：订阅',
                                 description: '点击订阅菜单，选择订阅套餐，最低1元试用',
                                 status: subscribed ? 'finish' : 'wait'
                             },
                             {
-                                title: '聊天',
+                                title: '第三步：使用Genie',
                                 description: '页面底部输入会话内容，开启聊天',
                                 status: isLoggedIn() && subscribed ? 'finish' : 'wait'
                             },
