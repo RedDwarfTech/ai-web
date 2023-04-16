@@ -37,7 +37,8 @@ export function isSubscribed(): boolean {
         return false;
     }
     const uInfo: IUserModel = JSON.parse(userInfoJson);
-    if(uInfo.autoRenewProductExpireTimeMs > new Date().getTime()){
+    // pay attention that the long data type in the backend server using string to avoid precise loss
+    if(Number(uInfo.autoRenewProductExpireTimeMs) > new Date().getTime()){
         return true;
     }
     return false;

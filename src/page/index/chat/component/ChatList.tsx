@@ -9,6 +9,7 @@ import './ChatList.css';
 import { Steps } from "antd";
 import { isLoggedIn, isSubscribed } from "@/service/user/UserService";
 import { useSelector } from "react-redux";
+import BaseMethods from "js-wheel/dist/src/utils/data/BaseMethods";
 
 export interface IChatAskList {
     myMap: Map<string, ISseMsg>,
@@ -21,9 +22,9 @@ export interface IChatAskList {
 const ChatList: React.FC<IChatAskList> = React.memo((props) => {
     const [subscribed, setSubscribed] = useState(isSubscribed()||false);
     const { user } = useSelector((state: any) => state.user)
-
+ 
     useEffect(() => {
-        if (user) {
+        if (!BaseMethods.isNull(user)) {
             const sub: boolean = isSubscribed();
             setSubscribed(sub);
         }
