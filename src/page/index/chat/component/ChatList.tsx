@@ -63,7 +63,7 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
         <div className="use-guide">
             <div className="use-guide-container">
                 <div className="demo-faq">
-                    <a href="https://reddwarftech.github.io/2023/04/16/genie/">了解Genie</a>
+                    <a href="https://reddwarftech.github.io/2023/04/16/genie/" target="_blank">了解Genie</a>
                 </div>
                 <div className="tips chat-tips"><strong>提示：</strong>AI生成内容不一定正确，仅做参考，所有自动生成信息请谨慎鉴别。</div>
             </div>
