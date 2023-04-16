@@ -20,13 +20,14 @@ export interface IChatAskList {
  * so add the React.memo to avoid the dulplicate rerender 
  */
 const ChatList: React.FC<IChatAskList> = React.memo((props) => {
-    const [subscribed, setSubscribed] = useState(isSubscribed()||false);
+    const [subscribed, setSubscribed] = useState(false);
     const { user } = useSelector((state: any) => state.user)
  
     useEffect(() => {
         if (!BaseMethods.isNull(user)) {
-            const sub: boolean = isSubscribed();
-            setSubscribed(sub);
+            if(Number(user.autoRenewProductExpireTimeMs) > new Date().getTime()){
+                setSubscribed(true);
+            }
         }
     }, [user]);
 
