@@ -66,7 +66,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         const serverMsg: ISse35ServerMsg = JSON.parse(msg);
         if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "vip-expired") {
             setLoadings(false);
-            message.info("会员已到期");
+            message.info("充值会员继续使用");
             return;
         }
         if (serverMsg.choices[0].delta.content && serverMsg.choices[0].delta.content.length > 0) {
