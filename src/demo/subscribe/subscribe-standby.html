@@ -1,0 +1,99 @@
+<!DOCTYPE html> <html> <head> <meta charset="utf-8"> <title>产品套餐订阅</title> <style> body { font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; }
+
+	h1 {
+		text-align: center;
+		margin-top: 30px;
+	}
+	
+	.container {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		margin-top: 50px;
+	}
+	
+	.package {
+		width: 300px;
+		margin: 20px;
+		padding: 20px;
+		border: 1px solid #ccc;
+		border-radius: 10px;
+		text-align: center;
+	}
+	
+	.package h2 {
+		font-size: 24px;
+		margin-top: 0;
+	}
+	
+	.package p {
+		font-size: 18px;
+		margin: 10px 0;
+	}
+	
+	.package button {
+		background-color: #4CAF50;
+		color: #fff;
+		font-size: 18px;
+		border: none;
+		border-radius: 5px;
+		padding: 10px 20px;
+		margin: 20px 0;
+		cursor: pointer;
+	}
+	
+	.package button:hover {
+		background-color: #3e8e41;
+	}
+	
+	.benefits {
+		display: none;
+		margin-top: 20px;
+		padding: 20px;
+		background-color: #f2f2f2;
+		border-radius: 10px;
+		text-align: center;
+		box-shadow: 0 0 10px #ccc;
+	}
+	
+	.benefits h3 {
+		font-size: 20px;
+		margin-top: 0;
+	}
+	
+	.benefits ul {
+		list-style: none;
+		padding: 0;
+		margin-top: 10px;
+		font-size: 18px;
+	}
+	
+	.benefits li {
+		margin-bottom: 10px;
+	}
+	
+	.benefits button {
+		background-color: #4CAF50;
+		color: #fff;
+		font-size: 18px;
+		border: none;
+		border-radius: 5px;
+		padding: 10px 20px;
+		margin-top: 20px;
+		cursor: pointer;
+	}
+	
+	.benefits button:hover {
+		background-color: #3e8e41;
+	}
+</style>
+
+</head> <body> <h1>产品套餐订阅</h1> <div class="container"> <div class="package" id="day"> <h2>订阅一天</h2> <p>价格：$1</p> <button onclick="showBenefits('day')">查看权益</button> <div class="benefits" id="dayBenefits"> <h3>您将获得以下权益：</h3> <ul> <li>24小时无限制访问</li> <li>高速网络连接</li> <li>全天候技术支持</li> </ul> <button onclick="hideBenefits('day')">关闭</button> </div> </div> <div class="package" id="month"> <h2>订阅一个月</h2> <p>价格：$10</p> <button onclick="showBenefits('month')">查看权益</button> <div class="benefits" id="monthBenefits"> <h3>您将获得以下权益：</h3> <ul> <li>30天无限制访问</li> <li>高速网络连接</li> <li>全天候技术支持</li> <li>15天内无理由退款</li> </ul> <button onclick="hideBenefits('month')">关闭</button> </div> </div> <div class="package" id="year"> <h2>订阅一年</h2> <p>价格：$100</p> <button onclick="showBenefits('year')">查看权益</button> <div class="benefits" id="yearBenefits"> <h3>您将获得以下权益：</h3> <ul> <li>365天无限制访问</li> <li>高速网络连接</li> <li>全天候技术支持</li> <li>30天内无理由退款</li> <li>独家优惠活动</li> </ul> <button onclick="hideBenefits('year')">关闭</button> </div> </div> </div> <script> function showBenefits(package) { var packageBenefits = document.getElementById(package + "Benefits"); packageBenefits.style.display = "block"; }
+
+	function hideBenefits(package) {
+		var packageBenefits = document.getElementById(package + "Benefits");
+		packageBenefits.style.display = "none";
+	}
+</script>
+
+</body> </html>

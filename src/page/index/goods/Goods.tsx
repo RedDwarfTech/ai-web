@@ -69,6 +69,9 @@ const Goods: React.FC = (props: any) => {
   return (
     <div>
       <Table dataSource={serverDataSource} columns={columns} />
+      <div>
+        
+      </div>
       <Pay payFormText={generateFormText}></Pay>
     </div>
   );

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>产品套餐订阅</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .price-table {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+
+        .price-card {
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 30px;
+            flex-basis: 30%;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        .price {
+            font-size: 48px;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .price span {
+            font-size: 24px;
+            vertical-align: super;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        .price-card:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px;
+            border-style: solid;
+            border-color: transparent transparent #ccc transparent;
+        }
+
+        .price-card:first-child:before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px;
+            border-style: solid;
+            border-color: transparent transparent transparent #ccc;
+        }
+
+        .benefit {
+            margin-top: 30px;
+            text-align: left;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>产品套餐订阅</h1>
+        <div class="price-table">
+            <div class="price-card">
+                <h2>订阅一天</h2>
+                <p class="price">1<span>元</span></p> <a href="#" class="btn">立即订阅</a>
+                <div class="benefit">
+                    <p>权益一</p>
+                    <p>权益二</p>
+                    <p>权益三</p>
+                </div>
+            </div>
+            <div class="price-card">
+                <h2>订阅一个月</h2>
+                <p class="price">19.9<span>元</span></p> <a href="#" class="btn">立即订阅</a>
+                <div class="benefit">
+                    <p>权益一</p>
+                    <p>权益二</p>
+                    <p>权益三</p>
+                </div>
+            </div>
+            <div class="price-card">
+                <h2>订阅三个月</h2>
+                <p class="price">59<span>元</span></p> <a href="#" class="btn">立即订阅</a>
+                <div class="benefit">
+                    <p>权益一</p>
+                    <p>权益二</p>
+                    <p>权益三</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
