@@ -15,7 +15,7 @@ const Goods: React.FC = (props: any) => {
 
   useEffect(() => {
     getGoods();
-  },[]);
+  }, []);
 
   const getGoods = () => {
     const req: ProductReq = {
@@ -23,33 +23,6 @@ const Goods: React.FC = (props: any) => {
     };
     doGetIapProduct(req);
   }
-
-  const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-
-    },
-    {
-      title: '名称',
-      dataIndex: 'productTitle',
-      key: 'productTitle',
-    },
-    {
-      title: '价格(元)',
-      dataIndex: 'price',
-      key: 'price',
-    },
-    {
-      title: '操作',
-      dataIndex: 'address',
-      key: 'address',
-      render: (text: string, record: any, index: number) => {
-        return (<div><Button onClick={() => handlePay(record)} type="primary">购买</Button></div>);
-      }
-    },
-  ];
 
   const handlePay = (row: any) => {
     let param = {
@@ -59,18 +32,46 @@ const Goods: React.FC = (props: any) => {
   };
 
   let generateFormText = props.pay.formText;
-  let serverDataSource =[];
-  if(BaseMethods.isNull(props.iapproducts.iapproducts)){
-    
-  }else{
+  let serverDataSource = [];
+  if (BaseMethods.isNull(props.iapproducts.iapproducts)) {
+
+  } else {
     serverDataSource = props.iapproducts.iapproducts;
   }
-  
+
+  const productSubMenu = (serverDataSource: any) => {
+    if (BaseMethods.isNull(serverDataSource)) {
+      return (<div></div>);
+    }
+    const productSubList: JSX.Element[] = [];
+    serverDataSource.forEach((item: any) => {
+      productSubList.push(<div className="package">
+        <h2>{item.productTitle}</h2>
+        <ul>
+          {vipItems(item.description)}
+        </ul> 
+        <button onClick={() => handlePay(item)}>立即订阅</button>
+      </div>);
+    });
+    return productSubList;
+  }
+
+  const vipItems = (items: string) => {
+    const parsedItmes = JSON.parse(items);
+    if (parsedItmes) {
+      const itemList: JSX.Element[] = [];
+      parsedItmes.forEach((item: string) => {
+        itemList.push(<li>{item}</li>);
+      });
+      return itemList;
+    }
+  }
+
+
   return (
     <div>
-      <Table dataSource={serverDataSource} columns={columns} />
-      <div>
-        
+      <div className="product-container">
+        {productSubMenu(serverDataSource)}
       </div>
       <Pay payFormText={generateFormText}></Pay>
     </div>
