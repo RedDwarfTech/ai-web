@@ -1,4 +1,3 @@
-import { Button, Table } from "antd";
 import { connect } from "react-redux";
 import "./Goods.css"
 import { doPay } from "@/service/pay/PayService";
@@ -10,6 +9,7 @@ import { doGetIapProduct } from "@/service/goods/GoodsService";
 import { useEffect } from "react";
 import { getIapProductsAction } from "@/action/iapproduct/IapProductAction";
 import BaseMethods from "js-wheel/dist/src/utils/data/BaseMethods";
+import { IapProduct } from "@/models/product/IapProduct";
 
 const Goods: React.FC = (props: any) => {
 
@@ -39,14 +39,15 @@ const Goods: React.FC = (props: any) => {
     serverDataSource = props.iapproducts.iapproducts;
   }
 
-  const productSubMenu = (serverDataSource: any) => {
+  const productSubMenu = (serverDataSource: IapProduct[]) => {
     if (BaseMethods.isNull(serverDataSource)) {
       return (<div></div>);
     }
     const productSubList: JSX.Element[] = [];
-    serverDataSource.forEach((item: any) => {
+    serverDataSource.forEach((item: IapProduct) => {
       productSubList.push(<div className="package">
         <h2>{item.productTitle}</h2>
+        <p className="price">{item.price}<span>元</span></p>
         <ul>
           {vipItems(item.description)}
         </ul> 
