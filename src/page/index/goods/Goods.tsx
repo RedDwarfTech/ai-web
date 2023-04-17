@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { getIapProductsAction } from "@/action/iapproduct/IapProductAction";
 import BaseMethods from "js-wheel/dist/src/utils/data/BaseMethods";
 import { IapProduct } from "@/models/product/IapProduct";
+import { Divider } from "antd";
 
 const Goods: React.FC = (props: any) => {
 
@@ -74,6 +75,7 @@ const Goods: React.FC = (props: any) => {
       <div className="product-container">
         {productSubMenu(serverDataSource)}
       </div>
+      <Divider></Divider>
       <Pay payFormText={generateFormText}></Pay>
     </div>
   );
