@@ -1,9 +1,5 @@
 .feedback-submit {
-    background-color: #418ed8;
-    border-radius: 5px;
-    color: #fff;
-    cursor: pointer;
-    height: 40px;
+    height: 40px; 
 }
 
 .feedback p {

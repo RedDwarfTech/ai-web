@@ -36,7 +36,7 @@ const Feedback: React.FC = (props: any) => {
         <p>您可以反馈使用问题、建议。</p>
         <div className="feedback-area">
             <Input onChange={handleInputChange} placeholder="请输入反馈内容"></Input>
-            <Button onClick={handleFeedback} className="feedback-submit">提交反馈</Button>
+            <Button type="primary" onClick={handleFeedback} className="feedback-submit">提交反馈</Button>
         </div>
     </div>);
 }
