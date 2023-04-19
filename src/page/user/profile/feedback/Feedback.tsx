@@ -33,7 +33,7 @@ const Feedback: React.FC = (props: any) => {
     }
 
     return (<div id="feedback">
-        <p>您可以反馈使用问题、建议，也可以发送想看的内容领域、信源给我们。</p>
+        <p>您可以反馈使用问题、建议。</p>
         <div className="feedback-area">
             <Input onChange={handleInputChange} placeholder="请输入反馈内容"></Input>
             <Button onClick={handleFeedback} className="feedback-submit">提交反馈</Button>
