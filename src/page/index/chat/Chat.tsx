@@ -372,9 +372,9 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                             <div className="conversation-item" onClick={() => handleMenuClick('chat')}>
                                 <MessageOutlined /><span className="action-item">聊天</span>
                             </div>
-                            <div className="conversation-item" onClick={() => handleMenuClick('image')}>
+                            {/**<div className="conversation-item" onClick={() => handleMenuClick('image')}>
                                 <FileImageOutlined /><span className="action-item">图片生成</span>
-                            </div>
+    </div>**/}
                             <div className="conversation-item" onClick={() => handleMenuClick('account')}>
                                 <DollarOutlined /><span className="action-item">订阅</span>
                             </div>

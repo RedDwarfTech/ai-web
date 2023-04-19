@@ -3,7 +3,7 @@
     flex-direction: row;
     height: 100vh;
     overflow: hidden;
-    width: 60%;
+    width: 80%;
 }
 
 .panel-menu {
@@ -34,6 +34,7 @@
 .panel-content {
     flex: 1;
     padding: 20px;
+    width: 100%;
 }
 
 .user-info {
@@ -41,12 +42,4 @@
     margin-top: 10px;
 }
 
-.feedback-submit {
-    padding: 12px 24px;
-    background-color: #418ed8;
-    border-radius: 4px;
-    color: #fff;
-    cursor: pointer;
-    transition: opacity .25s ease;
-    height: 60px;
-}
+
