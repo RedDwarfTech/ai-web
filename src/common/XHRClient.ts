@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { v4 as uuid } from 'uuid';
 import store from '../store/store';
 import { ResponseCode, ResponseHandler, WheelGlobal } from 'js-wheel';
@@ -46,7 +46,7 @@ function addRequestToQueue(originalRequest: any){
     });
 }
 
-instance.interceptors.response.use((response) => {
+instance.interceptors.response.use((response:AxiosResponse<any, any>) => {
   const originalRequest = response.config;
   if(isRefreshing){
     addRequestToQueue(originalRequest);
@@ -59,7 +59,14 @@ instance.interceptors.response.use((response) => {
       .then((data:any) => {
         isRefreshing = false;
         pendingRequestsQueue.forEach((request) => {
-          request.resolve(data);
+          request.resolve(data)
+          .then((resp:any)=>{
+            // get the action of original request
+            const action = request.action;
+            const data = resp.data.result;
+            // change the state to make it render the UI
+            store.dispatch(action(data));
+          });
         });
         pendingRequestsQueue = [];
       });
