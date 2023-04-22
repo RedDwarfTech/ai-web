@@ -42,7 +42,7 @@ instance.interceptors.response.use((response: AxiosResponse<any, any>) => {
             request.headers['x-request-id'] = uuid();
             instance(request).then((resp:any) => {
               // get the action of original request
-              const action = request.action;
+              const action = JSON.parse(response.config.headers['x-action']);
               const data = resp.data.result;
               // change the state to make it render the UI
               store.dispatch(action(data));
@@ -58,6 +58,7 @@ instance.interceptors.response.use((response: AxiosResponse<any, any>) => {
 )
 
 export function requestWithAction(config: any, action: (arg0: any) => any) {
+  config.headers['x-action'] = JSON.stringify(action);
   return instance(config).then(
     (response: { data: { result: any; }; }) => {
       const data = response.data.result;
