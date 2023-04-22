@@ -23,33 +23,14 @@ instance.interceptors.request.use((request) => {
   }
 )
 
-function addRequestToQueue(originalRequest: any): Promise<any> {
-  return new Promise((resolve, reject) => {
-    pendingRequestsQueue.push({ resolve, reject });
-  })
-    .then((data: any) => {
-      originalRequest.headers['x-access-token'] = data.accessToken;
-      originalRequest.headers['x-request-id'] = uuid();
-      return instance(originalRequest).then((response: { data: { result: any; }; }) => {
-        const data = response.data.result;
-        const action = originalRequest.action;
-        store.dispatch(action(data));
-        return response.data;
-      });
-    })
-    .catch((err) => {
-      return Promise.reject(err);
-    });
-}
-
 instance.interceptors.response.use((response: AxiosResponse<any, any>) => {
   const originalRequest: InternalAxiosRequestConfig<any> = response.config;
   if (isRefreshing) {
-    addRequestToQueue(originalRequest);
+    pendingRequestsQueue.push(originalRequest);
   }
   if (!isRefreshing) {
     if (response.data.resultCode === ResponseCode.ACCESS_TOKEN_EXPIRED) {
-      addRequestToQueue(originalRequest);
+      pendingRequestsQueue.push(originalRequest);
       isRefreshing = true;
       // refresh the access token
       ResponseHandler.handleWebCommonFailure(response.data)
@@ -57,16 +38,15 @@ instance.interceptors.response.use((response: AxiosResponse<any, any>) => {
           isRefreshing = false;
           pendingRequestsQueue.forEach((request) => {
             const accessToken = localStorage.getItem(WheelGlobal.ACCESS_TOKEN_NAME);
-            const promise = request.resolve(accessToken);
-            if (promise) {
-              promise.then((resp: any) => {
-                // get the action of original request
-                const action = request.action;
-                const data = resp.data.result;
-                // change the state to make it render the UI
-                store.dispatch(action(data));
-              });
-            }
+            request.headers['x-access-token'] = accessToken;
+            request.headers['x-request-id'] = uuid();
+            instance(request).then((resp:any) => {
+              // get the action of original request
+              const action = request.action;
+              const data = resp.data.result;
+              // change the state to make it render the UI
+              store.dispatch(action(data));
+            });
           });
           pendingRequestsQueue = [];
         });
