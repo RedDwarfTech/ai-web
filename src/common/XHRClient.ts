@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { v4 as uuid } from 'uuid';
 import store from '../store/store';
 import { ResponseCode, ResponseHandler, WheelGlobal } from 'js-wheel';
@@ -47,7 +47,7 @@ function addRequestToQueue(originalRequest: any){
 }
 
 instance.interceptors.response.use((response:AxiosResponse<any, any>) => {
-  const originalRequest = response.config;
+  const originalRequest:InternalAxiosRequestConfig<any> = response.config;
   if(isRefreshing){
     addRequestToQueue(originalRequest);
   }
@@ -55,11 +55,13 @@ instance.interceptors.response.use((response:AxiosResponse<any, any>) => {
     if(response.data.resultCode === ResponseCode.ACCESS_TOKEN_EXPIRED){
       addRequestToQueue(originalRequest);
       isRefreshing = true;
+      // refresh the access token
       ResponseHandler.handleWebCommonFailure(response.data)
       .then((data:any) => {
         isRefreshing = false;
         pendingRequestsQueue.forEach((request) => {
-          request.resolve(data)
+          const accessToken = localStorage.getItem(WheelGlobal.ACCESS_TOKEN_NAME);
+          request.resolve(accessToken)
           .then((resp:any)=>{
             // get the action of original request
             const action = request.action;
