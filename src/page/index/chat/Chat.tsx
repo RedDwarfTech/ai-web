@@ -273,6 +273,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         if (isLoggedIn) {
             var avatarUrl = localStorage.getItem('avatarUrl');
             if (avatarUrl) {
+                // https://stackoverflow.com/questions/76052644/warning-finddomnode-is-deprecated-in-strictmode-when-using-antd-dropdown
                 return (
                     <Dropdown className="user-menu" menu={{ items }} trigger={['click']} placement="topRight">
                         <Avatar size={40} src={avatarUrl} />
@@ -317,9 +318,9 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                             onChange={handleChatInputChange}
                             onKeyPress={handleEnterKey}
                             placeholder="输入会话内容，按Enter快捷发送" />
-                        <Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
+                        {/**<Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
                             <span>发送</span>
-                        </Button>
+            </Button>**/}
                     </div>
                 </div>
             );

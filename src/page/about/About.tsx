@@ -1,8 +1,6 @@
-import { Typography } from "antd";
 import React from "react";
 import "./About.css"
-const { Paragraph} = Typography;
-
+import Footer from "../component/footer/Footer";
 
 const About: React.FC = (props) => {
   return (
@@ -16,6 +14,7 @@ const About: React.FC = (props) => {
 
       相比于辗转各个平台，我们致力于为用户提供统一的、最好的对话体验，为此我们不断优化我们的技术和服务。我们相信，通过我们的AI对话平台，用户将能够轻松地与世界各地的人交流，获得更多的信息和知识。
       </div>
+      <Footer></Footer>
     </div>
   );
 }

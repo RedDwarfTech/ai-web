@@ -24,7 +24,6 @@ const Home: React.FC = (props) => {
   return (
     <div id="home-root">
       <Chat menu={currentPage} onMenuClick={(value) => { setCurrentPage(value.toString()); }}></Chat>
-      <Footer></Footer>
     </div>
   );
 }
