@@ -74,6 +74,7 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
     const newGuide = () => {
         return (
             <div className="steps-guide">
+                
                 <div className="guide-container">
                     <Steps
                         current={1}
@@ -96,6 +97,7 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
                         ]}
                     />
                 </div>
+                <div className="tips chat-tips"><strong>提示：</strong>每天有至少2次试用额度。</div>
             </div>
         );
     }

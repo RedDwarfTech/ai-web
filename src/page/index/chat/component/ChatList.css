@@ -11,6 +11,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+    flex-direction: column;
 }
 
 .use-guide {
@@ -48,6 +49,7 @@
     margin-bottom: 20px;
     border: 1px solid transparent;
     border-radius: 4px;
+    margin-top: 10px;
 }
 
 .chat-tips{
