@@ -4,16 +4,7 @@ import store from '../store/store';
 import { ResponseCode, ResponseHandler, WheelGlobal } from 'js-wheel';
 
 let isRefreshing = false
-let subscribers: ((token: string) => void)[] = [];
 let pendingRequestsQueue: Array<any> = [];
-
-const subscribeTokenRefresh = (cb: (token: string) => void) => {
-  subscribers.push(cb);
-};
-
-const onTokenRefreshed = (token: string) => {
-  subscribers.forEach((cb) => cb(token));
-};
 
 const instance = axios.create({
   timeout: 60000
@@ -39,7 +30,12 @@ function addRequestToQueue(originalRequest: any): Promise<any> {
     .then((data: any) => {
       originalRequest.headers['x-access-token'] = data.accessToken;
       originalRequest.headers['x-request-id'] = uuid();
-      return instance(originalRequest);
+      return instance(originalRequest).then((response: { data: { result: any; }; }) => {
+        const data = response.data.result;
+        const action = originalRequest.action;
+        store.dispatch(action(data));
+        return response.data;
+      });
     })
     .catch((err) => {
       return Promise.reject(err);
