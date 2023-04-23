@@ -41,12 +41,14 @@ instance.interceptors.response.use((response: AxiosResponse<any, any>) => {
             request.headers['x-access-token'] = accessToken;
             request.headers['x-request-id'] = uuid();
             instance(request).then((resp:any) => {
-              // get the action of original request
-              const functionStr = atob(response.config.headers['x-action']);
-              const action = eval(`(${functionStr})`);
+              const functionStr = response.config.headers['x-action'];
               const data = resp.data.result;
+              const action = {
+                type: functionStr,
+                content: data
+              };
               // change the state to make it render the UI
-              store.dispatch(action(data));
+              store.dispatch(action);
             });
           });
           pendingRequestsQueue = [];
@@ -59,8 +61,8 @@ instance.interceptors.response.use((response: AxiosResponse<any, any>) => {
 )
 
 export function requestWithAction(config: any, action: any) {
-  const actionJson = action.toString();
-  config.headers['x-action'] = btoa(actionJson);
+  const actionJson = action({}).type;
+  config.headers['x-action'] =actionJson;
   return instance(config).then(
     (response: { data: { result: any; }; }) => {
       const data = response.data.result;
