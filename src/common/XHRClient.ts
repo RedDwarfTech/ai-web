@@ -40,7 +40,7 @@ instance.interceptors.response.use((response: AxiosResponse<any, any>) => {
             const accessToken = localStorage.getItem(WheelGlobal.ACCESS_TOKEN_NAME);
             request.headers['x-access-token'] = accessToken;
             request.headers['x-request-id'] = uuid();
-            instance(request).then((resp:any) => {
+            instance(request).then((resp: any) => {
               const functionStr = response.config.headers['x-action'];
               const data = resp.data.result;
               const action = {
@@ -62,15 +62,35 @@ instance.interceptors.response.use((response: AxiosResponse<any, any>) => {
 
 export function requestWithAction(config: any, action: any) {
   const actionJson = action({}).type;
-  config.headers['x-action'] =actionJson;
-  return instance(config).then(
-    (response: { data: { result: any; }; }) => {
+  config.headers['x-action'] = actionJson;
+  return instance(config).then((response: { data: { result: any; }; }) => {
       const data = response.data.result;
-      store.dispatch(action(data));
+      const localAction = {
+        type: actionJson,
+        data: data
+      };
+      store.dispatch(localAction);
       return response.data;
     }
   ).catch(
     (error: any) => {
+      console.error(error);
+    }
+  );
+}
+
+export function requestWithActionType(config: any, actionType: string) {
+  config.headers['x-action'] = actionType;
+  return instance(config).then((response: { data: { result: any; }; }) => {
+      const data = response.data.result;
+      const localAction = {
+        type: actionType,
+        data: data
+      };
+      store.dispatch(localAction);
+      return response.data;
+    }
+  ).catch((error: any) => {
       console.error(error);
     }
   );

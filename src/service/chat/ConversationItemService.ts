@@ -1,4 +1,4 @@
-import { requestWithAction } from '../../common/XHRClient';
+import { requestWithAction, requestWithActionType } from '../../common/XHRClient';
 import { IConversationItemReq } from '@/models/request/conversation/ConversationItemReq';
 import { getConversationItemAction } from '../../action/conversation/ConversationItemAction';
 
@@ -9,5 +9,5 @@ export function getConversationItems(params: IConversationItemReq) {
         url: '/ai/conversation/item/page?' + queryString,
         headers: {'Content-Type': 'application/json'}
     };
-    return requestWithAction(config, getConversationItemAction);
+    return requestWithActionType(config, 'CONVERSATION_ITEM_PAGE');
 }

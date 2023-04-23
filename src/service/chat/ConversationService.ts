@@ -1,6 +1,6 @@
 import { getConversationAction } from '../../action/conversation/ConversationAction';
 import { IConversationReq } from '@/models/request/conversation/ConversationReq';
-import { requestWithAction } from '../../common/XHRClient';
+import { requestWithActionType } from '../../common/XHRClient';
 
 export function getConversations(params: IConversationReq) {
     const config = {
@@ -9,5 +9,5 @@ export function getConversations(params: IConversationReq) {
         headers: {'Content-Type': 'application/json'},
         data: JSON.stringify(params)
     };
-    return requestWithAction(config, getConversationAction);
+    return requestWithActionType(config, 'CONVERSATION_PAGE');
 }

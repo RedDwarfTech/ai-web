@@ -6,6 +6,7 @@ const initState = {
 const ConversationReducer = (state=initState, action) => {
     switch (action.type) {
         case "CONVERSATION_PAGE":
+            debugger
             return {
                 ...state,
                 conversations: action.data 

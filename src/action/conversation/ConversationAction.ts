@@ -1,6 +1,6 @@
-export function getConversationAction(content: any) {
-    return {
-        type: "CONVERSATION_PAGE",
-        data: content
-    };
+type conversationAction = getConversationAction;
+
+export interface getConversationAction {
+    type: 'CONVERSATION_PAGE';
+    data: any;
 }
