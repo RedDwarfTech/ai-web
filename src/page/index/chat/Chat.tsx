@@ -183,7 +183,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const putCitems =(resp: any) => {
         if (resp && resp.list && resp.list.length > 0) {
             const newMap = new Map<string, ISseMsg>();
-            const itemList = resp.result.list;
+            const itemList = resp.list;
             itemList.sort((a: any, b: any) => Number(a.createdTime) - Number(b.createdTime));
             itemList.forEach((item: any) => {
                 if (item.questionTime) {
