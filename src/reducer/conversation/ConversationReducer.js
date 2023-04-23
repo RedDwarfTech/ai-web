@@ -8,7 +8,7 @@ const ConversationReducer = (state=initState, action) => {
         case "CONVERSATION_PAGE":
             return {
                 ...state,
-                conversations: action.conversations 
+                conversations: action.data 
             };
         default:
             break;

@@ -8,7 +8,7 @@ const ConversationItemReducer = (state=initState, action) => {
         case "CONVERSATION_ITEM_PAGE":
             return {
                 ...state,
-                citem: action.conversations 
+                citem: action.data 
             };
         default:
             break;

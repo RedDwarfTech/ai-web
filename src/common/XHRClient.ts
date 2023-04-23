@@ -45,7 +45,7 @@ instance.interceptors.response.use((response: AxiosResponse<any, any>) => {
               const data = resp.data.result;
               const action = {
                 type: functionStr,
-                content: data
+                data: data
               };
               // change the state to make it render the UI
               store.dispatch(action);
