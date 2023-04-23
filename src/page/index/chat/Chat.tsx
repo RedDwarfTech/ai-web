@@ -44,8 +44,8 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     };
 
     useEffect(()=>{
-        console.log("item updated");
-        // putCitems(citem);
+        console.log("item updated",items);
+        putCitems(citem);
     },[citem]);
 
     useEffect(() => {
