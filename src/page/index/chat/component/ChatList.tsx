@@ -97,7 +97,7 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
                         ]}
                     />
                 </div>
-                <div className="tips chat-tips"><strong>提示：</strong>每天有至少2次试用额度。</div>
+                <div className="tips chat-tips"><strong>提示：</strong>每天有2次免费试用额度。</div>
             </div>
         );
     }

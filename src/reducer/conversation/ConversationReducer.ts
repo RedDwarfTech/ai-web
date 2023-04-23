@@ -1,12 +1,10 @@
-
 const initState = {
     conversations: {}
 };
 
-const ConversationReducer = (state=initState, action) => {
+const ConversationReducer = (state=initState, action:any) => {
     switch (action.type) {
         case "CONVERSATION_PAGE":
-            debugger
             return {
                 ...state,
                 conversations: action.data 

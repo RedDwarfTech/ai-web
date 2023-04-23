@@ -35,7 +35,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
     const [isGetUserLoading, setIsGetUserLoading] = useState(false);
     const [userInfo, setUserInfo] = useState<IUserModel>();
-    const { citem } = useSelector((state:any) => state.citem)
+    const { citem } = useSelector((state: any) => state.citem)
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -43,9 +43,9 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         setInputValue(e.target.value);
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         putCitems(citem);
-    },[citem]);
+    }, [citem]);
 
     useEffect(() => {
         var element = document.querySelector('.chat-body');
@@ -55,7 +55,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     }, [myMap]);
 
     React.useEffect(() => {
-        if(isLoggedIn){
+        if (isLoggedIn) {
             fetchConversations();
         }
     }, []);
@@ -79,20 +79,20 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
         if (serverMsg.choices[0].finish_reason && serverMsg.choices[0].finish_reason === "stop") {
             setLoadings(false);
-            if(cid === 0){
+            if (cid === 0) {
                 fetchNewestCid();
             }
         }
     }
 
     const fetchNewestCid = () => {
-        fetchConversations().then((data:any) =>{
-            if(data && data.result && data.result.list){
-                const newestConversations = data.result.list.reduce((previous:any, current:any) => {
+        fetchConversations().then((data: any) => {
+            if (data && data.result && data.result.list) {
+                const newestConversations = data.result.list.reduce((previous: any, current: any) => {
                     return (previous.createdTime > current.createdTime) ? previous : current;
                 });
                 const newestCid = newestConversations.id;
-                if(cid === 0){
+                if (cid === 0) {
                     setCid(newestCid);
                 }
             }
@@ -133,7 +133,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     };
 
     const handleSend = () => {
-        if(loadings){
+        if (loadings) {
             return;
         }
         if (!isLoggedIn) {
@@ -170,7 +170,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const handleEnterKey = (e: any) => {
         if (e.nativeEvent.keyCode === 13) {
             e.preventDefault();
-            e.stopPropagation(); 
+            e.stopPropagation();
             handleSend();
         }
     }
@@ -180,7 +180,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         getConverItems(id)
     }
 
-    const putCitems =(resp: any) => {
+    const putCitems = (resp: any) => {
         if (resp && resp.list && resp.list.length > 0) {
             const newMap = new Map<string, ISseMsg>();
             const itemList = resp.list;
@@ -225,10 +225,10 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         const conversationList: JSX.Element[] = [];
         conversations.forEach(item => {
             conversationList.push(
-            <div key={uuid()} onClick={() => handleConversation(item.id)} className="conversation-item">
-                <img src={chatPic}></img>
-                <span>{item.title}</span>
-            </div>);
+                <div key={uuid()} onClick={() => handleConversation(item.id)} className="conversation-item">
+                    <img src={chatPic}></img>
+                    <span>{item.title}</span>
+                </div>);
         });
         return conversationList;
     }
@@ -324,10 +324,14 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                             ref={inputRef}
                             onChange={handleChatInputChange}
                             onKeyPress={handleEnterKey}
-                            placeholder="输入会话内容，按Enter快捷发送" />
-                        {/**<Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
+                            placeholder="输入会话内容，按Enter快捷发送" >
+                                <Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
                             <span>发送</span>
-            </Button>**/}
+                        </Button>
+                        </Input.TextArea>
+                        <Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
+                            <span>发送</span>
+                        </Button>
                     </div>
                 </div>
             );
@@ -374,7 +378,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                 <div className="conversation-list">
                     {conversationRender(props.conversations.conversations)}
                 </div>
-                <div className="chat-menu" > 
+                <div className="chat-menu" >
                     <div className="conversation-action">
                         <nav>
                             <div className="conversation-item" onClick={() => handleMenuClick('chat')}>

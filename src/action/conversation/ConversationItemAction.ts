@@ -1,6 +1,10 @@
-type conversationItemAction = getConversationItemAction;
+export type conversationItemAction = getConversationItemAction;
+
+export enum ConversationItemActionType {
+    CONVERSATION_ITEM_PAGE,
+}
 
 export interface getConversationItemAction {
-    type: 'CONVERSATION_ITEM_PAGE';
+    type: ConversationItemActionType.CONVERSATION_ITEM_PAGE;
     data: any;
 }
