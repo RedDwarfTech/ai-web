@@ -44,7 +44,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     };
 
     useEffect(()=>{
-        console.log("item updated",items);
         putCitems(citem);
     },[citem]);
 
@@ -182,7 +181,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     }
 
     const putCitems =(resp: any) => {
-        if (resp.result && resp.result.list && resp.result.list.length > 0) {
+        if (resp && resp.list && resp.list.length > 0) {
             const newMap = new Map<string, ISseMsg>();
             const itemList = resp.result.list;
             itemList.sort((a: any, b: any) => Number(a.createdTime) - Number(b.createdTime));
@@ -215,9 +214,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             cid: choosedCid
         };
         setCid(choosedCid);
-        getConversationItems(items).then((resp: any) => {
-            putCitems(resp);
-        });
+        getConversationItems(items);
     }
 
     const conversationRender = (con: any) => {
