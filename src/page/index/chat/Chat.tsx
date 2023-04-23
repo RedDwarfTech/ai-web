@@ -1,6 +1,6 @@
 import { Avatar, Button, Dropdown, Input, MenuProps, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
 import { doLoginOut, getCurrentUser, isLoggedIn, userLoginImpl } from "@/service/user/UserService";
@@ -35,12 +35,18 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
     const [isGetUserLoading, setIsGetUserLoading] = useState(false);
     const [userInfo, setUserInfo] = useState<IUserModel>();
-    
+    const { citem } = useSelector((state:any) => state.citem)
+
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
     };
+
+    useEffect(()=>{
+        console.log("item updated");
+        // putCitems(citem);
+    },[citem]);
 
     useEffect(() => {
         var element = document.querySelector('.chat-body');
@@ -164,8 +170,8 @@ const Chat: React.FC<IChatAskResp> = (props) => {
 
     const handleEnterKey = (e: any) => {
         if (e.nativeEvent.keyCode === 13) {
-            e.preventDefault(); // 阻止默认换行行为
-            e.stopPropagation(); // 阻止事件继续传递
+            e.preventDefault();
+            e.stopPropagation(); 
             handleSend();
         }
     }
@@ -175,38 +181,42 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         getConverItems(id)
     }
 
+    const putCitems =(resp: any) => {
+        if (resp.result && resp.result.list && resp.result.list.length > 0) {
+            const newMap = new Map<string, ISseMsg>();
+            const itemList = resp.result.list;
+            itemList.sort((a: any, b: any) => Number(a.createdTime) - Number(b.createdTime));
+            itemList.forEach((item: any) => {
+                if (item.questionTime) {
+                    const sseMsg: ISseMsg = {
+                        id: "x",
+                        created: TimeUtils.getFormattedTime(Number(item.questionTime)),
+                        msg: item.question,
+                        type: "prompt"
+                    };
+                    newMap.set(item.questionTime, sseMsg);
+                }
+                if (item.answerTime) {
+                    const sseMsg: ISseMsg = {
+                        id: "x1",
+                        created: TimeUtils.getFormattedTime(Number(item.answerTime)),
+                        msg: item.answer,
+                        type: "chatgpt"
+                    };
+                    newMap.set(item.answerTime, sseMsg);
+                }
+            })
+            setMyMap(newMap);
+        }
+    }
+
     const getConverItems = (choosedCid: number) => {
         let items: IConversationItemReq = {
             cid: choosedCid
         };
         setCid(choosedCid);
         getConversationItems(items).then((resp: any) => {
-            if (resp.result && resp.result.list && resp.result.list.length > 0) {
-                const newMap = new Map<string, ISseMsg>();
-                const itemList = resp.result.list;
-                itemList.sort((a: any, b: any) => Number(a.createdTime) - Number(b.createdTime));
-                itemList.forEach((item: any) => {
-                    if (item.questionTime) {
-                        const sseMsg: ISseMsg = {
-                            id: "x",
-                            created: TimeUtils.getFormattedTime(Number(item.questionTime)),
-                            msg: item.question,
-                            type: "prompt"
-                        };
-                        newMap.set(item.questionTime, sseMsg);
-                    }
-                    if (item.answerTime) {
-                        const sseMsg: ISseMsg = {
-                            id: "x1",
-                            created: TimeUtils.getFormattedTime(Number(item.answerTime)),
-                            msg: item.answer,
-                            type: "chatgpt"
-                        };
-                        newMap.set(item.answerTime, sseMsg);
-                    }
-                })
-                setMyMap(newMap);
-            }
+            putCitems(resp);
         });
     }
 
