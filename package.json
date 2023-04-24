@@ -19,6 +19,7 @@
     "event-source-polyfill": "^1.0.31",
     "gulp-connect": "^5.7.0",
     "hashmap": "^2.4.0",
+    "idb": "^7.1.1",
     "js-wheel": "https://github.com/jiangxiaoqiang/js-wheel.git",
     "query-string": "8.1.0",
     "react": "^18.2.0",

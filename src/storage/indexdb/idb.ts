@@ -1,0 +1,44 @@
+import { openDB, DBSchema } from 'idb';
+
+interface GenieDB {
+    prompt: {
+        name: string;
+        id: number;
+    };
+}
+
+export interface Prompt {
+    id: number;
+    name: string;
+}
+
+const db = openDB<GenieDB>('genie', 1, {
+    upgrade(db) {
+        const promptStore = db.createObjectStore('prompt', {
+            keyPath: 'id',
+            autoIncrement: true,
+        });
+        promptStore.createIndex("promptIdIndex", "id", { unique: true });
+    },
+});
+
+export async function insertToIdb(prompt: string) {
+    let objectStore = (await db).transaction(["prompt"], "readwrite").objectStore("prompt");
+    let request = objectStore.add({ name: prompt });
+    return request;
+}
+
+export async function getToIdb<T>(key: number): Promise<T | undefined> {
+    let objectStore = (await db).transaction(["prompt"], "readwrite").objectStore("prompt");
+    let request = objectStore.get(key);
+    return request;
+}
+
+export async function getNewestRecord<T>(): Promise<T | undefined> {
+    var transaction = (await db).transaction(["prompt"], "readonly");
+    var store = transaction.objectStore("prompt").index("promptIdIndex");
+    const cursor = await store.openCursor(null, 'prev');
+    const maxIdRecord = cursor?.value as T;
+    await transaction.done;
+    return maxIdRecord;
+}

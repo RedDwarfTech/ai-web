@@ -14,7 +14,7 @@ export function doSseChatAsk(params: ChatAsk, onSseMessage: (msg: string) => voi
     }
   });
   eventSource.onopen = () => {
-    console.log("onopen....")
+    
   }
   eventSource.onerror = (error) => {
     console.log("onerror",error)

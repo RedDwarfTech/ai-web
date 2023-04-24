@@ -26,6 +26,7 @@ import Profile from "@/page/user/profile/Profile";
 import GenImages from "../images/GenImages";
 import ChatList from "./component/ChatList";
 import chatPic from "@/asset/icon/chat/chat.svg";
+import { Prompt, getNewestRecord, getToIdb, insertToIdb } from "@/storage/indexdb/idb";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
     const [inputValue, setInputValue] = useState('');
@@ -37,6 +38,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const [userInfo, setUserInfo] = useState<IUserModel>();
     const { citem } = useSelector((state: any) => state.citem);
     const { user } = useSelector((state: any) => state.user);
+    const [currInputIndex, setCurrInputIndex] = useState(0);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -59,15 +61,56 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
     }, [myMap]);
 
+    useEffect(() => {
+        // https://stackoverflow.com/questions/76091350/how-can-the-event-listener-always-get-the-newest-state-value-in-a-function-compo
+        // https://overreacted.io/a-complete-guide-to-useeffect/
+        window.addEventListener("keydown", handleKeyDown);
+        window.addEventListener("keyup", handleKeyUp);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+            window.removeEventListener("keyup",handleKeyUp);
+        };
+    },[currInputIndex]);
+
     React.useEffect(() => {
         if (isLoggedIn) {
             fetchConversations();
         }
+        initialCurrentSelect();
     }, []);
 
+    const initialCurrentSelect = async () =>{
+        const result = await getNewestRecord<Prompt>();
+        if(result){
+            setCurrInputIndex(result.id);
+        }
+    }
 
-    const saveAuthInfo =(user:any)=>{
-        if(user ==null || Object.keys(user).length===0){
+    const handleKeyUp = async (event: KeyboardEvent) => {
+        if (event.key === 'ArrowUp') {
+            const selected = currInputIndex - 1;
+            const stored = await getToIdb<Prompt>(selected);
+            if(stored){
+                setInputValue(stored.name);
+                setCurrInputIndex(selected);
+            }
+        }
+    };
+
+    const handleKeyDown = async (event: KeyboardEvent) => {
+        // https://stackoverflow.com/questions/35394937/keyboardevent-keycode-deprecated-what-does-this-mean-in-practice
+        if (event.key === 'ArrowDown') {
+            const selected = currInputIndex + 1;
+            const stored = await getToIdb<Prompt>(selected);
+            if(stored){
+                setInputValue(stored.name);
+                setCurrInputIndex(selected);
+            }
+        }
+    };
+
+    const saveAuthInfo = (user: any) => {
+        if (user == null || Object.keys(user).length === 0) {
             return;
         }
         localStorage.setItem('isLoggedIn', 'true');
@@ -156,16 +199,19 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         props.onMenuClick(menu);
     };
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (loadings) {
             return;
         }
+        if (!inputValue && inputValue.trim().length === 0) {
+            return;
+        }
+        await insertToIdb(inputValue.trim()).then((response) => {
+            setCurrInputIndex(Number(response));
+        });
         if (!isLoggedIn) {
             message.warning("请登录后再开启聊天");
             setLoadings(false);
-            return;
-        }
-        if (!inputValue && inputValue.trim().length === 0) {
             return;
         }
         let msg: ISse35ServerMsg = {
@@ -196,6 +242,8 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             e.preventDefault();
             e.stopPropagation();
             handleSend();
+        } else {
+            console.log("keycode:", e.nativeEvent.keyCode);
         }
     }
 
@@ -294,22 +342,22 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const userLogin = () => {
         if (process.env.NODE_ENV === 'production') {
             let param = {
-              appId: readConfig("appId")
+                appId: readConfig("appId")
             };
             userLoginImpl(param).then((data: any) => {
-              window.location.href = data.result;
+                window.location.href = data.result;
             });
-          } else {
+        } else {
             let param = {
-              appId: readConfig("appId"),
-              phone: readConfig("phone"),
-              password: readConfig("password"),
-              loginType: 1,
-              deviceId: 1,
-              deviceName: readConfig("deviceName")
+                appId: readConfig("appId"),
+                phone: readConfig("phone"),
+                password: readConfig("password"),
+                loginType: 1,
+                deviceId: 1,
+                deviceName: readConfig("deviceName")
             };
             userLoginByPhoneImpl(param);
-          }
+        }
     }
 
     const renderLogin = () => {
@@ -361,9 +409,9 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                             onChange={handleChatInputChange}
                             onKeyPress={handleEnterKey}
                             placeholder="输入会话内容，按Enter快捷发送" >
-                                <Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
-                            <span>发送</span>
-                        </Button>
+                            <Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
+                                <span>发送</span>
+                            </Button>
                         </Input.TextArea>
                         <Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
                             <span>发送</span>
