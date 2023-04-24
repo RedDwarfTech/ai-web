@@ -1,17 +1,20 @@
-import { GetUserAction, UserAction } from "@/action/user/UserAction";
 import { AppState } from "@/store/AppState";
 
 const initState: AppState = {
     user: {}
 };
 
-const UserReducer = (state=initState, action: UserAction) => {
+const UserReducer = (state=initState, action: any) => {
     switch (action.type) {  
         case "GET_CURRENT_USER":
-            const getUserAction = action as GetUserAction;
             return {
                 ...state,
-                user: getUserAction.payload 
+                user: action.data 
+            };
+        case "LOGIN_BY_PHONE":
+            return {
+                ...state,
+                user: action.data
             };
         default:
             break;

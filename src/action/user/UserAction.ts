@@ -1,34 +1,22 @@
-import { Action } from "redux";
+export type userAction = loginByPhoneAction|userLoginAction|getCurrentUserAction;
 
-export type UserAction = GetUserAction | LoginUserAction;
-
-
-export interface GetUserAction extends Action{
-    type: 'GET_CURRENT_USER',
-    payload: {
-        
-    }
+export enum UserActionType {
+  LOGIN_BY_PHONE,
+  USER_LOGIN,
+  GET_CURRENT_USER
 }
 
-export interface LoginUserAction {
-    type: 'USER_LOGIN',
-    payload: {
-        
-    }
+export interface loginByPhoneAction {
+    type: UserActionType.LOGIN_BY_PHONE;
+    data: any;
 }
 
-export const getCurrentUserAction = (user: any): GetUserAction => {
-  return {
-    type: 'GET_CURRENT_USER',
-    payload: user
-  }
+export interface userLoginAction {
+  type: UserActionType.USER_LOGIN;
+  data: any;
 }
 
-
-export function userLogin() {
-    return {
-        type: "USER_LOGIN",
-        article: ''
-    };
+export interface getCurrentUserAction {
+  type: UserActionType.USER_LOGIN;
+  data: any;
 }
-

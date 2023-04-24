@@ -1,5 +1,5 @@
-import { getCurrentUserAction } from "@/action/user/UserAction";
-import { requestWithAction } from "@/common/XHRClient";
+import { UserActionType } from "@/action/user/UserAction";
+import { requestWithActionType } from "@/common/XHRClient";
 
 export function submitFeedback(params: any) {
     const config = {
@@ -8,5 +8,6 @@ export function submitFeedback(params: any) {
         headers: {'Content-Type': 'application/json'},
         data: JSON.stringify(params)
     };
-    return requestWithAction(config, getCurrentUserAction);
+    const actionTypeString: string = UserActionType[UserActionType.GET_CURRENT_USER];
+    return requestWithActionType(config, actionTypeString);
 }

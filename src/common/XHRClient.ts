@@ -41,10 +41,10 @@ instance.interceptors.response.use((response: AxiosResponse<any, any>) => {
             request.headers['x-access-token'] = accessToken;
             request.headers['x-request-id'] = uuid();
             instance(request).then((resp: any) => {
-              const functionStr = response.config.headers['x-action'];
+              const actionType = response.config.headers['x-action'];
               const data = resp.data.result;
               const action = {
-                type: functionStr,
+                type: actionType,
                 data: data
               };
               // change the state to make it render the UI

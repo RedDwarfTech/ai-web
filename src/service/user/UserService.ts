@@ -1,7 +1,7 @@
 import { IUserModel, WheelGlobal } from 'js-wheel';
-import { getCurrentUserAction, userLogin } from '../../action/user/UserAction';
-import { requestWithAction } from '../../common/XHRClient';
-import { readConfig } from '../../config/app/config-reader';
+import { UserActionType } from '@/action/user/UserAction';
+import { requestWithAction, requestWithActionType } from '@/common/XHRClient';
+import { readConfig } from '@/config/app/config-reader';
 
 export function getCurrentUser() {
     const config = {
@@ -9,7 +9,8 @@ export function getCurrentUser() {
         url: '/post/user/current-user',
         headers: {'Content-Type': 'application/json'}
     };
-    return requestWithAction(config, getCurrentUserAction);
+    const actionTypeString: string = UserActionType[UserActionType.GET_CURRENT_USER];
+    return requestWithActionType(config, actionTypeString);
 }
 
 export function userLoginImpl(params: any) {
@@ -19,7 +20,19 @@ export function userLoginImpl(params: any) {
         headers: {'Content-Type': 'application/json'},
         params: params
     };
-    return requestWithAction(config, userLogin);
+    const actionTypeString: string = UserActionType[UserActionType.USER_LOGIN];
+    return requestWithActionType(config, actionTypeString);
+}
+
+export function userLoginByPhoneImpl(params: any) {
+    const config = {
+        method: 'post',
+        url: '/ai/user/login',
+        headers: {'Content-Type': 'application/json'},
+        data: JSON.stringify(params)
+    };
+    const actionTypeString: string = UserActionType[UserActionType.LOGIN_BY_PHONE];
+    return requestWithActionType(config, actionTypeString);
 }
 
 export function isLoggedIn(){
@@ -38,7 +51,7 @@ export function isSubscribed(): boolean {
     }
     const uInfo: IUserModel = JSON.parse(userInfoJson);
     // pay attention that the long data type in the backend server using string to avoid precise loss
-    if(Number(uInfo.autoRenewProductExpireTimeMs) > new Date().getTime()){
+    if(uInfo && Number(uInfo.autoRenewProductExpireTimeMs) > new Date().getTime()){
         return true;
     }
     return false;

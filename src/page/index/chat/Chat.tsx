@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
-import { doLoginOut, getCurrentUser, isLoggedIn, userLoginImpl } from "@/service/user/UserService";
+import { doLoginOut, getCurrentUser, isLoggedIn, userLoginByPhoneImpl, userLoginImpl } from "@/service/user/UserService";
 import { ChatAsk } from "@/models/request/chat/ChatAsk";
 import { chatAskAction } from "@/action/chat/ChatAction";
 import { IChatAskResp } from "@/models/chat/ChatAskResp";
@@ -35,13 +35,18 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
     const [isGetUserLoading, setIsGetUserLoading] = useState(false);
     const [userInfo, setUserInfo] = useState<IUserModel>();
-    const { citem } = useSelector((state: any) => state.citem)
+    const { citem } = useSelector((state: any) => state.citem);
+    const { user } = useSelector((state: any) => state.user);
 
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
     };
+
+    useEffect(() => {
+        saveAuthInfo(user);
+    }, [user]);
 
     useEffect(() => {
         putCitems(citem);
@@ -60,6 +65,20 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
     }, []);
 
+
+    const saveAuthInfo =(user:any)=>{
+        if(user ==null || Object.keys(user).length===0){
+            return;
+        }
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem(WheelGlobal.ACCESS_TOKEN_NAME, user.accessToken);
+        localStorage.setItem(WheelGlobal.REFRESH_TOKEN_NAME, user.refreshToken);
+        localStorage.setItem('avatarUrl', user.avatarUrl);
+        localStorage.setItem(WheelGlobal.BASE_AUTH_URL, readConfig("baseAuthUrl"));
+        localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH, readConfig("accessTokenUrlPath"));
+        setIsLoggedIn(true);
+    }
+
     const fetchConversations = () => {
         const convReq: IConversationReq = {
             title: 'React'
@@ -72,6 +91,11 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "vip-expired") {
             setLoadings(false);
             message.info("充值会员继续使用");
+            return;
+        }
+        if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "rate-limit") {
+            setLoadings(false);
+            message.info("超出频率限制，请稍后再试一试");
             return;
         }
         if (serverMsg.choices[0].delta.content && serverMsg.choices[0].delta.content.length > 0) {
@@ -268,12 +292,24 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }]
 
     const userLogin = () => {
-        let param = {
-            appId: readConfig("appId")
-        };
-        userLoginImpl(param).then((data: any) => {
-            window.location.href = data.result;
-        });
+        if (process.env.NODE_ENV === 'production') {
+            let param = {
+              appId: readConfig("appId")
+            };
+            userLoginImpl(param).then((data: any) => {
+              window.location.href = data.result;
+            });
+          } else {
+            let param = {
+              appId: readConfig("appId"),
+              phone: readConfig("phone"),
+              password: readConfig("password"),
+              loginType: 1,
+              deviceId: 1,
+              deviceName: readConfig("deviceName")
+            };
+            userLoginByPhoneImpl(param);
+          }
     }
 
     const renderLogin = () => {
