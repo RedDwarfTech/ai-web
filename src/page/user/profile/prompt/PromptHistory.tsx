@@ -40,7 +40,7 @@ const PromptHistory: React.FC = (props: any) => {
 
 
     const fetchPrompts = async () => {
-        const promptPage:Prompt[] = await getPage<Prompt>(1,10);
+        const promptPage:Prompt[] = await getPage<Prompt>(tableParams.pagination?.current||1,tableParams.pagination?.pageSize||10);
         setData(promptPage);
     }
 

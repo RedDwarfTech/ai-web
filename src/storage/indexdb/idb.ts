@@ -1,4 +1,4 @@
-import { openDB, DBSchema } from 'idb';
+import { openDB } from 'idb';
 
 interface GenieDB {
     prompt: {
@@ -46,21 +46,16 @@ export async function getNewestRecord<T>(): Promise<T | undefined> {
 export async function getPage<T>(page: number, pageSize: number): Promise<T[]> {
     let transaction = (await db).transaction(["prompt"], "readonly");
     let store = transaction.objectStore("prompt");
-    const cursor = await store.index("promptIdIndex").openCursor(null,'next');
+    let cursor = await store.index("promptIdIndex").openCursor(null,'next');
     let offset = (page - 1) * pageSize;
     const data: T[] = [];
     while (cursor && offset > 0) {
-        if(cursor && cursor.value){
-            cursor.advance(offset);
-            offset -= cursor.key as number;
-        }
+        cursor.advance(offset);
+        offset -= cursor.key as number;
     }
     for (let i = 0; cursor && i < pageSize; i++) {
-        if(cursor && cursor.value && cursor.continue){
-            data.push(cursor.value);
-            debugger
-            cursor.continue();
-        }
+        data.push(cursor.value);
+        cursor = await cursor.continue();
     }
     await transaction.done;
     return data;
