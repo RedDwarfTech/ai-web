@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
-import { doLoginOut, getCurrentUser, isLoggedIn, userLoginByPhoneImpl, userLoginImpl } from "@/service/user/UserService";
+import { doLoginOut, getCurrentUser, userLoginByPhoneImpl, userLoginImpl } from "@/service/user/UserService";
 import { ChatAsk } from "@/models/request/chat/ChatAsk";
 import { chatAskAction } from "@/action/chat/ChatAction";
 import { IChatAskResp } from "@/models/chat/ChatAskResp";
@@ -19,7 +19,7 @@ import BaseMethods from 'js-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "@/config/app/config-reader";
-import { DollarOutlined, FileImageOutlined, InfoCircleOutlined, MessageOutlined, SendOutlined } from "@ant-design/icons";
+import { DollarOutlined, InfoCircleOutlined, MessageOutlined, SendOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
 import Goods from "../goods/Goods";
 import Profile from "@/page/user/profile/Profile";
@@ -68,9 +68,9 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         window.addEventListener("keyup", handleKeyUp);
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
-            window.removeEventListener("keyup",handleKeyUp);
+            window.removeEventListener("keyup", handleKeyUp);
         };
-    },[currInputIndex]);
+    }, [currInputIndex]);
 
     React.useEffect(() => {
         if (isLoggedIn) {
@@ -79,18 +79,18 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         initialCurrentSelect();
     }, []);
 
-    const initialCurrentSelect = async () =>{
+    const initialCurrentSelect = async () => {
         const result = await getNewestRecord<Prompt>();
-        if(result){
+        if (result) {
             setCurrInputIndex(result.id);
         }
     }
 
     const handleKeyUp = async (event: KeyboardEvent) => {
         if (event.key === 'ArrowUp') {
-            const selected = currInputIndex - 1;
+            const selected = inputValue && inputValue.length > 0 ? currInputIndex - 1 : currInputIndex;
             const stored = await getToIdb<Prompt>(selected);
-            if(stored){
+            if (stored) {
                 setInputValue(stored.name);
                 setCurrInputIndex(selected);
             }
@@ -102,7 +102,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         if (event.key === 'ArrowDown') {
             const selected = currInputIndex + 1;
             const stored = await getToIdb<Prompt>(selected);
-            if(stored){
+            if (stored) {
                 setInputValue(stored.name);
                 setCurrInputIndex(selected);
             }
@@ -117,7 +117,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         localStorage.setItem(WheelGlobal.ACCESS_TOKEN_NAME, user.accessToken);
         localStorage.setItem(WheelGlobal.REFRESH_TOKEN_NAME, user.refreshToken);
         localStorage.setItem('avatarUrl', user.avatarUrl);
-        localStorage.setItem('userInfo',JSON.stringify(user));
+        localStorage.setItem('userInfo', JSON.stringify(user));
         localStorage.setItem(WheelGlobal.BASE_AUTH_URL, readConfig("baseAuthUrl"));
         localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH, readConfig("accessTokenUrlPath"));
         setIsLoggedIn(true);
@@ -243,8 +243,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             e.preventDefault();
             e.stopPropagation();
             handleSend();
-        } else {
-            console.log("keycode:", e.nativeEvent.keyCode);
         }
     }
 
@@ -442,7 +440,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                 </div>
             );
         }
-        if (tab === "profile") {            
+        if (tab === "profile") {
             return (
                 <div className="chat-container">
                     <Profile></Profile>
