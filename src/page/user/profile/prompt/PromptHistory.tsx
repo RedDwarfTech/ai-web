@@ -36,12 +36,11 @@ const PromptHistory: React.FC = (props: any) => {
     });
 
     React.useEffect(() => {
-        fetchPrompts();
+        fetchPrompts(tableParams.pagination);
     }, []);
 
-
-    const fetchPrompts = async () => {
-        const promptPage:REST.EntityList<Prompt> = await getPage<Prompt>(tableParams.pagination);
+    const fetchPrompts = async (pagination?: TablePaginationConfig) => {
+        const promptPage:REST.EntityList<Prompt> = await getPage<Prompt>(pagination);
         setData(promptPage.data);
         setTableParams({
             pagination: {
@@ -65,6 +64,7 @@ const PromptHistory: React.FC = (props: any) => {
         if (pagination.pageSize !== tableParams.pagination?.pageSize) {
             setData([]);
         }
+        fetchPrompts(pagination);
     };
 
     return (

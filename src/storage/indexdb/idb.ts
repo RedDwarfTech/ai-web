@@ -55,8 +55,10 @@ export async function getPage<T>(pagination?: TablePaginationConfig): Promise<RE
     let offset = (current - 1) * pageSize;
     const data: T[] = [];
     while (cursor && offset > 0) {
-        cursor.advance(offset);
-        offset -= cursor.key as number;
+        cursor = await cursor.advance(offset);
+        if(cursor){
+            offset -= cursor.key as number;
+        }
     }
     for (let i = 0; cursor && i < pageSize; i++) {
         if(cursor){
