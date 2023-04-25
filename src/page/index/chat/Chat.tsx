@@ -47,7 +47,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     };
 
     useEffect(() => {
-        saveAuthInfo(user);
+        saveUserInfo(user);
     }, [user]);
 
     useEffect(() => {
@@ -109,18 +109,11 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
     };
 
-    const saveAuthInfo = (user: any) => {
+    const saveUserInfo = (user: any) => {
         if (user == null || Object.keys(user).length === 0) {
             return;
         }
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem(WheelGlobal.ACCESS_TOKEN_NAME, user.accessToken);
-        localStorage.setItem(WheelGlobal.REFRESH_TOKEN_NAME, user.refreshToken);
-        localStorage.setItem('avatarUrl', user.avatarUrl);
         localStorage.setItem('userInfo', JSON.stringify(user));
-        localStorage.setItem(WheelGlobal.BASE_AUTH_URL, readConfig("baseAuthUrl"));
-        localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH, readConfig("accessTokenUrlPath"));
-        setIsLoggedIn(true);
     }
 
     const fetchConversations = () => {
