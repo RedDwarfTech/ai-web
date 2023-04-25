@@ -4,7 +4,7 @@ import "./PaySuccess.css"
 import queryString from 'query-string';
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router-dom';
-import { RequestHandler } from "js-wheel";
+import { RequestHandler, ResponseHandler } from "js-wheel";
 import { getCurrentUser } from "@/service/user/UserService";
 
 const PaySuccess: React.FC = (props) => {
@@ -25,7 +25,9 @@ const PaySuccess: React.FC = (props) => {
     if(parsed != null && parsed.orderId && parsed.payAmount){
         RequestHandler.handleAccessTokenExpire();
         getCurrentUser().then((data: any) => {
-            localStorage.setItem("userInfo", JSON.stringify(data.result));
+            if(ResponseHandler.responseSuccess(data)){
+                localStorage.setItem("userInfo", JSON.stringify(data.result));
+            }
         });
       return (<div className="pay-success-container">
       <h1>支付成功！</h1>

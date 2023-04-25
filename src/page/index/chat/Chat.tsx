@@ -11,7 +11,7 @@ import { doSseChatAsk } from "@/service/chat/SseClientService";
 import { ISseMsg } from "@/models/chat/SseMsg";
 import { ISse35ServerMsg } from "@/models/chat/3.5/Sse35ServerMsg";
 import dayjs from "dayjs";
-import { IUserModel, TimeUtils, WheelGlobal } from "js-wheel";
+import { IUserModel, ResponseHandler, TimeUtils, WheelGlobal } from "js-wheel";
 import { IConversation } from "@/models/chat/3.5/Conversation";
 import { getConversations } from "@/service/chat/ConversationService";
 import { IConversationReq } from "@/models/request/conversation/ConversationReq";
@@ -308,9 +308,11 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         if (!localStorage.getItem("userInfo") && isGetUserLoading === false) {
             setIsGetUserLoading(true);
             getCurrentUser().then((data: any) => {
-                setUserInfo(data.result);
-                localStorage.setItem("userInfo", JSON.stringify(data.result));
-                setIsGetUserLoading(false);
+                if(ResponseHandler.responseSuccess(data)){
+                    setUserInfo(data.result);
+                    localStorage.setItem("userInfo", JSON.stringify(data.result));
+                    setIsGetUserLoading(false);
+                }
             });
         }
     }
