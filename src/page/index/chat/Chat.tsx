@@ -70,7 +70,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [currInputIndex]);
+    }, [currInputIndex,inputValue]);
 
     React.useEffect(() => {
         if (isLoggedIn) {
