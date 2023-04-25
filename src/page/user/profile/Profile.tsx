@@ -7,6 +7,7 @@ import Feedback from "./feedback/Feedback";
 import withConnect from "@/page/component/hoc/withConnect";
 import { getCurrentUser } from "@/service/user/UserService";
 import { useSelector } from "react-redux";
+import PromptHistory from "./prompt/PromptHistory";
 
 export type ProfileProps = {
   panelUserInfo: IUserModel | undefined;
@@ -50,6 +51,9 @@ const Profile: React.FC = (props: any) => {
     if (currentPanel && currentPanel === 'feedback') {
       return <Feedback></Feedback>
     }
+    if (currentPanel && currentPanel === 'prompt'){
+      return (<PromptHistory></PromptHistory>);
+    }
     if (currentPanel && currentPanel === 'userinfo') {
       return (<div id="userinfo">
         <Card title="基本信息" style={{ marginBottom: '20px' }}>
@@ -91,6 +95,7 @@ const Profile: React.FC = (props: any) => {
     <div className="panel-container">
       <div className="panel-menu">
         <div className="menu-item" data-target="userinfo" id="userinfo-menu" onClick={handlePanelSwitch}><span>用户信息</span></div>
+        <div className="menu-item" data-target="prompt" id="userinfo-menu" onClick={handlePanelSwitch}><span>提示词</span></div>
         <div className="menu-item" data-target="feedback" id="feedback-menu" onClick={handlePanelSwitch}><span>意见与建议</span></div>
       </div>
       <div className="panel-content">
