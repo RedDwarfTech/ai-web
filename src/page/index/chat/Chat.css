@@ -108,21 +108,21 @@
 
 .conversation-item {
   display: flex;
-  height: 40px;
+  height: 55px;
   overflow-x: hidden;
   font-size: 17px;
   align-items: center;
   white-space: nowrap;
   text-overflow: ellipsis;
-  margin-top: 10px;
-  padding-left: 15px;
+  margin-top: 0px;
+  padding-left: 20px;
   padding-right: 5px;
   flex: 8;
   width: 85%;
 }
 
 .conversation-item:hover {
-  background-color:gray;
+  background-color:rgba(0,0,0,.15);
 }
 
 .conversation-item span {
