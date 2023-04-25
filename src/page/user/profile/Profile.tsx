@@ -1,24 +1,42 @@
 import { Avatar, Card, Col, Row } from "antd";
 import { IUserModel, TimeUtils } from "js-wheel";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import "./Profile.css";
 import alipayPic from "@/asset/icon/alipay-circle.png";
 import Feedback from "./feedback/Feedback";
 import withConnect from "@/page/component/hoc/withConnect";
+import { getCurrentUser } from "@/service/user/UserService";
+import { useSelector } from "react-redux";
 
 export type ProfileProps = {
   panelUserInfo: IUserModel | undefined;
 };
 
-const Profile: React.FC<ProfileProps> = (props: any) => {
+const Profile: React.FC = (props: any) => {
 
   const [currentPanel, setCurrentPanel] = useState('userinfo');
+  const [userInfo, setUserInfo] = useState<IUserModel>();
+  const { user } = useSelector((state: any) => state.user);
 
   React.useEffect(() => {
-   
-  }, [])
+    getUserInfo();
+  }, []);
 
-  const userInfo = props.panelUserInfo;
+  React.useEffect(() => {
+    if(user && Object.keys(user).length > 0) {
+      setUserInfo(user);
+    }
+  },[user]);
+
+  const getUserInfo =() => {
+    const userInfoJson = localStorage.getItem("userInfo");
+    if(userInfoJson){
+      const uInfo: IUserModel = JSON.parse(userInfoJson);
+      setUserInfo(uInfo);
+    }else{
+      getCurrentUser();
+    }
+  }
 
   const getVipExpiredTime = (userInfo: any) => {
     if (userInfo && userInfo.autoRenewProductExpireTimeMs && userInfo.autoRenewProductExpireTime > new Date().getTime()) {

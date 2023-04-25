@@ -117,6 +117,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         localStorage.setItem(WheelGlobal.ACCESS_TOKEN_NAME, user.accessToken);
         localStorage.setItem(WheelGlobal.REFRESH_TOKEN_NAME, user.refreshToken);
         localStorage.setItem('avatarUrl', user.avatarUrl);
+        localStorage.setItem('userInfo',JSON.stringify(user));
         localStorage.setItem(WheelGlobal.BASE_AUTH_URL, readConfig("baseAuthUrl"));
         localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH, readConfig("accessTokenUrlPath"));
         setIsLoggedIn(true);
@@ -441,19 +442,14 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                 </div>
             );
         }
-        if (tab === "profile") {
-            const userInfoJson = localStorage.getItem("userInfo");
-            if (!userInfoJson) {
-                return;
-            }
-            const uInfo: IUserModel = JSON.parse(userInfoJson);
+        if (tab === "profile") {            
             return (
                 <div className="chat-container">
-                    <Profile panelUserInfo={uInfo}></Profile>
+                    <Profile></Profile>
                 </div>
             );
         }
-        return (<div></div>);
+        return (<div>开发中，敬请期待...</div>);
     }
 
     return (

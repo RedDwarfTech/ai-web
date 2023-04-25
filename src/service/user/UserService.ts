@@ -1,6 +1,6 @@
 import { IUserModel, WheelGlobal } from 'js-wheel';
 import { UserActionType } from '@/action/user/UserAction';
-import { requestWithAction, requestWithActionType } from '@/common/XHRClient';
+import { requestWithActionType } from '@/common/XHRClient';
 import { readConfig } from '@/config/app/config-reader';
 
 export function getCurrentUser() {
