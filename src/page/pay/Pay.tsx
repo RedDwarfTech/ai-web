@@ -1,8 +1,6 @@
-import { Col, Row } from "antd";
 import React from "react";
 import "./Pay.css"
-import { connect } from "react-redux";
-import { createOrder } from "../../action/pay/PayAction";
+import withConnect from "@/page/component/hoc/withConnect";
 
 export type PayProps = {
   payFormText: string;
@@ -24,16 +22,4 @@ const Pay: React.FC<PayProps> = (props) => {
   );
 }
 
-const mapStateToProps = (state: { formText: any; }) => ({
-  formText: state.formText
-});
-
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    createOrder: (formText: String) => {
-      dispatch(createOrder(formText))
-    }
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Pay);
+export default withConnect(Pay);
