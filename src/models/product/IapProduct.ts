@@ -11,7 +11,8 @@ export interface IapProduct {
     rawPrice: string; 
     currencyCode?: string; 
     appId: string; 
-    sort: string; deleted?:number; 
+    sort: number; 
+    deleted?:number; 
     amount?: number; 
     period?: number;
 }

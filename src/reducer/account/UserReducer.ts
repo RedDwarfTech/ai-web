@@ -1,7 +1,8 @@
 import { AppState } from "@/store/AppState";
 
 const initState: AppState = {
-    user: {}
+    user: {},
+    loginUser: {}
 };
 
 const UserReducer = (state=initState, action: any) => {
@@ -14,7 +15,7 @@ const UserReducer = (state=initState, action: any) => {
         case "LOGIN_BY_PHONE":
             return {
                 ...state,
-                user: action.data
+                loginUser: action.data
             };
         default:
             break;

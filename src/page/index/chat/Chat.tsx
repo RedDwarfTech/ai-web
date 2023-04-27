@@ -37,7 +37,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const [isGetUserLoading, setIsGetUserLoading] = useState(false);
     const [userInfo, setUserInfo] = useState<IUserModel>();
     const { citem } = useSelector((state: any) => state.citem);
-    const { user } = useSelector((state: any) => state.user);
+    const { loginUser } = useSelector((state: any) => state.user);
     const [currInputIndex, setCurrInputIndex] = useState(0);
 
     const inputRef = useRef<HTMLInputElement>(null);
@@ -47,8 +47,10 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     };
 
     useEffect(() => {
-        saveUserInfo(user);
-    }, [user]);
+        if (loginUser && Object.keys(loginUser).length > 0) {
+            saveLoginUserInfo(loginUser);
+        }
+    }, [loginUser]);
 
     useEffect(() => {
         putCitems(citem);
@@ -70,7 +72,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         };
-    }, [currInputIndex,inputValue]);
+    }, [currInputIndex, inputValue]);
 
     React.useEffect(() => {
         if (isLoggedIn) {
@@ -109,11 +111,15 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
     };
 
-    const saveUserInfo = (user: any) => {
-        if (user == null || Object.keys(user).length === 0) {
-            return;
-        }
-        localStorage.setItem('userInfo', JSON.stringify(user));
+    const saveLoginUserInfo = (userInfo: any) => {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem(WheelGlobal.ACCESS_TOKEN_NAME, userInfo.accessToken);
+        localStorage.setItem(WheelGlobal.REFRESH_TOKEN_NAME, userInfo.refreshToken);
+        localStorage.setItem('avatarUrl', userInfo.avatarUrl);
+        localStorage.setItem(WheelGlobal.BASE_AUTH_URL, readConfig("baseAuthUrl"));
+        localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH, readConfig("accessTokenUrlPath"));
+        loadCurrentUser();
+        setIsLoggedIn(true);
     }
 
     const fetchConversations = () => {
@@ -301,7 +307,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         if (!localStorage.getItem("userInfo") && isGetUserLoading === false) {
             setIsGetUserLoading(true);
             getCurrentUser().then((data: any) => {
-                if(ResponseHandler.responseSuccess(data)){
+                if (ResponseHandler.responseSuccess(data)) {
                     setUserInfo(data.result);
                     localStorage.setItem("userInfo", JSON.stringify(data.result));
                     setIsGetUserLoading(false);
@@ -348,7 +354,8 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                 password: readConfig("password"),
                 loginType: 1,
                 deviceId: 1,
-                deviceName: readConfig("deviceName")
+                deviceName: readConfig("deviceName"),
+                deviceType: 4
             };
             userLoginByPhoneImpl(param);
         }

@@ -45,16 +45,17 @@ const Goods: React.FC = (props: any) => {
       return (<div></div>);
     }
     const productSubList: JSX.Element[] = [];
-    serverDataSource.forEach((item: IapProduct) => {
-      productSubList.push(<div className="package">
-        <h2>{item.productTitle}</h2>
-        <p className="price">{item.price}<span>元</span></p>
-        <ul>
-          {vipItems(item.description)}
-        </ul> 
-        <button onClick={() => handlePay(item)}>立即订阅</button>
-      </div>);
-    });
+    serverDataSource.sort((a: IapProduct, b: IapProduct) => b.sort - a.sort)
+      .forEach((item: IapProduct) => {
+        productSubList.push(<div className="package">
+          <h2>{item.productTitle}</h2>
+          <p className="price">{item.price}<span>元</span></p>
+          <ul>
+            {vipItems(item.description)}
+          </ul>
+          <button onClick={() => handlePay(item)}>立即订阅</button>
+        </div>);
+      });
     return productSubList;
   }
 
