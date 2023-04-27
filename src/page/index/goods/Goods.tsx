@@ -1,4 +1,4 @@
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import "./Goods.css"
 import { doPay } from "@/service/pay/PayService";
 import Pay from "../../pay/Pay";
@@ -6,17 +6,28 @@ import { createOrder } from "@/action/pay/PayAction";
 import { ProductReq } from "js-wheel/dist/src/model/product/ProductReq";
 import { readConfig } from "@/config/app/config-reader";
 import { doGetIapProduct } from "@/service/goods/GoodsService";
-import { useEffect } from "react";
+import { useState } from "react";
 import { getIapProductsAction } from "@/action/iapproduct/IapProductAction";
 import BaseMethods from "js-wheel/dist/src/utils/data/BaseMethods";
 import { IapProduct } from "@/models/product/IapProduct";
 import { Divider } from "antd";
+import React from "react";
+import { v4 as uuid } from 'uuid';
 
 const Goods: React.FC = (props: any) => {
 
-  useEffect(() => {
+  const { formText } = useSelector((state: any) => state.pay);
+  const [payFrame, setPayFrame] = useState('');
+
+  React.useEffect(() => {
     getGoods();
   }, []);
+
+  React.useEffect(() => {
+    if(formText && formText.length > 0) {
+      setPayFrame(formText);
+    }
+  }, [formText]);
 
   const getGoods = () => {
     const req: ProductReq = {
@@ -32,7 +43,6 @@ const Goods: React.FC = (props: any) => {
     doPay(param);
   };
 
-  let generateFormText = props.pay.formText;
   let serverDataSource = [];
   if (BaseMethods.isNull(props.iapproducts.iapproducts)) {
 
@@ -47,7 +57,8 @@ const Goods: React.FC = (props: any) => {
     const productSubList: JSX.Element[] = [];
     serverDataSource.sort((a: IapProduct, b: IapProduct) => b.sort - a.sort)
       .forEach((item: IapProduct) => {
-        productSubList.push(<div className="package">
+        productSubList.push(
+        <div key= {uuid()} className="package">
           <h2>{item.productTitle}</h2>
           <p className="price">{item.price}<span>元</span></p>
           <ul>
@@ -64,12 +75,11 @@ const Goods: React.FC = (props: any) => {
     if (parsedItmes) {
       const itemList: JSX.Element[] = [];
       parsedItmes.forEach((item: string) => {
-        itemList.push(<li>{item}</li>);
+        itemList.push(<li key={uuid()}>{item}</li>);
       });
       return itemList;
     }
   }
-
 
   return (
     <div>
@@ -77,7 +87,7 @@ const Goods: React.FC = (props: any) => {
         {productSubMenu(serverDataSource)}
       </div>
       <Divider></Divider>
-      <Pay payFormText={generateFormText}></Pay>
+      <Pay payFormText={payFrame}></Pay>
     </div>
   );
 }

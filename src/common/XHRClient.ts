@@ -65,11 +65,7 @@ export function requestWithAction(config: any, action: any) {
   config.headers['x-action'] = actionJson;
   return instance(config).then((response: { data: { result: any; }; }) => {
       const data = response.data.result;
-      const localAction = {
-        type: actionJson,
-        data: data
-      };
-      store.dispatch(localAction);
+      store.dispatch(action(data));
       return response.data;
     }
   ).catch(
