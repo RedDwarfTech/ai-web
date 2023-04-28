@@ -40,8 +40,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const { loginUser } = useSelector((state: any) => state.user);
     const [currInputIndex, setCurrInputIndex] = useState(0);
 
-    const inputRef = useRef<HTMLInputElement>(null);
-
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
     };
@@ -402,13 +400,12 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                 <div className="chat-container">
                     <ChatList myMap={myMap}></ChatList>
                     <div className="input-box">
-                        <Input.TextArea
+                        <textarea
                             id="talkInput"
                             rows={1}
                             value={inputValue}
-                            ref={inputRef}
                             onChange={handleChatInputChange}
-                            onKeyPress={handleEnterKey}
+                            onKeyDown={handleEnterKey}
                             placeholder="输入会话内容，按Enter快捷发送" />
                         <Button icon={<SendOutlined style={{ 
                             display: 'flex', 
