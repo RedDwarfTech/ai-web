@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Input with send button</title>
+    <style>
+        .input-box {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .input-box input[type="text"] {
+            flex: 1;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 25px;
+            outline: none;
+            font-size: 16px;
+            font-family: sans-serif;
+        }
+
+        .input-box button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-left: 10px;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .input-box button:hover {
+            background-color: #3e8e41;
+        }
+
+        .input-box button i {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="input-box"> 
+        <input type="text" placeholder="Write a message..."/> 
+        <button><i class="fas fa-paper-plane"></i>Send</button> 
+    </div>
+</body>
+
+</html>

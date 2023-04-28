@@ -37,53 +37,6 @@
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.chat-form {
-  display: flex;
-  padding: 10px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  align-items: center;
-}
-
-.chat-form input[type="text"], .chat-form textarea {
-  width: 86%;
-  font-size: 16px;
-  border: none;
-  border: 2px solid;
-  border-color: lightgray;
-  border-radius: 15px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
-  margin-bottom: 10px;
-  margin-left: 30px;
-  margin-right: 15px;
-}
-
-.chat-form button {
-  background-color: #1d93ab;
-  color: #fff;
-  padding: 5px 20px;
-  font-size: 17px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-right: 20px;
-}
-
-.chat-form button:hover {
-  background-color: #333;
-}
-
-.chat-form button span {
-  margin-bottom: 10px;
-}
-
-.chat-send-icon {
-  transform: rotate(-45deg);
-  margin-right: 0px;
-  height: 10px;
-  width: 10px;
-}
-
 .conversation {
   width: 13%;
   display: flex;
@@ -122,7 +75,7 @@
 }
 
 .conversation-item:hover {
-  background-color:rgba(0,0,0,.15);
+  background-color: rgba(0, 0, 0, .15);
 }
 
 .conversation-item span {
@@ -172,5 +125,59 @@
 
 .user-menu {
   margin-left: 10px;
-  background-color:#1d93ab;
+  background-color: #1d93ab;
+}
+
+
+
+.input-box {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  width: 80%;
+  margin: auto;
+  margin-bottom: 30px;
+}
+
+.input-box textarea {
+  flex: 1;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 25px;
+  outline: none;
+  font-size: 16px;
+  font-family: sans-serif;
+  outline: none;
+  resize: none;
+}
+
+.input-box button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+
+}
+
+.chat-send-icon {
+  transform: rotate(-45deg);
+  display: 'flex';
+  align-items: 'center';
+  justify-content: 'center';
+}
+
+.input-box button:hover {
+  background-color: #3e8e41;
+}
+
+.input-box button i {
+  margin-right: 5px;
 }

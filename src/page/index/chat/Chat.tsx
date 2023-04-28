@@ -401,22 +401,23 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             return (
                 <div className="chat-container">
                     <ChatList myMap={myMap}></ChatList>
-                    <div className="chat-form">
+                    <div className="input-box">
                         <Input.TextArea
-                            rows={2}
                             id="talkInput"
+                            rows={1}
                             value={inputValue}
                             ref={inputRef}
                             onChange={handleChatInputChange}
                             onKeyPress={handleEnterKey}
-                            placeholder="输入会话内容，按Enter快捷发送" >
-                            <Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
-                                <span>发送</span>
-                            </Button>
-                        </Input.TextArea>
-                        <Button icon={<SendOutlined className="chat-send-icon" />} loading={loadings} onClick={handleSend}>
-                            <span>发送</span>
-                        </Button>
+                            placeholder="输入会话内容，按Enter快捷发送" />
+                        <Button icon={<SendOutlined style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            transform: 'rotate(-45deg)',
+                            justifyContent: 'center' }}/>}
+                            loading={loadings}
+                            onClick={handleSend}
+                        ></Button>
                     </div>
                 </div>
             );
