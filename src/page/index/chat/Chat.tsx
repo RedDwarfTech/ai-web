@@ -333,25 +333,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         handleMenuClick('profile');
     }
 
-    const items: MenuProps['items'] = [
-        {
-            key: '2',
-            onClick: doLoginOut,
-            label: (
-                <a className="user-action-item">
-                    登出
-                </a>
-            )
-        }, {
-            key: '3',
-            onClick: showUserProfile,
-            label: (
-                <a className="user-action-item">
-                    控制台
-                </a>
-            )
-        }]
-
     const userLogin = () => {
         if (process.env.NODE_ENV === 'production') {
             let param = {
@@ -389,7 +370,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         if (isLoggedIn) {
             var avatarUrl = localStorage.getItem('avatarUrl');
             return (<a id="user-menu">
-                {avatarUrl ? <Avatar size={40} src={avatarUrl} onClick={avatarClick} /> : <Avatar size={40} >Me</Avatar>}
+                {avatarUrl ? <Avatar size={40} src={avatarUrl} onClick={avatarClick} /> : <Avatar onClick={avatarClick} size={40} >Me</Avatar>}
                 <div id="dropdown" className="dropdown-content">
                     <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
                     <div onClick={doLoginOut}><LogoutOutlined /><span>登出</span></div>
