@@ -40,8 +40,9 @@ const Profile: React.FC = (props: any) => {
   }
 
   const getVipExpiredTime = (userInfo: any) => {
-    if (userInfo && userInfo.autoRenewProductExpireTimeMs && userInfo.autoRenewProductExpireTime > new Date().getTime()) {
-      return TimeUtils.getFormattedTime(Number(userInfo.autoRenewProductExpireTimeMs));
+    const expiredTime = Number(userInfo.autoRenewProductExpireTimeMs);
+    if (userInfo && expiredTime && expiredTime > new Date().getTime()) {
+      return TimeUtils.getFormattedTime(expiredTime);
     } else {
       return "--";
     }
