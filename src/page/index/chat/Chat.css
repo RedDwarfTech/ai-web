@@ -74,12 +74,35 @@
   width: 85%;
 }
 
+.conversation-menu-item {
+  display: flex;
+  height: 55px;
+  overflow-x: hidden;
+  font-size: 17px;
+  align-items: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-top: 0px;
+  padding-left: 20px;
+  padding-right: 5px;
+  flex: 8;
+  width: 85%;
+}
+
 .conversation-item:hover {
   background-color: rgba(0, 0, 0, .15);
 }
 
 .conversation-item span {
   margin-left: 5px;
+}
+
+.conversation-menu-item:hover {
+  background-color: rgba(0, 0, 0, .15);
+}
+
+.conversation-menu-item span {
+  margin-left: 15px;
 }
 
 .conversation-item-login {
@@ -90,7 +113,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   margin-top: 10px;
-  padding-left: 15px;
+  padding-left: 35px;
   padding-right: 5px;
   flex: 8;
 }
@@ -124,11 +147,9 @@
 }
 
 .user-menu {
-  margin-left: 10px;
+  margin-left: 20px;
   background-color: #1d93ab;
 }
-
-
 
 .input-box {
   display: flex;
@@ -188,3 +209,32 @@ textarea:focus {
 .input-box button i {
   margin-right: 5px;
 }
+
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    background-color: #f9f9f9;
+    width:160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    left:4%;
+    bottom: 4%;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content div {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width:80%;
+    border-bottom: 2px solid #eee;
+  }
+  
+  .dropdown-content span {
+    margin-left:15px;
+  }
+  
+  .dropdown-content div:hover {background-color: #f1f1f1}
+  

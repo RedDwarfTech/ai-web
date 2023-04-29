@@ -19,7 +19,7 @@ import BaseMethods from 'js-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "@/config/app/config-reader";
-import { DollarOutlined, InfoCircleOutlined, MessageOutlined, SendOutlined } from "@ant-design/icons";
+import { ControlOutlined, DollarOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, SendOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
 import Goods from "../goods/Goods";
 import Profile from "@/page/user/profile/Profile";
@@ -43,6 +43,28 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
     };
+
+    React.useEffect(() => {
+        if (isLoggedIn) {
+            fetchConversations();
+        }
+        initialCurrentSelect();
+        document.addEventListener("click", handleMenuClose);
+        return () => {
+            document.removeEventListener("click", handleMenuClose);
+        };
+    }, []);
+
+    const handleMenuClose = (event: any) => {
+        const menu = document.getElementById('user-menu');
+        const dropdown = document.getElementById('dropdown');
+        if (menu && dropdown) {
+            const target = event.target;
+            if (!menu.contains(target)) {
+                dropdown.style.display = 'none';
+            }
+        }
+    }
 
     useEffect(() => {
         if (loginUser && Object.keys(loginUser).length > 0) {
@@ -71,13 +93,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             window.removeEventListener("keyup", handleKeyUp);
         };
     }, [currInputIndex, inputValue]);
-
-    React.useEffect(() => {
-        if (isLoggedIn) {
-            fetchConversations();
-        }
-        initialCurrentSelect();
-    }, []);
 
     const initialCurrentSelect = async () => {
         const result = await getNewestRecord<Prompt>();
@@ -359,23 +374,27 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
     }
 
+    const avatarClick = () => {
+        const dropdown = document.getElementById("dropdown");
+        if (dropdown) {
+            if (dropdown.style.display == "none" || dropdown.style.display == "") {
+                dropdown.style.display = "block";
+            } else {
+                dropdown.style.display = "none";
+            }
+        }
+    }
+
     const renderLogin = () => {
         if (isLoggedIn) {
             var avatarUrl = localStorage.getItem('avatarUrl');
-            if (avatarUrl) {
-                // https://stackoverflow.com/questions/76052644/warning-finddomnode-is-deprecated-in-strictmode-when-using-antd-dropdown
-                return (
-                    <Dropdown className="user-menu" menu={{ items }} trigger={['click']} placement="topRight">
-                        <Avatar size={40} src={avatarUrl} />
-                    </Dropdown>
-                );
-            } else {
-                return (
-                    <Dropdown className="user-menu" menu={{ items }} trigger={['click']} placement="topRight">
-                        <Avatar size={40} >Me</Avatar>
-                    </Dropdown>
-                );
-            }
+            return (<a id="user-menu">
+                {avatarUrl ? <Avatar size={40} src={avatarUrl} onClick={avatarClick} /> : <Avatar size={40} >Me</Avatar>}
+                <div id="dropdown" className="dropdown-content">
+                    <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
+                    <div onClick={doLoginOut}><LogoutOutlined /><span>登出</span></div>
+                </div>
+            </a>);
         }
         const accessTokenOrigin = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
         if (accessTokenOrigin) {
@@ -399,22 +418,25 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             return (
                 <div className="chat-container">
                     <ChatList myMap={myMap}></ChatList>
-                    <div className="input-box">
-                        <textarea
-                            id="talkInput"
-                            rows={1}
-                            value={inputValue}
-                            onChange={handleChatInputChange}
-                            onKeyDown={handleEnterKey}
-                            placeholder="输入会话内容，按Enter快捷发送" />
-                        <Button icon={<SendOutlined style={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            transform: 'rotate(-45deg)',
-                            justifyContent: 'center' }}/>}
-                            loading={loadings}
-                            onClick={handleSend}
-                        ></Button>
+                    <div className="input-box-container">
+                        <div className="input-box">
+                            <textarea
+                                id="talkInput"
+                                rows={1}
+                                value={inputValue}
+                                onChange={handleChatInputChange}
+                                onKeyDown={handleEnterKey}
+                                placeholder="输入会话内容，按Enter快捷发送" />
+                            <Button icon={<SendOutlined style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                transform: 'rotate(-45deg)',
+                                justifyContent: 'center'
+                            }} />}
+                                loading={loadings}
+                                onClick={handleSend}
+                            ></Button>
+                        </div>
                     </div>
                 </div>
             );
@@ -459,16 +481,16 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                 <div className="chat-menu" >
                     <div className="conversation-action">
                         <nav>
-                            <div className="conversation-item" onClick={() => handleMenuClick('chat')}>
+                            <div className="conversation-menu-item" onClick={() => handleMenuClick('chat')}>
                                 <MessageOutlined /><span className="action-item">聊天</span>
                             </div>
                             {/**<div className="conversation-item" onClick={() => handleMenuClick('image')}>
                                 <FileImageOutlined /><span className="action-item">图片生成</span>
     </div>**/}
-                            <div className="conversation-item" onClick={() => handleMenuClick('account')}>
+                            <div className="conversation-menu-item" onClick={() => handleMenuClick('account')}>
                                 <DollarOutlined /><span className="action-item">订阅</span>
                             </div>
-                            <div className="conversation-item" onClick={() => handleMenuClick('about')}>
+                            <div className="conversation-menu-item" onClick={() => handleMenuClick('about')}>
                                 <InfoCircleOutlined /><span className="action-item">关于</span>
                             </div>
                             <div className="conversation-item-login">
