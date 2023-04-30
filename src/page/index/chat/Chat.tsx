@@ -19,7 +19,7 @@ import BaseMethods from 'js-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "@/config/app/config-reader";
-import { ControlOutlined, DollarOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, SendOutlined } from "@ant-design/icons";
+import { ControlOutlined, DollarOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
 import Goods from "../goods/Goods";
 import Profile from "@/page/user/profile/Profile";
@@ -364,6 +364,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             return (<a id="user-menu">
                 {avatarUrl ? <Avatar size={40} src={avatarUrl} onClick={avatarClick} /> : <Avatar onClick={avatarClick} size={40} >Me</Avatar>}
                 <div id="dropdown" className="dropdown-content">
+                    <div onClick={()=>handleMenuClick('account')}><PayCircleOutlined /><span>订阅</span></div>
                     <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
                     <div onClick={doLoginOut}><LogoutOutlined /><span>登出</span></div>
                 </div>
@@ -460,9 +461,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
                             {/**<div className="conversation-item" onClick={() => handleMenuClick('image')}>
                                 <FileImageOutlined /><span className="action-item">图片生成</span>
     </div>**/}
-                            <div className="conversation-menu-item" onClick={() => handleMenuClick('account')}>
-                                <DollarOutlined /><span className="action-item">订阅</span>
-                            </div>
                             <div className="conversation-menu-item" onClick={() => handleMenuClick('about')}>
                                 <InfoCircleOutlined /><span className="action-item">关于</span>
                             </div>

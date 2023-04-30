@@ -1,11 +1,10 @@
-import Footer from "../component/footer/Footer";
 import React, { useEffect, useState } from "react";
 import Chat from "./chat/Chat";
 import { IUserModel } from "js-wheel";
 import "./Home.css";
 import withConnect from "../component/hoc/withConnect";
 
-const Home: React.FC = (props) => {
+const Home: React.FC = () => {
 
   const [currentPage, setCurrentPage] = useState("chat");
   const [userInfo, setUserInfo] = useState<IUserModel>();
