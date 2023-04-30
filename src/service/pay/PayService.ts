@@ -14,7 +14,7 @@ export function doPay(params: any) {
 
 export function doClearAlipayFormText() {
     const action = {
-        type: PayActionType.CREATE_ORDER,
+        type: PayActionType.CLEAR_ALIPAY_FORM_TEXT,
         data: ''
       };
       store.dispatch(action);
