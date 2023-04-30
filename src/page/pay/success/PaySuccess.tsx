@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 import { RequestHandler, ResponseHandler } from "js-wheel";
 import { getCurrentUser } from "@/service/user/UserService";
 
-const PaySuccess: React.FC = (props) => {
+const PaySuccess: React.FC = () => {
 
     const location = useLocation();
 
@@ -27,6 +27,7 @@ const PaySuccess: React.FC = (props) => {
         getCurrentUser().then((data: any) => {
             if(ResponseHandler.responseSuccess(data)){
                 localStorage.setItem("userInfo", JSON.stringify(data.result));
+                RequestHandler.handleWebAccessTokenExpire();
             }
         });
       return (<div className="pay-success-container">
