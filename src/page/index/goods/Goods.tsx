@@ -1,6 +1,6 @@
-import { connect, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import "./Goods.css"
-import { doPay } from "@/service/pay/PayService";
+import { doClearAlipayFormText, doPay } from "@/service/pay/PayService";
 import Pay from "@/page/pay/Pay";
 import { ProductReq } from "js-wheel/dist/src/model/product/ProductReq";
 import { readConfig } from "@/config/app/config-reader";
@@ -13,10 +13,10 @@ import React from "react";
 import { v4 as uuid } from 'uuid';
 import withConnect from "@/page/component/hoc/withConnect";
 
-const Goods: React.FC = (props: any) => {
+const Goods: React.FC = () => {
 
   const { iapproducts } = useSelector((state: any) => state.iapproducts);
-  const { formText } = useSelector((state: any) => state.pay);
+  const { formText } = useSelector((state: any) => state.rdRootReducer.pay);
   const [payFrame, setPayFrame] = useState('');
   const [products, setProducts] = useState<IapProduct[]>([]);
 
@@ -33,6 +33,9 @@ const Goods: React.FC = (props: any) => {
   React.useEffect(() => {
     if(formText && formText.length > 0) {
       setPayFrame(formText);
+    }
+    return () => {
+      doClearAlipayFormText(); 
     }
   }, [formText]);
 
@@ -93,4 +96,3 @@ const Goods: React.FC = (props: any) => {
 }
 
 export default withConnect(Goods);
-

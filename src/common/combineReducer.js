@@ -6,6 +6,7 @@ import citem from '../reducer/conversation/ConversationItemReducer';
 import iapproducts from '../reducer/iapproduct/IapProductReducer';
 import image from '../reducer/images/ImageReducer';
 import user from '@/reducer/account/UserReducer';
+import { rdRootReducer } from 'rd-component';
 
 const rootReducer = combineReducers({
     chat,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
     citem,
     iapproducts,
     image,
-    user
+    user,
+    rdRootReducer
 })
 
 export default rootReducer;

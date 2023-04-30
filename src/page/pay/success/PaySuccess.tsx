@@ -23,7 +23,6 @@ const PaySuccess: React.FC = () => {
     // 现代浏览器已经不再需要将 & 编码为 &amp;，但一些较旧版本的浏览器和遗留系统可能仍然需要这样做。
     const parsed = queryString.parse(location.search.replace(/&amp;/g, '&'));
     if(parsed != null && parsed.orderId && parsed.payAmount){
-        RequestHandler.handleAccessTokenExpire();
         getCurrentUser().then((data: any) => {
             if(ResponseHandler.responseSuccess(data)){
                 localStorage.setItem("userInfo", JSON.stringify(data.result));

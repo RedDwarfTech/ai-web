@@ -1,5 +1,5 @@
-import { createOrder } from '@/action/pay/PayAction';
-import { requestWithAction } from '@/common/XHRClient';
+import store from '@/store/store';
+import { PayActionType, requestWithActionType } from "rd-component";
 
 export function doPay(params: any) {
     const config = {
@@ -8,6 +8,14 @@ export function doPay(params: any) {
         headers: {'Content-Type': 'application/json'},
         data: JSON.stringify(params)
     };
-    return requestWithAction(config, createOrder);
+    const actionTypeString: string = PayActionType[PayActionType.CREATE_ORDER];
+    return requestWithActionType(config, actionTypeString, store);
 }
 
+export function doClearAlipayFormText() {
+    const action = {
+        type: PayActionType.CREATE_ORDER,
+        data: ''
+      };
+      store.dispatch(action);
+}
