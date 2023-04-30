@@ -8,6 +8,7 @@ import withConnect from "@/page/component/hoc/withConnect";
 import { getCurrentUser } from "@/service/user/UserService";
 import { useSelector } from "react-redux";
 import PromptHistory from "./prompt/PromptHistory";
+import { UserProfile } from "rd-component";
 
 export type ProfileProps = {
   panelUserInfo: IUserModel | undefined;
@@ -39,18 +40,6 @@ const Profile: React.FC = (props: any) => {
     }
   }
 
-  const getVipExpiredTime = (userInfo: any) => {
-    if(!userInfo || !userInfo.autoRenewProductExpireTimeMs){
-      return;
-    }
-    const expiredTime = Number(userInfo.autoRenewProductExpireTimeMs);
-    if (expiredTime && expiredTime > new Date().getTime()) {
-      return TimeUtils.getFormattedTime(expiredTime);
-    } else {
-      return "--";
-    }
-  }
-
   const renderPanelContent = () => {
     if (currentPanel && currentPanel === 'feedback') {
       return <Feedback></Feedback>
@@ -68,7 +57,7 @@ const Profile: React.FC = (props: any) => {
           </Row>
           <Row style={{ marginTop: '10px', marginBottom: '10px' }}>
             <Col span={8}><span className="user-info">会员到期日</span></Col>
-            <Col span={8}><span className="user-info">{getVipExpiredTime(userInfo)}</span></Col>
+            <Col span={8}><span className="user-info">{userInfo?UserProfile.getVipExpiredTime(userInfo):"--"}</span></Col>
             <Col span={8}></Col>
           </Row>
         </Card>

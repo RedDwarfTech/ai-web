@@ -1,5 +1,5 @@
-import { Avatar, Button, Dropdown, Input, MenuProps, message } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import { Avatar, Button, message } from "antd";
+import React, { useEffect, useState } from "react";
 import { connect, useSelector } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
@@ -83,17 +83,6 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
     }, [myMap]);
 
-    useEffect(() => {
-        // https://stackoverflow.com/questions/76091350/how-can-the-event-listener-always-get-the-newest-state-value-in-a-function-compo
-        // https://overreacted.io/a-complete-guide-to-useeffect/
-        window.addEventListener("keydown", handleKeyDown);
-        window.addEventListener("keyup", handleKeyUp);
-        return () => {
-            window.removeEventListener("keydown", handleKeyDown);
-            window.removeEventListener("keyup", handleKeyUp);
-        };
-    }, [currInputIndex, inputValue]);
-
     const initialCurrentSelect = async () => {
         const result = await getNewestRecord<Prompt>();
         if (result) {
@@ -101,26 +90,22 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
     }
 
-    const handleKeyUp = async (event: KeyboardEvent) => {
-        if (event.key === 'ArrowUp') {
-            const selected = inputValue && inputValue.length > 0 ? currInputIndex - 1 : currInputIndex;
-            const stored = await getToIdb<Prompt>(selected);
-            if (stored) {
-                setInputValue(stored.name);
-                setCurrInputIndex(selected);
-            }
+    const handleKeyUp = async () => {
+        const selected = inputValue && inputValue.length > 0 ? currInputIndex - 1 : currInputIndex;
+        const stored = await getToIdb<Prompt>(selected);
+        if (stored) {
+            setInputValue(stored.name);
+            setCurrInputIndex(selected);
         }
     };
 
-    const handleKeyDown = async (event: KeyboardEvent) => {
+    const handleKeyDown = async () => {
         // https://stackoverflow.com/questions/35394937/keyboardevent-keycode-deprecated-what-does-this-mean-in-practice
-        if (event.key === 'ArrowDown') {
-            const selected = currInputIndex + 1;
-            const stored = await getToIdb<Prompt>(selected);
-            if (stored) {
-                setInputValue(stored.name);
-                setCurrInputIndex(selected);
-            }
+        const selected = currInputIndex + 1;
+        const stored = await getToIdb<Prompt>(selected);
+        if (stored) {
+            setInputValue(stored.name);
+            setCurrInputIndex(selected);
         }
     };
 
@@ -255,6 +240,13 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             e.preventDefault();
             e.stopPropagation();
             handleSend();
+        }
+        // https://stackoverflow.com/questions/76139781/how-to-prevent-the-chinese-input-keyboard-keyup-and-keydown-event-pass-into-reac
+        if (e.nativeEvent.keyCode === 38) {
+            handleKeyUp();
+        }
+        if (e.nativeEvent.keyCode === 40) {
+            handleKeyDown();
         }
     }
 
