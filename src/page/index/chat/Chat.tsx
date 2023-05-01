@@ -55,6 +55,13 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         };
     }, []);
 
+    const menuClose = () => {
+        const dropdown = document.getElementById('dropdown');
+        if(dropdown){
+            dropdown.style.display = 'none';
+        }
+    }
+
     const handleMenuClose = (event: any) => {
         const menu = document.getElementById('user-menu');
         const dropdown = document.getElementById('dropdown');
@@ -195,6 +202,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
 
     const handleMenuClick = (menu: string) => {
         props.onMenuClick(menu);
+        menuClose();
     };
 
     const handleSend = async () => {
@@ -323,6 +331,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
 
     const showUserProfile = () => {
         handleMenuClick('profile');
+        menuClose();
     }
 
     const userLogin = () => {
