@@ -7,11 +7,11 @@ import { doLoginOut, getCurrentUser, userLoginByPhoneImpl, userLoginImpl } from 
 import { ChatAsk } from "@/models/request/chat/ChatAsk";
 import { chatAskAction } from "@/action/chat/ChatAction";
 import { IChatAskResp } from "@/models/chat/ChatAskResp";
-import { doSseChatAsk } from "@/service/chat/SseClientService";
+import { doAskPreCheck } from "@/service/chat/SseClientService";
 import { ISseMsg } from "@/models/chat/SseMsg";
 import { ISse35ServerMsg } from "@/models/chat/3.5/Sse35ServerMsg";
 import dayjs from "dayjs";
-import { IUserModel, ResponseHandler, TimeUtils, WheelGlobal } from "js-wheel";
+import { AuthHandler, IUserModel, ResponseHandler, TimeUtils, WheelGlobal } from "js-wheel";
 import { IConversation } from "@/models/chat/3.5/Conversation";
 import { getConversations } from "@/service/chat/ConversationService";
 import { IConversationReq } from "@/models/request/conversation/ConversationReq";
@@ -19,7 +19,7 @@ import BaseMethods from 'js-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "@/config/app/config-reader";
-import { ControlOutlined, DollarOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
+import { ControlOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
 import Goods from "../goods/Goods";
 import Profile from "@/page/user/profile/Profile";
@@ -240,7 +240,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             prompt: encodeURIComponent(inputValue),
             cid: cid
         };
-        doSseChatAsk(ask, onSseMessage);
+        doAskPreCheck(ask, onSseMessage);
     };
 
     const handleEnterKey = (e: any) => {
@@ -381,15 +381,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
         const accessTokenOrigin = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
         if (accessTokenOrigin) {
-            const accessTokenCookie = accessTokenOrigin.split("=")[1];
-            const refreshTokenCookie = document.cookie.split('; ').find(row => row.startsWith('refreshToken='))?.split("=")[1];
-            const avatarUrlCookie = document.cookie.split('; ').find(row => row.startsWith('avatarUrl='))?.split("=")[1];
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem(WheelGlobal.ACCESS_TOKEN_NAME, accessTokenCookie);
-            localStorage.setItem(WheelGlobal.REFRESH_TOKEN_NAME, refreshTokenCookie ? refreshTokenCookie : "");
-            localStorage.setItem('avatarUrl', avatarUrlCookie ? avatarUrlCookie : "");
-            localStorage.setItem(WheelGlobal.BASE_AUTH_URL, readConfig("baseAuthUrl"));
-            localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH, readConfig("accessTokenUrlPath"));
+            AuthHandler.storeCookieAuthInfo(accessTokenOrigin, readConfig("baseAuthUrl"), readConfig("accessTokenUrlPath"));
             loadCurrentUser();
             setIsLoggedIn(true);
         }

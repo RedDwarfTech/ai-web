@@ -1,8 +1,20 @@
 import { ChatAsk } from '@/models/request/chat/ChatAsk';
 import { EventSourcePolyfill } from 'event-source-polyfill';
+import { AuthHandler, RequestHandler } from 'js-wheel';
 import { v4 as uuid } from 'uuid';
 
-export function doSseChatAsk(params: ChatAsk, onSseMessage: (msg: string) => void,) {
+export function doAskPreCheck(params: ChatAsk, onSseMessage: (msg: string) => void) {
+  if (AuthHandler.isTokenNeedRefresh(60)) {
+    RequestHandler.handleWebAccessTokenExpire()
+      .then((data) => {
+        doSseChatAsk(params, onSseMessage);
+      });
+  } else {
+    doSseChatAsk(params, onSseMessage);
+  }
+}
+
+export function doSseChatAsk(params: ChatAsk, onSseMessage: (msg: string) => void) {
   let eventSource: EventSourcePolyfill;
   const accessToken = localStorage.getItem("x-access-token");
   // https://stackoverflow.com/questions/6623232/eventsource-and-basic-http-authentication
@@ -14,11 +26,11 @@ export function doSseChatAsk(params: ChatAsk, onSseMessage: (msg: string) => voi
     }
   });
   eventSource.onopen = () => {
-    
+
   }
   eventSource.onerror = (error) => {
-    console.log("onerror",error)
-    if(eventSource){
+    console.log("onerror", error)
+    if (eventSource) {
       eventSource.close();
     }
   }
@@ -29,7 +41,7 @@ export function doSseChatAsk(params: ChatAsk, onSseMessage: (msg: string) => voi
   eventSource.addEventListener('complete', () => {
     console.log('Transfer of data is complete');
   });
-  
+
   eventSource.addEventListener('onclose', () => {
     console.log('Transfer of data is complete');
   });
