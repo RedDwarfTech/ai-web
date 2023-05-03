@@ -9,7 +9,7 @@ import './ChatList.css';
 import { Steps } from "antd";
 import { isLoggedIn, isSubscribed } from "@/service/user/UserService";
 import { useSelector } from "react-redux";
-import BaseMethods from "js-wheel/dist/src/utils/data/BaseMethods";
+import BaseMethods from "rdjs-wheel/dist/src/utils/data/BaseMethods";
 
 export interface IChatAskList {
     myMap: Map<string, ISseMsg>,

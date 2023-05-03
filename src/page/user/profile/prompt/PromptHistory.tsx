@@ -2,7 +2,7 @@ import withConnect from "@/page/component/hoc/withConnect";
 import { Prompt, getPage } from "@/storage/indexdb/idb";
 import { Card, Table, TablePaginationConfig } from "antd";
 import { FilterValue, SorterResult } from "antd/es/table/interface";
-import { REST } from "js-wheel";
+import { REST } from "rdjs-wheel";
 import React, { useState } from "react";
 
 interface TableParams {

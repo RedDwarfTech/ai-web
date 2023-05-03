@@ -1,6 +1,6 @@
 import { TablePaginationConfig } from 'antd';
 import { openDB } from 'idb';
-import { REST } from 'js-wheel';
+import { REST } from 'rdjs-wheel';
 
 interface GenieDB {
     prompt: {

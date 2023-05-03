@@ -4,7 +4,7 @@ import "./PaySuccess.css"
 import queryString from 'query-string';
 import dayjs from 'dayjs';
 import { useLocation } from 'react-router-dom';
-import { RequestHandler, ResponseHandler } from "js-wheel";
+import { RequestHandler, ResponseHandler } from "rdjs-wheel";
 import { getCurrentUser } from "@/service/user/UserService";
 
 const PaySuccess: React.FC = () => {

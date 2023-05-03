@@ -27,5 +27,5 @@
   },
   "include": [
     "src"
-, "archive/WebSocketClient.ts", "archive/WebSocketClient.ts"  ]
+  ]
 }

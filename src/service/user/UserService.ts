@@ -1,4 +1,4 @@
-import { IUserModel, WheelGlobal } from 'js-wheel';
+import { IUserModel, WheelGlobal } from 'rdjs-wheel';
 import { UserActionType } from '@/action/user/UserAction';
 import { requestWithActionType } from '@/common/XHRClient';
 import { readConfig } from '@/config/app/config-reader';

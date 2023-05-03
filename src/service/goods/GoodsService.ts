@@ -1,5 +1,5 @@
 import { requestWithAction } from '@/common/XHRClient';
-import { ProductReq } from "js-wheel/dist/src/model/product/ProductReq";
+import { ProductReq } from "rdjs-wheel/dist/src/model/product/ProductReq";
 import { getIapProductsAction } from '@/action/iapproduct/IapProductAction';
 
 

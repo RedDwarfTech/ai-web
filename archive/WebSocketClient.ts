@@ -1,4 +1,4 @@
-import { ResponseHandler, REST, WheelGlobal } from 'js-wheel';
+import { ResponseHandler, REST, WheelGlobal } from 'rdjs-wheel';
 import { readConfig } from '../src/config/app/config-reader';
 import { IWebsocketMsg } from '../src/models/chat/WebSocketMsg';
 import { WebSocketMsgType } from '../src/models/chat/WebSocketMsgType';

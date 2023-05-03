@@ -1,6 +1,6 @@
 import { ChatAsk } from '@/models/request/chat/ChatAsk';
 import { EventSourcePolyfill } from 'event-source-polyfill';
-import { AuthHandler, RequestHandler } from 'js-wheel';
+import { AuthHandler, RequestHandler } from 'rdjs-wheel';
 import { v4 as uuid } from 'uuid';
 
 export function doAskPreCheck(params: ChatAsk, onSseMessage: (msg: string) => void) {

@@ -4,7 +4,7 @@ import { useState } from "react";
 import './Feedback.css';
 import { submitFeedback } from "@/service/user/FeedbackService";
 import { isLoggedIn } from "@/service/user/UserService";
-import { ResponseHandler } from "js-wheel";
+import { ResponseHandler } from "rdjs-wheel";
 
 const Feedback: React.FC = (props: any) => {
 

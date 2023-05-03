@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.90d182df.css",
-    "main.js": "/static/js/main.a7f66e9b.js",
+    "main.js": "/static/js/main.8859875f.js",
     "static/js/787.47393b9c.chunk.js": "/static/js/787.47393b9c.chunk.js",
     "static/media/chat-me.png": "/static/media/chat-me.0b982eddae0c4a296918.png",
     "static/media/alipay-circle.png": "/static/media/alipay-circle.09f8c38289547c861f34.png",
@@ -9,11 +9,11 @@
     "index.html": "/index.html",
     "static/media/chat.svg": "/static/media/chat.507432b4f052a5ad0ac900ec17483d68.svg",
     "main.90d182df.css.map": "/static/css/main.90d182df.css.map",
-    "main.a7f66e9b.js.map": "/static/js/main.a7f66e9b.js.map",
+    "main.8859875f.js.map": "/static/js/main.8859875f.js.map",
     "787.47393b9c.chunk.js.map": "/static/js/787.47393b9c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.90d182df.css",
-    "static/js/main.a7f66e9b.js"
+    "static/js/main.8859875f.js"
   ]
 }

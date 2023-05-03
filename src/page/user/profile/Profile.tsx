@@ -1,5 +1,5 @@
 import { Avatar, Card, Col, Row } from "antd";
-import { IUserModel, TimeUtils } from "js-wheel";
+import { IUserModel, TimeUtils } from "rdjs-wheel";
 import React, { useState } from "react";
 import "./Profile.css";
 import alipayPic from "@/asset/icon/alipay-circle.png";

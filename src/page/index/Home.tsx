@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Chat from "./chat/Chat";
-import { IUserModel } from "js-wheel";
+import { IUserModel } from "rdjs-wheel";
 import "./Home.css";
 import withConnect from "../component/hoc/withConnect";
 

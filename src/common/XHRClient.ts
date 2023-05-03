@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { v4 as uuid } from 'uuid';
 import store from '../store/store';
-import { ResponseCode, ResponseHandler, WheelGlobal } from 'js-wheel';
+import { ResponseCode, ResponseHandler, WheelGlobal } from 'rdjs-wheel';
 
 let isRefreshing = false
 let pendingRequestsQueue: Array<any> = [];

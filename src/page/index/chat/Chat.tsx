@@ -11,11 +11,11 @@ import { doAskPreCheck } from "@/service/chat/SseClientService";
 import { ISseMsg } from "@/models/chat/SseMsg";
 import { ISse35ServerMsg } from "@/models/chat/3.5/Sse35ServerMsg";
 import dayjs from "dayjs";
-import { AuthHandler, IUserModel, ResponseHandler, TimeUtils, WheelGlobal } from "js-wheel";
+import { AuthHandler, IUserModel, ResponseHandler, TimeUtils, WheelGlobal } from "rdjs-wheel";
 import { IConversation } from "@/models/chat/3.5/Conversation";
 import { getConversations } from "@/service/chat/ConversationService";
 import { IConversationReq } from "@/models/request/conversation/ConversationReq";
-import BaseMethods from 'js-wheel/dist/src/utils/data/BaseMethods';
+import BaseMethods from 'rdjs-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "@/config/app/config-reader";
@@ -240,6 +240,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             prompt: encodeURIComponent(inputValue),
             cid: cid
         };
+        setTimeout(()=>setLoadings(false), 15000);
         doAskPreCheck(ask, onSseMessage);
     };
 

@@ -2,11 +2,11 @@ import { useSelector } from "react-redux";
 import "./Goods.css"
 import { doClearAlipayFormText, doPay } from "@/service/pay/PayService";
 import Pay from "@/page/pay/Pay";
-import { ProductReq } from "js-wheel/dist/src/model/product/ProductReq";
+import { ProductReq } from "rdjs-wheel/dist/src/model/product/ProductReq";
 import { readConfig } from "@/config/app/config-reader";
 import { doGetIapProduct } from "@/service/goods/GoodsService";
 import { useState } from "react";
-import BaseMethods from "js-wheel/dist/src/utils/data/BaseMethods";
+import BaseMethods from "rdjs-wheel/dist/src/utils/data/BaseMethods";
 import { IapProduct } from "@/models/product/IapProduct";
 import { Divider } from "antd";
 import React from "react";
