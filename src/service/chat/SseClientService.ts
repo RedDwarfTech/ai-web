@@ -3,7 +3,7 @@ import { EventSourcePolyfill } from 'event-source-polyfill';
 import { AuthHandler, RequestHandler } from 'rdjs-wheel';
 import { v4 as uuid } from 'uuid';
 
-export function doAskPreCheck(params: ChatAsk, onSseMessage: (msg: string) => void) {
+export function doAskPreCheck(params: ChatAsk, onSseMessage: (msg: string, eventSource: EventSourcePolyfill) => void) {
   if (AuthHandler.isTokenNeedRefresh(60)) {
     RequestHandler.handleWebAccessTokenExpire()
       .then((data) => {
@@ -14,7 +14,7 @@ export function doAskPreCheck(params: ChatAsk, onSseMessage: (msg: string) => vo
   }
 }
 
-export function doSseChatAsk(params: ChatAsk, onSseMessage: (msg: string) => void) {
+export function doSseChatAsk(params: ChatAsk, onSseMessage: (msg: string, eventSource: EventSourcePolyfill) => void) {
   let eventSource: EventSourcePolyfill;
   const accessToken = localStorage.getItem("x-access-token");
   // https://stackoverflow.com/questions/6623232/eventsource-and-basic-http-authentication
@@ -28,21 +28,11 @@ export function doSseChatAsk(params: ChatAsk, onSseMessage: (msg: string) => voi
   eventSource.onopen = () => {
 
   }
-  eventSource.onerror = (error) => {
-    console.log("onerror", error)
-    if (eventSource) {
-      eventSource.close();
-    }
+  eventSource.onerror = (error: any) => {
+    console.log("onerror", error);
+    eventSource.close();
   }
   eventSource.onmessage = e => {
-    onSseMessage(e.data);
+    onSseMessage(e.data, eventSource);
   };
-
-  eventSource.addEventListener('complete', () => {
-    console.log('Transfer of data is complete');
-  });
-
-  eventSource.addEventListener('onclose', () => {
-    console.log('Transfer of data is complete');
-  });
 }

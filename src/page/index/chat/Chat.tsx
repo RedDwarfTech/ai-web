@@ -27,6 +27,7 @@ import GenImages from "../images/GenImages";
 import ChatList from "./component/ChatList";
 import chatPic from "@/asset/icon/chat/chat.svg";
 import { Prompt, getNewestRecord, getToIdb, insertToIdb } from "@/storage/indexdb/idb";
+import { EventSourcePolyfill } from "event-source-polyfill";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
     const [inputValue, setInputValue] = useState('');
@@ -134,16 +135,18 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         return getConversations(convReq);
     }
 
-    const onSseMessage = (msg: string) => {
+    const onSseMessage = (msg: string,eventSource:EventSourcePolyfill) => {
         const serverMsg: ISse35ServerMsg = JSON.parse(msg);
         if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "vip-expired") {
             setLoadings(false);
             message.info("充值会员继续使用");
+            eventSource.close();
             return;
         }
         if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "rate-limit") {
             setLoadings(false);
             message.info("超出频率限制，请稍后再试一试");
+            eventSource.close();
             return;
         }
         if (serverMsg.choices[0].delta.content && serverMsg.choices[0].delta.content.length > 0) {
@@ -151,6 +154,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         }
         if (serverMsg.choices[0].finish_reason && serverMsg.choices[0].finish_reason === "stop") {
             setLoadings(false);
+            eventSource.close();
             if (cid === 0) {
                 fetchNewestCid();
             }
