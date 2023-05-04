@@ -209,6 +209,12 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         menuClose();
     };
 
+    const handleSendStatusReset = async () => {
+        // https://stackoverflow.com/questions/42218699/chrome-violation-violation-handler-took-83ms-of-runtime
+        await new Promise(resolve => setTimeout(resolve, 15000)); 
+        setLoadings(false);
+    }
+
     const handleSend = async () => {
         if (loadings) {
             return;
@@ -239,7 +245,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         };
         appenSseMsg(msg, "prompt");
         setInputValue('');
-        setLoadings(true);
+        //handleSendStatusReset();
         let ask: ChatAsk = {
             prompt: encodeURIComponent(inputValue),
             cid: cid

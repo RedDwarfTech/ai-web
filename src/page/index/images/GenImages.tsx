@@ -5,6 +5,7 @@ import "./GenImages.css"
 import { IImageResp } from "@/models/images/IImageResp";
 import { connect } from "react-redux";
 import { genImageAction } from "@/action/images/ImageAction";
+import { MessageHandler } from "rd-component";
 
 const GenImages: React.FC<IImageResp> = (props) => {
     const [inputValue, setInputValue] = useState('');
@@ -21,9 +22,9 @@ const GenImages: React.FC<IImageResp> = (props) => {
         }
     }
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (!isLoggedIn) {
-            message.warning("请登录后再生成图片");
+            await message.warning("请登录后再生成图片");
             setLoadings(false);
             return;
         }
