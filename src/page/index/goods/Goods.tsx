@@ -16,7 +16,7 @@ import withConnect from "@/page/component/hoc/withConnect";
 const Goods: React.FC = () => {
 
   const { iapproducts } = useSelector((state: any) => state.iapproducts);
-  const { formText } = useSelector((state: any) => state.rdRootReducer.pay);
+  const { createdOrder } = useSelector((state: any) => state.rdRootReducer.pay);
   const [payFrame, setPayFrame] = useState('');
   const [products, setProducts] = useState<IapProduct[]>([]);
 
@@ -31,13 +31,13 @@ const Goods: React.FC = () => {
   }, [iapproducts]);
 
   React.useEffect(() => {
-    if(formText && formText.length > 0) {
-      setPayFrame(formText);
+    if(createdOrder && Object.keys(createdOrder).length > 0) {
+      setPayFrame(createdOrder.formText);
     }
     return () => {
       doClearAlipayFormText(); 
     }
-  }, [formText]);
+  }, [createdOrder]);
 
   const getGoods = () => {
     const req: ProductReq = {
