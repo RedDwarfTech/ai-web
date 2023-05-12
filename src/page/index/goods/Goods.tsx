@@ -27,6 +27,10 @@ const Goods: React.FC = () => {
 
   React.useEffect(() => {
     getGoods();
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
   }, []);
 
   React.useEffect(() => {
@@ -44,6 +48,13 @@ const Goods: React.FC = () => {
       doClearAlipayFormText(); 
     }
   }, [createdOrder]);
+
+  const handleOutsideClick = (e:any) => {
+    const modal = document.getElementById('pay-popup');
+    if (modal && !modal.contains(e.target)) {
+      setPayFrame('');
+    }
+  };
 
   const getGoods = () => {
     const req: ProductReq = {
