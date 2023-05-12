@@ -20,6 +20,7 @@ const Goods: React.FC = () => {
 
   const { iapproducts } = useSelector((state: any) => state.iapproducts);
   const { createdOrder } = useSelector((state: any) => state.rdRootReducer.pay);
+  const [createdOrderInfo, setCreatedOrderInfo] = useState<{ formText: string, orderId: string }>();
   const [payFrame, setPayFrame] = useState('');
   const [products, setProducts] = useState<IapProduct[]>([]);
   const [currentProduct, setCurrentProduct] = useState<IapProduct>();
@@ -36,6 +37,7 @@ const Goods: React.FC = () => {
 
   React.useEffect(() => {
     if(createdOrder && Object.keys(createdOrder).length > 0) {
+      setCreatedOrderInfo(createdOrder);
       setPayFrame(createdOrder.formText);
     }
     return () => {
@@ -90,15 +92,16 @@ const Goods: React.FC = () => {
   }
 
   const payComplete = () => {
-    if (!createdOrder || !createdOrder.orderId) {
+    if (!createdOrderInfo || !createdOrderInfo.orderId) {
         message.error("未找到订单信息");
         return;
     }
-    const orderId = createdOrder.orderId;
+    const orderId = createdOrderInfo.orderId;
     OrderService.getOrderStatus(orderId, store).then((resp: any) => {
         if (ResponseHandler.responseSuccess(resp)) {
             if (Number(resp.result.orderStatus) === 1) {
                 setPayFrame('');
+                setCreatedOrderInfo(undefined);
                 UserService.getCurrentUser(store).then((data: any) => {
                   if(ResponseHandler.responseSuccess(data)){
                       localStorage.setItem("userInfo", JSON.stringify(data.result));
