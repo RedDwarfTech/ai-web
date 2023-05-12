@@ -1,7 +1,7 @@
 import { createBrowserRouter, useLocation } from 'react-router-dom';
 import App from '../page/index/Home';
 import Login from '../page/user/login/Login';
-import { SubPaySuccess } from 'rd-component';
+import { PaySuccess } from 'rd-component';
 
 const routes = createBrowserRouter([
   {
@@ -10,7 +10,7 @@ const routes = createBrowserRouter([
   },
   {
     path: "/product/pay/success",
-    element: <SubPaySuccess location={useLocation()}/>
+    element: <PaySuccess />
   },
   {
     path: "/user/login",
