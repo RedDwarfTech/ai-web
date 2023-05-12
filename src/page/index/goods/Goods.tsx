@@ -99,7 +99,7 @@ const Goods: React.FC = () => {
         if (ResponseHandler.responseSuccess(resp)) {
             if (Number(resp.result.orderStatus) === 1) {
                 setPayFrame('');
-                UserService.getCurrentUser().then((data: any) => {
+                UserService.getCurrentUser(store).then((data: any) => {
                   if(ResponseHandler.responseSuccess(data)){
                       localStorage.setItem("userInfo", JSON.stringify(data.result));
                       RequestHandler.handleWebAccessTokenExpire();
