@@ -11,9 +11,9 @@ import { Divider, message } from "antd";
 import React from "react";
 import { v4 as uuid } from 'uuid';
 import withConnect from "@/page/component/hoc/withConnect";
-import { OrderService, Pay } from "rd-component";
+import { OrderService, Pay, UserService } from "rd-component";
 import store from "@/store/store";
-import { ResponseHandler } from "rdjs-wheel";
+import { RequestHandler, ResponseHandler } from "rdjs-wheel";
 import 'rd-component/dist/style.css';
 
 const Goods: React.FC = () => {
@@ -99,6 +99,12 @@ const Goods: React.FC = () => {
         if (ResponseHandler.responseSuccess(resp)) {
             if (Number(resp.result.orderStatus) === 1) {
                 setPayFrame('');
+                UserService.getCurrentUser().then((data: any) => {
+                  if(ResponseHandler.responseSuccess(data)){
+                      localStorage.setItem("userInfo", JSON.stringify(data.result));
+                      RequestHandler.handleWebAccessTokenExpire();
+                  }
+              });
             } else {
                 message.warning("检测到订单当前未支付，请稍后再次确认");
             }
