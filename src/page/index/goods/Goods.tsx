@@ -1,17 +1,19 @@
 import { useSelector } from "react-redux";
 import "./Goods.css"
 import { doClearAlipayFormText, doPay } from "@/service/pay/PayService";
-import Pay from "@/page/pay/Pay";
 import { ProductReq } from "rdjs-wheel/dist/src/model/product/ProductReq";
 import { readConfig } from "@/config/app/config-reader";
 import { doGetIapProduct } from "@/service/goods/GoodsService";
 import { useState } from "react";
 import BaseMethods from "rdjs-wheel/dist/src/utils/data/BaseMethods";
 import { IapProduct } from "@/models/product/IapProduct";
-import { Divider } from "antd";
+import { Divider, message } from "antd";
 import React from "react";
 import { v4 as uuid } from 'uuid';
 import withConnect from "@/page/component/hoc/withConnect";
+import { OrderService, Pay } from "rd-component";
+import store from "@/store/store";
+import { ResponseHandler } from "rdjs-wheel";
 
 const Goods: React.FC = () => {
 
@@ -19,6 +21,7 @@ const Goods: React.FC = () => {
   const { createdOrder } = useSelector((state: any) => state.rdRootReducer.pay);
   const [payFrame, setPayFrame] = useState('');
   const [products, setProducts] = useState<IapProduct[]>([]);
+  const [currentProduct, setCurrentProduct] = useState<IapProduct>();
 
   React.useEffect(() => {
     getGoods();
@@ -50,6 +53,7 @@ const Goods: React.FC = () => {
     let param = {
       productId: Number(row.id)
     };
+    setCurrentProduct(row);
     doPay(param);
   };
 
@@ -84,13 +88,32 @@ const Goods: React.FC = () => {
     }
   }
 
+  const payComplete = () => {
+    if (!createdOrder || !createdOrder.orderId) {
+        message.error("未找到订单信息");
+        return;
+    }
+    const orderId = createdOrder.orderId;
+    OrderService.getOrderStatus(orderId, store).then((resp: any) => {
+        if (ResponseHandler.responseSuccess(resp)) {
+            if (Number(resp.result.orderStatus) === 1) {
+                setPayFrame('');
+            } else {
+                message.warning("检测到订单当前未支付，请稍后再次确认");
+            }
+        } else {
+            message.warning("订单检测失败");
+        }
+    });
+}
+
   return (
     <div>
       <div className="product-container">
         {productSubMenu(products)}
       </div>
       <Divider></Divider>
-      <Pay payFormText={payFrame}></Pay>
+      <Pay payFormText={payFrame} price={currentProduct?.price!} payProvider={"支付宝"} onPayComplete={payComplete}></Pay>
     </div>
   );
 }
