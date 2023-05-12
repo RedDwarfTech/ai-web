@@ -14,6 +14,7 @@ import withConnect from "@/page/component/hoc/withConnect";
 import { OrderService, Pay } from "rd-component";
 import store from "@/store/store";
 import { ResponseHandler } from "rdjs-wheel";
+import 'rd-component/dist/style.css';
 
 const Goods: React.FC = () => {
 
