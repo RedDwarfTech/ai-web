@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../page/index/Home';
 import Login from '../page/user/login/Login';
-import { PaySuccess } from 'rd-component';
+import { SubPaySuccess } from 'rd-component';
 
 const routes = createBrowserRouter([
   {
@@ -10,7 +10,7 @@ const routes = createBrowserRouter([
   },
   {
     path: "/product/pay/success",
-    element: <PaySuccess refreshUser={true} />
+    element: <SubPaySuccess />
   },
   {
     path: "/user/login",
