@@ -366,7 +366,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             console.log(loadedConversations);
         }
         if (loadedConversations.size > 9) {
-            conversationList.push(<button onClick={loadMoreConversations}>加载更多</button>)
+            conversationList.push(<button onClick={loadMoreConversations}>加载更多</button>);
         }
         return conversationList;
     }
