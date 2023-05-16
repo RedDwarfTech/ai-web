@@ -1,4 +1,4 @@
-import { Avatar, Button, message } from "antd";
+import { Avatar, Button, Modal, message } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import "./Chat.css"
@@ -12,13 +12,13 @@ import { ISse35ServerMsg } from "@/models/chat/3.5/Sse35ServerMsg";
 import dayjs from "dayjs";
 import { AuthHandler, IUserModel, ResponseHandler, TimeUtils, WheelGlobal } from "rdjs-wheel";
 import { IConversation } from "@/models/chat/3.5/Conversation";
-import { getConversations } from "@/service/chat/ConversationService";
+import { delConversation, getConversations } from "@/service/chat/ConversationService";
 import { IConversationReq } from "@/models/request/conversation/ConversationReq";
 import BaseMethods from 'rdjs-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "@/config/app/config-reader";
-import { ControlOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
+import { ControlOutlined, DeleteOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
 import Goods from "../goods/Goods";
 import Profile from "@/page/user/profile/Profile";
@@ -42,7 +42,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const { conversations } = useSelector((state: any) => state.conversation);
     const [currInputIndex, setCurrInputIndex] = useState(0);
     const [currConversationReq, setCurrConversationReq] = useState<IConversationReq>();
-    const [loadedConversations, setLoadedConversations] = useState<IConversation[]>();
+    const [loadedConversations, setLoadedConversations] = useState<Map<number,IConversation>>();
 
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
@@ -51,8 +51,12 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     React.useEffect(() => {
         if (conversations && Object.keys(conversations).length > 0) {
             const legacyConverstions = loadedConversations;
-            if (legacyConverstions) {
-                legacyConverstions?.push(conversations.list);
+            if (legacyConverstions && legacyConverstions.size > 0) {
+                conversations.list.forEach((item:IConversation)=>{
+                    if(!legacyConverstions.has(item.id)){
+                        legacyConverstions.set(item.id,item);
+                    }
+                });
                 setLoadedConversations(legacyConverstions);
             } else {
                 setLoadedConversations(conversations.list);
@@ -146,8 +150,8 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const fetchConversations = () => {
         const convReq: IConversationReq = {
             title: '',
-            pageNum: 10,
-            pageSize: 1
+            pageNum: 1,
+            pageSize: 10
         };
         setCurrConversationReq(convReq);
         return getConversations(convReq);
@@ -339,6 +343,19 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         return getConversations(convReq);
     }
 
+    const delConversations = (id: number)=> {
+        Modal.confirm({
+            title: '删除确认',
+            content: '确定要永久删除会话吗？删除后无法恢复',
+            onOk() {
+                delConversation(id);
+            },
+            onCancel() {
+              
+            },
+          });
+    }
+
     const conversationRender = () => {
         if (loadedConversations === undefined) {
             return;
@@ -347,14 +364,15 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             return;
         }
         const conversationList: JSX.Element[] = [];
-        loadedConversations.forEach(item => {
+        loadedConversations.forEach((value,key) => {
             conversationList.push(
-                <div key={uuid()} onClick={() => handleConversation(item.id)} className="conversation-item">
+                <div key={uuid()} onClick={() => handleConversation(key)} className="conversation-item">
                     <img src={chatPic}></img>
-                    <span>{item.title}</span>
+                    <span>{value.title}</span>
+                    <div className="conversation-item-icon"><DeleteOutlined onClick={()=>delConversations(key)}></DeleteOutlined></div>
                 </div>);
         });
-        if (loadedConversations.length > 9) {
+        if (loadedConversations.size > 9) {
             conversationList.push(<button onClick={loadMoreConversations}>加载更多</button>)
         }
         return conversationList;
