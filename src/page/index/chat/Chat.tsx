@@ -368,7 +368,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             conversationList.push(
                 <div key={uuid()} onClick={() => handleConversation(key)} className="conversation-item">
                     <img src={chatPic}></img>
-                    <span>{value.title}</span>
+                    <span title={value.title.toString()}>{value.title}</span>
                     <div className="conversation-item-icon"><DeleteOutlined onClick={()=>delConversations(key)}></DeleteOutlined></div>
                 </div>);
         });

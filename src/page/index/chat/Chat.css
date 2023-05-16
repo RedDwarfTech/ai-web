@@ -6,7 +6,7 @@
 
 .chat-container {
   display: flex;
-  width: 87%;
+  width: 85%;
   margin: 0px auto;
   background-color: #fff;
   border-radius: 0px;
@@ -38,7 +38,7 @@
 }
 
 .conversation {
-  width: 13%;
+  width: 15%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -74,13 +74,27 @@
   width: 85%;
 }
 
+.conversation-item span {
+  width: 95%;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+
+.conversation-item span:hover { 
+  width: auto; 
+  overflow: visible;
+  white-space: normal; 
+}
+
+
+
 .conversation-item-icon {
   margin-left: auto;
   transition: transform 0.3s ease;
 }
 
 .conversation-item-icon:hover {
-  color:green;
+  color: green;
   transform: scale(1.2);
 }
 
