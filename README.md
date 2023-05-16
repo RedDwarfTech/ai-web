@@ -5,8 +5,8 @@ Genie是一个可以和不同的AI模型对话的网站。
 ### 开始开发
 
 ```bash
-npm install
-npm run start
+pnpm install
+pnpm run start
 ```
 
 macOS本机Nginx配置（/System/Volumes/Data/opt/homebrew/etc/nginx/conf.d/ai-web.conf）：

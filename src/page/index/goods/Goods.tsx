@@ -34,22 +34,22 @@ const Goods: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    if(iapproducts && iapproducts.length > 0) {
+    if (iapproducts && iapproducts.length > 0) {
       setProducts(iapproducts);
     }
   }, [iapproducts]);
 
   React.useEffect(() => {
-    if(createdOrder && Object.keys(createdOrder).length > 0) {
+    if (createdOrder && Object.keys(createdOrder).length > 0) {
       setCreatedOrderInfo(createdOrder);
       setPayFrame(createdOrder.formText);
     }
     return () => {
-      doClearAlipayFormText(); 
+      doClearAlipayFormText();
     }
   }, [createdOrder]);
 
-  const handleOutsideClick = (e:any) => {
+  const handleOutsideClick = (e: any) => {
     const modal = document.getElementById('pay-popup');
     if (modal && !modal.contains(e.target)) {
       setPayFrame('');
@@ -79,14 +79,14 @@ const Goods: React.FC = () => {
     serverDataSource.sort((a: IapProduct, b: IapProduct) => b.sort - a.sort)
       .forEach((item: IapProduct) => {
         productSubList.push(
-        <div key= {uuid()} className="package">
-          <h2>{item.productTitle}</h2>
-          <p className="price">{item.price}<span>元</span></p>
-          <ul>
-            {vipItems(item.description)}
-          </ul>
-          <button onClick={() => handlePay(item)}>立即订阅</button>
-        </div>);
+          <div key={uuid()} className="package">
+            <h2>{item.productTitle}</h2>
+            <p className="price">{item.price}<span>元</span></p>
+            <ul>
+              {vipItems(item.description)}
+            </ul>
+            <button onClick={() => handlePay(item)}>立即订阅</button>
+          </div>);
       });
     return productSubList;
   }
@@ -104,29 +104,29 @@ const Goods: React.FC = () => {
 
   const payComplete = () => {
     if (!createdOrderInfo || !createdOrderInfo.orderId) {
-        message.error("未找到订单信息");
-        return;
+      message.error("未找到订单信息");
+      return;
     }
     const orderId = createdOrderInfo.orderId;
     OrderService.getOrderStatus(orderId, store).then((resp: any) => {
-        if (ResponseHandler.responseSuccess(resp)) {
-            if (Number(resp.result.orderStatus) === 1) {
-                setPayFrame('');
-                setCreatedOrderInfo(undefined);
-                UserService.getCurrentUser(store).then((data: any) => {
-                  if(ResponseHandler.responseSuccess(data)){
-                      localStorage.setItem("userInfo", JSON.stringify(data.result));
-                      RequestHandler.handleWebAccessTokenExpire();
-                  }
-              });
-            } else {
-                message.warning("检测到订单当前未支付，请稍后再次确认");
+      if (ResponseHandler.responseSuccess(resp)) {
+        if (Number(resp.result.orderStatus) === 1) {
+          setPayFrame('');
+          setCreatedOrderInfo(undefined);
+          UserService.getCurrentUser(store).then((data: any) => {
+            if (ResponseHandler.responseSuccess(data)) {
+              localStorage.setItem("userInfo", JSON.stringify(data.result));
+              RequestHandler.handleWebAccessTokenExpire();
             }
+          });
         } else {
-            message.warning("订单检测失败");
+          message.warning("检测到订单当前未支付，请稍后再次确认");
         }
+      } else {
+        message.warning("订单检测失败");
+      }
     });
-}
+  }
 
   return (
     <div>

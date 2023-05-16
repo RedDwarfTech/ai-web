@@ -1,4 +1,3 @@
-import { getConversationAction } from '../../action/conversation/ConversationAction';
 import { IConversationReq } from '@/models/request/conversation/ConversationReq';
 import { requestWithActionType } from '../../common/XHRClient';
 

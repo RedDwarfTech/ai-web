@@ -28,6 +28,7 @@ import ChatList from "./component/ChatList";
 import chatPic from "@/asset/icon/chat/chat.svg";
 import { Prompt, getNewestRecord, getToIdb, insertToIdb } from "@/storage/indexdb/idb";
 import { EventSourcePolyfill } from "event-source-polyfill";
+import withConnect from "@/page/component/hoc/withConnect";
 
 const Chat: React.FC<IChatAskResp> = (props) => {
     const [inputValue, setInputValue] = useState('');
@@ -39,11 +40,22 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     const [userInfo, setUserInfo] = useState<IUserModel>();
     const { citem } = useSelector((state: any) => state.citem);
     const { loginUser } = useSelector((state: any) => state.user);
+    const { conversations } = useSelector((state: any) => state.conversation);
     const [currInputIndex, setCurrInputIndex] = useState(0);
+    const [currConversationReq, setCurrConversationReq] = useState<IConversationReq>();
+    const [loadedConversations, setLoadedConversations] = useState<IConversation[]>();
 
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
     };
+
+    React.useEffect(() => {
+        if(conversations && conversations.length > 0){
+            const legacyConverstions = loadedConversations;
+            legacyConverstions?.push(conversations);
+            setLoadedConversations(legacyConverstions);
+        }
+    }, [conversations]);
 
     React.useEffect(() => {
         if (isLoggedIn) {
@@ -58,7 +70,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
 
     const menuClose = () => {
         const dropdown = document.getElementById('dropdown');
-        if(dropdown){
+        if (dropdown) {
             dropdown.style.display = 'none';
         }
     }
@@ -130,12 +142,15 @@ const Chat: React.FC<IChatAskResp> = (props) => {
 
     const fetchConversations = () => {
         const convReq: IConversationReq = {
-            title: 'React'
+            title: '',
+            pageNum: 10,
+            pageSize: 1
         };
+        setCurrConversationReq(convReq);
         return getConversations(convReq);
     }
 
-    const onSseMessage = (msg: string,eventSource:EventSourcePolyfill) => {
+    const onSseMessage = (msg: string, eventSource: EventSourcePolyfill) => {
         const serverMsg: ISse35ServerMsg = JSON.parse(msg);
         if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "vip-expired") {
             setLoadings(false);
@@ -211,7 +226,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
 
     const handleSendStatusReset = async () => {
         // https://stackoverflow.com/questions/42218699/chrome-violation-violation-handler-took-83ms-of-runtime
-        await new Promise(resolve => setTimeout(resolve, 15000)); 
+        await new Promise(resolve => setTimeout(resolve, 15000));
         setLoadings(false);
     }
 
@@ -250,7 +265,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             prompt: encodeURIComponent(inputValue),
             cid: cid
         };
-        setTimeout(()=>setLoadings(false), 15000);
+        setTimeout(() => setLoadings(false), 15000);
         doAskPreCheck(ask, onSseMessage);
     };
 
@@ -311,19 +326,34 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         getConversationItems(items);
     }
 
-    const conversationRender = (con: any) => {
-        if (BaseMethods.isNull(con) || BaseMethods.isNull(con.list)) {
+    const loadMoreConversations = () => {
+        const cnum = currConversationReq ? currConversationReq.pageNum + 1 : 1;
+        const convReq: IConversationReq = {
+            title: '',
+            pageSize: 10,
+            pageNum: cnum
+        };
+        return getConversations(convReq);
+    }
+
+    const conversationRender = () => {
+        if(loadedConversations === undefined){
             return;
         }
-        const conversations: IConversation[] = con.list;
+        if (BaseMethods.isNull(loadedConversations)) {
+            return;
+        }
         const conversationList: JSX.Element[] = [];
-        conversations.forEach(item => {
+        loadedConversations.forEach(item => {
             conversationList.push(
                 <div key={uuid()} onClick={() => handleConversation(item.id)} className="conversation-item">
                     <img src={chatPic}></img>
                     <span>{item.title}</span>
                 </div>);
         });
+        if (loadedConversations.length > 9) {
+            conversationList.push(<button onClick={loadMoreConversations}>加载更多</button>)
+        }
         return conversationList;
     }
 
@@ -384,7 +414,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
             return (<a id="user-menu">
                 {avatarUrl ? <Avatar size={40} src={avatarUrl} onClick={avatarClick} /> : <Avatar onClick={avatarClick} size={40} >Me</Avatar>}
                 <div id="dropdown" className="dropdown-content">
-                    <div onClick={()=>handleMenuClick('account')}><PayCircleOutlined /><span>订阅</span></div>
+                    <div onClick={() => handleMenuClick('account')}><PayCircleOutlined /><span>订阅</span></div>
                     <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
                     <div onClick={doLoginOut}><LogoutOutlined /><span>登出</span></div>
                 </div>
@@ -462,7 +492,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
         <div className="chat-main-body">
             <div className="conversation">
                 <div className="conversation-list">
-                    {conversationRender(props.conversations.conversations)}
+                    {conversationRender()}
                 </div>
                 <div className="chat-menu" >
                     <div className="conversation-action">
@@ -488,18 +518,5 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     );
 }
 
-const mapStateToProps = (state: any) => ({
-    chatProps: state.chat,
-    conversations: state.conversation
-});
-
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        respContentFuc: (prompt: any) => {
-            dispatch(chatAskAction(prompt))
-        }
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Chat);
+export default withConnect(Chat);
 
