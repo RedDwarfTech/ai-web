@@ -36,13 +36,13 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [cid, setCid] = useState<number>(0);
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
     const [isGetUserLoading, setIsGetUserLoading] = useState(false);
-    const [userInfo, setUserInfo] = useState<IUserModel>();
+    const [_, setUserInfo] = useState<IUserModel>();
     const { citem } = useSelector((state: any) => state.citem);
     const { loginUser } = useSelector((state: any) => state.user);
     const { conversations } = useSelector((state: any) => state.conversation);
     const [currInputIndex, setCurrInputIndex] = useState(0);
     const [currConversationReq, setCurrConversationReq] = useState<IConversationReq>();
-    const [loadedConversations, setLoadedConversations] = useState<Map<number,IConversation>>();
+    const [loadedConversations, setLoadedConversations] = useState<Map<number, IConversation>>(new Map<number, IConversation>());
 
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
@@ -51,16 +51,12 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     React.useEffect(() => {
         if (conversations && Object.keys(conversations).length > 0) {
             const legacyConverstions = loadedConversations;
-            if (legacyConverstions && legacyConverstions.size > 0) {
-                conversations.list.forEach((item:IConversation)=>{
-                    if(!legacyConverstions.has(item.id)){
-                        legacyConverstions.set(item.id,item);
-                    }
-                });
-                setLoadedConversations(legacyConverstions);
-            } else {
-                setLoadedConversations(conversations.list);
-            }
+            conversations.list.forEach((item: IConversation) => {
+                if (!legacyConverstions.has(item.id)) {
+                    legacyConverstions.set(item.id, item);
+                }
+            });
+            setLoadedConversations(legacyConverstions);
         }
     }, [conversations]);
 
@@ -99,7 +95,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         }
     }, [loginUser]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         putCitems(citem);
     }, [citem]);
 
@@ -231,12 +227,6 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         menuClose();
     };
 
-    const handleSendStatusReset = async () => {
-        // https://stackoverflow.com/questions/42218699/chrome-violation-violation-handler-took-83ms-of-runtime
-        await new Promise(resolve => setTimeout(resolve, 15000));
-        setLoadings(false);
-    }
-
     const handleSend = async () => {
         if (loadings) {
             return;
@@ -343,7 +333,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         return getConversations(convReq);
     }
 
-    const delConversations = (id: number)=> {
+    const delConversations = (id: number) => {
         Modal.confirm({
             title: '删除确认',
             content: '确定要永久删除会话吗？删除后无法恢复',
@@ -351,9 +341,9 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 delConversation(id);
             },
             onCancel() {
-              
+
             },
-          });
+        });
     }
 
     const conversationRender = () => {
@@ -364,14 +354,17 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             return;
         }
         const conversationList: JSX.Element[] = [];
-        loadedConversations.forEach((value,key) => {
+        loadedConversations.forEach((value, key) => {
             conversationList.push(
                 <div key={uuid()} onClick={() => handleConversation(key)} className="conversation-item">
                     <img src={chatPic}></img>
                     <span title={value.title.toString()}>{value.title}</span>
-                    <div className="conversation-item-icon"><DeleteOutlined onClick={()=>delConversations(key)}></DeleteOutlined></div>
+                    <div className="conversation-item-icon"><DeleteOutlined onClick={() => delConversations(key)}></DeleteOutlined></div>
                 </div>);
         });
+        if(loadedConversations.size > 0) {
+            console.log(loadedConversations);
+        }
         if (loadedConversations.size > 9) {
             conversationList.push(<button onClick={loadMoreConversations}>加载更多</button>)
         }

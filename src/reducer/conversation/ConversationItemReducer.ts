@@ -4,7 +4,7 @@ const initState = {
     citem: {}
 };
 
-const ConversationItemReducer = (state=initState, action) => {
+const ConversationItemReducer = (state=initState, action:any) => {
     switch (action.type) {
         case "CONVERSATION_ITEM_PAGE":
             return {
