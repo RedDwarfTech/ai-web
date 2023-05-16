@@ -362,9 +362,6 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                     <div className="conversation-item-icon"><DeleteOutlined onClick={() => delConversations(key)}></DeleteOutlined></div>
                 </div>);
         });
-        if(loadedConversations.size > 0) {
-            console.log(loadedConversations);
-        }
         if (loadedConversations.size > 9) {
             conversationList.push(<button onClick={loadMoreConversations}>加载更多</button>);
         }
