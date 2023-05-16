@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import Chat from "./chat/Chat";
 import { IUserModel } from "rdjs-wheel";
 import "./Home.css";
-import withConnect from "../component/hoc/withConnect";
+import withConnect from "@/page/component/hoc/withConnect";
 
 const Home: React.FC = () => {
 
   const [currentPage, setCurrentPage] = useState("chat");
   const [userInfo, setUserInfo] = useState<IUserModel>();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (currentPage === 'profile') {
       if (!userInfo) {
         const storeUser = localStorage.getItem("userInfo");

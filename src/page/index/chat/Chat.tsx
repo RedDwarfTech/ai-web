@@ -1,11 +1,10 @@
 import { Avatar, Button, message } from "antd";
 import React, { useEffect, useState } from "react";
-import { connect, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
 import { doLoginOut, getCurrentUser, userLoginByPhoneImpl, userLoginImpl } from "@/service/user/UserService";
 import { ChatAsk } from "@/models/request/chat/ChatAsk";
-import { chatAskAction } from "@/action/chat/ChatAction";
 import { IChatAskResp } from "@/models/chat/ChatAskResp";
 import { doAskPreCheck } from "@/service/chat/SseClientService";
 import { ISseMsg } from "@/models/chat/SseMsg";
@@ -30,7 +29,7 @@ import { Prompt, getNewestRecord, getToIdb, insertToIdb } from "@/storage/indexd
 import { EventSourcePolyfill } from "event-source-polyfill";
 import withConnect from "@/page/component/hoc/withConnect";
 
-const Chat: React.FC<IChatAskResp> = (props) => {
+const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [inputValue, setInputValue] = useState('');
     const [myMap, setMyMap] = useState(new Map<string, ISseMsg>());
     const [loadings, setLoadings] = useState<boolean>(false);
@@ -50,10 +49,14 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     };
 
     React.useEffect(() => {
-        if(conversations && conversations.length > 0){
+        if (conversations && Object.keys(conversations).length > 0) {
             const legacyConverstions = loadedConversations;
-            legacyConverstions?.push(conversations);
-            setLoadedConversations(legacyConverstions);
+            if (legacyConverstions) {
+                legacyConverstions?.push(conversations.list);
+                setLoadedConversations(legacyConverstions);
+            } else {
+                setLoadedConversations(conversations.list);
+            }
         }
     }, [conversations]);
 
@@ -337,7 +340,7 @@ const Chat: React.FC<IChatAskResp> = (props) => {
     }
 
     const conversationRender = () => {
-        if(loadedConversations === undefined){
+        if (loadedConversations === undefined) {
             return;
         }
         if (BaseMethods.isNull(loadedConversations)) {
