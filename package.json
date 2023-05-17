@@ -22,7 +22,7 @@
     "hashmap": "^2.4.0",
     "idb": "^7.1.1",
     "query-string": "8.1.0",
-    "rd-component": "^0.1.76",
+    "rd-component": "^0.1.77",
     "rdjs-wheel": "0.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
