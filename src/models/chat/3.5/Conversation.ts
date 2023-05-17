@@ -1,5 +1,6 @@
 export interface IConversation {
     id: number,
     created: number,
-    title: String
+    title: String,
+    createdTime: string
 }

@@ -260,7 +260,6 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         };
         appenSseMsg(msg, "prompt");
         setInputValue('');
-        //handleSendStatusReset();
         let ask: ChatAsk = {
             prompt: encodeURIComponent(inputValue),
             cid: cid
@@ -355,6 +354,10 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         });
     }
 
+    function compareFn(a: [number, IConversation], b: [number, IConversation]): number {
+        return Number(b[1].createdTime) - Number(a[1].createdTime);
+    }
+
     const conversationRender = () => {
         if (loadedConversations === undefined) {
             return;
@@ -363,12 +366,13 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             return;
         }
         const conversationList: JSX.Element[] = [];
-        loadedConversations.forEach((value, key) => {
+        let sortedConversations: [number, IConversation][] = Array.from(loadedConversations.entries()).sort(compareFn);
+        sortedConversations.forEach((item) => {
             conversationList.push(
-                <div key={uuid()} onClick={() => handleConversation(key)} className="conversation-item">
+                <div key={uuid()} onClick={() => handleConversation(item[0])} className="conversation-item">
                     <img src={chatPic}></img>
-                    <span title={value.title.toString()}>{value.title}</span>
-                    <div className="conversation-item-icon"><DeleteOutlined onClick={() => delConversations(key)}></DeleteOutlined></div>
+                    <span title={item[1].title.toString()}>{item[1].title}</span>
+                    <div className="conversation-item-icon"><DeleteOutlined onClick={() => delConversations(item[0])}></DeleteOutlined></div>
                 </div>);
         });
         if (loadedConversations.size > 0) {
