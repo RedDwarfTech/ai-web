@@ -1,5 +1,5 @@
 import { Avatar, Button, Modal, message } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
@@ -20,7 +20,7 @@ import { IConversationItemReq } from "@/models/request/conversation/Conversation
 import { readConfig } from "@/config/app/config-reader";
 import { ControlOutlined, DeleteOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
-import Goods from "../goods/Goods";
+import { Goods } from "rd-component";
 import Profile from "@/page/user/profile/Profile";
 import GenImages from "../images/GenImages";
 import ChatList from "./component/ChatList";
@@ -28,6 +28,7 @@ import chatPic from "@/asset/icon/chat/chat.svg";
 import { Prompt, getNewestRecord, getToIdb, insertToIdb } from "@/storage/indexdb/idb";
 import { EventSourcePolyfill } from "event-source-polyfill";
 import withConnect from "@/page/component/hoc/withConnect";
+import store from "@/store/store";
 
 const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [inputValue, setInputValue] = useState('');
@@ -43,6 +44,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [currInputIndex, setCurrInputIndex] = useState(0);
     const [currConversationReq, setCurrConversationReq] = useState<IConversationReq>();
     const [loadedConversations, setLoadedConversations] = useState<Map<number, IConversation>>(new Map<number, IConversation>());
+    const [showGoodsPopup, setShowGoodsPopup] = useState(false);
 
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
@@ -88,7 +90,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         }
     }
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (loginUser && Object.keys(loginUser).length > 0) {
             saveLoginUserInfo(loginUser);
         }
@@ -98,7 +100,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         putCitems(citem);
     }, [citem]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         var element = document.querySelector('.chat-body');
         if (element) {
             element.scrollTop = element.scrollHeight - element.clientHeight;
@@ -158,6 +160,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             setLoadings(false);
             message.info("充值会员继续使用");
             eventSource.close();
+            setShowGoodsPopup(true);
             return;
         }
         if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "rate-limit") {
@@ -339,8 +342,8 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             content: '确定要永久删除会话吗？删除后无法恢复',
             onOk() {
                 delConversation(id).then((response) => {
-                    if(ResponseHandler.responseSuccess(response)) {
-                        const newMap = new Map([...loadedConversations].filter(([key,value])=>key !== id));
+                    if (ResponseHandler.responseSuccess(response)) {
+                        const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
                         setLoadedConversations(newMap);
                     }
                 });
@@ -534,6 +537,13 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 </div>
             </div>
             {renderRightContainer(props.menu)}
+            <Modal title="订阅"
+                open={showGoodsPopup}
+                width={1000}
+                onCancel={() => setShowGoodsPopup(false)}
+                footer={null}>
+                <Goods refreshUser={true} appId ={readConfig("appId")} store={store}></Goods>
+            </Modal>
         </div>
     );
 }
