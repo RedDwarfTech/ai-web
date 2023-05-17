@@ -490,7 +490,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         if (tab === "account") {
             return (
                 <div className="chat-container">
-                    <Goods></Goods>
+                    <Goods refreshUser={true} appId ={readConfig("appId")} store={store}></Goods>
                 </div>
             );
         }
