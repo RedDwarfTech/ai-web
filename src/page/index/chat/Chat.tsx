@@ -329,6 +329,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             pageSize: 10,
             pageNum: cnum
         };
+        setCurrConversationReq(convReq);
         return getConversations(convReq);
     }
 
@@ -366,9 +367,9 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                     <div className="conversation-item-icon"><DeleteOutlined onClick={() => delConversations(key)}></DeleteOutlined></div>
                 </div>);
         });
-        if (loadedConversations.size > 9) {
+        if (loadedConversations.size > 0) {
             conversationList.push(
-                <div key={uuid()} className="conversation-item">
+                <div key={uuid()} className="conversation-item-more">
                     <button onClick={loadMoreConversations}>加载更多</button>
                 </div>
             );

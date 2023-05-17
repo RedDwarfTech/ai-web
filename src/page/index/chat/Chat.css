@@ -86,8 +86,6 @@
   white-space: normal; 
 }
 
-
-
 .conversation-item-icon {
   margin-left: auto;
   transition: transform 0.3s ease;
@@ -96,6 +94,13 @@
 .conversation-item-icon:hover {
   color: green;
   transform: scale(1.2);
+}
+
+.conversation-item-more {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .conversation-menu-item {
