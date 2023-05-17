@@ -49,7 +49,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     };
 
     React.useEffect(() => {
-        if (conversations && Object.keys(conversations).length > 0) {
+        if (conversations && Object.keys(conversations).length > 0 && conversations.list && conversations.list.length > 0) {
             const legacyConverstions = loadedConversations;
             conversations.list.forEach((item: IConversation) => {
                 if (!legacyConverstions.has(item.id)) {
