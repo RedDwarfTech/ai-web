@@ -26,7 +26,6 @@ const Feedback: React.FC = (props: any) => {
         };
         submitFeedback(params).then((data) => {
             if(ResponseHandler.responseSuccess(data)){
-                debugger
                 message.info("提交成功");
             }
         });

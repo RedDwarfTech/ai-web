@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Chat from "./chat/Chat";
 import { IUserModel } from "rdjs-wheel";
 import "./Home.css";

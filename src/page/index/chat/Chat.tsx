@@ -18,11 +18,10 @@ import BaseMethods from 'rdjs-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "@/config/app/config-reader";
-import { ControlOutlined, DeleteOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
+import { ControlOutlined, DeleteOutlined, FileImageOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
 import { Goods } from "rd-component";
 import Profile from "@/page/user/profile/Profile";
-import GenImages from "../images/GenImages";
 import ChatList from "./component/ChatList";
 import chatPic from "@/asset/icon/chat/chat.svg";
 import { Prompt, getNewestRecord, getToIdb, insertToIdb } from "@/storage/indexdb/idb";
@@ -30,6 +29,7 @@ import { EventSourcePolyfill } from "event-source-polyfill";
 import withConnect from "@/page/component/hoc/withConnect";
 import store from "@/store/store";
 import "rd-component/dist/style.css";
+import GenImages from "../images/GenImages";
 
 const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [inputValue, setInputValue] = useState('');
@@ -491,7 +491,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         if (tab === "account") {
             return (
                 <div className="chat-container">
-                    <Goods refreshUser={true} appId ={readConfig("appId")} store={store}></Goods>
+                    <Goods refreshUser={true} appId={readConfig("appId")} store={store}></Goods>
                 </div>
             );
         }
@@ -524,9 +524,9 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                             <div className="conversation-menu-item" onClick={() => handleMenuClick('chat')}>
                                 <MessageOutlined /><span className="action-item">聊天</span>
                             </div>
-                            {/**<div className="conversation-item" onClick={() => handleMenuClick('image')}>
-                                <FileImageOutlined /><span className="action-item">图片生成</span>
-    </div>**/}
+                            <div className="conversation-menu-item" onClick={() => handleMenuClick('image')}>
+                                <FileImageOutlined /><span className="action-item">AI 绘画</span>
+                            </div>
                             <div className="conversation-menu-item" onClick={() => handleMenuClick('about')}>
                                 <InfoCircleOutlined /><span className="action-item">关于</span>
                             </div>
@@ -543,7 +543,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 width={1000}
                 onCancel={() => setShowGoodsPopup(false)}
                 footer={null}>
-                <Goods refreshUser={true} appId ={readConfig("appId")} store={store}></Goods>
+                <Goods refreshUser={true} appId={readConfig("appId")} store={store}></Goods>
             </Modal>
         </div>
     );

@@ -2,15 +2,22 @@ import { genImage } from "@/service/images/ImageService";
 import { Button, Divider, Input, message } from "antd";
 import React, { useState } from "react";
 import "./GenImages.css"
+import { withConnect } from "rd-component";
+import { useSelector } from "react-redux";
 import { IImageResp } from "@/models/images/IImageResp";
-import { connect } from "react-redux";
-import { genImageAction } from "@/action/images/ImageAction";
-import { MessageHandler } from "rd-component";
 
-const GenImages: React.FC<IImageResp> = (props) => {
+const GenImages: React.FC = () => {
     const [inputValue, setInputValue] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
     const [loadings, setLoadings] = useState<boolean>(false);
+    const { image } = useSelector((state: any) => state.image);
+    const [genImageResult, setGenImageResult] = useState<IImageResp>();
+
+    React.useEffect(() => {
+        if (image) {
+            setGenImageResult(image);
+        }
+    }, [image]);
 
     const handleChange = (e: any) => {
         setInputValue(e.target.value);
@@ -40,11 +47,11 @@ const GenImages: React.FC<IImageResp> = (props) => {
         });
     };
 
-
     const renderImages = () => {
+        if(!genImageResult) return;
         const tagList: JSX.Element[] = [];
-        if(Object.keys(props.image).length>0 && Object.keys(props.image.image).length>0) {
-            let imageList:[] = props.image.image;
+        if (Object.keys(genImageResult).length > 0 && Object.keys(genImageResult).length > 0) {
+            let imageList: [] = image.image;
             imageList.forEach((item) => {
                 let url = item['url'];
                 tagList.push(
@@ -53,6 +60,12 @@ const GenImages: React.FC<IImageResp> = (props) => {
             });
         }
         return tagList;
+    };
+
+    const renderSingleImages = () => {
+        if(!genImageResult || Object.keys(genImageResult).length == 0) return;
+        const baseUrl = 'data:image/png;base64,' + genImageResult.imageStr;
+         return(<img className="img-item" src={baseUrl} alt="description" />);         
     };
 
 
@@ -67,21 +80,9 @@ const GenImages: React.FC<IImageResp> = (props) => {
                 <Button type="primary" loading={loadings} onClick={handleSend}><span>生成</span></Button>
             </div>
             <Divider></Divider>
-            {renderImages()}
+            {renderSingleImages()}
         </div>
     );
 }
 
-const mapStateToProps = (state: any) => ({
-    image: state.image
-});
-
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        genImage: (prompt: any) => {
-            dispatch(genImageAction(prompt))
-        }
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(GenImages);
+export default withConnect(GenImages);

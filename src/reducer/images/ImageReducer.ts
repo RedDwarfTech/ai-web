@@ -3,7 +3,7 @@ const initState = {
     image:{}
 };
 
-const ImageReducer = (state=initState, action) => {
+const ImageReducer = (state=initState, action:any) => {
     switch (action.type) {
         case "GEN_IMAGE":
             return {
