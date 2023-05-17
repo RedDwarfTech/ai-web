@@ -29,6 +29,7 @@ import { Prompt, getNewestRecord, getToIdb, insertToIdb } from "@/storage/indexd
 import { EventSourcePolyfill } from "event-source-polyfill";
 import withConnect from "@/page/component/hoc/withConnect";
 import store from "@/store/store";
+import "rd-component/dist/style.css";
 
 const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [inputValue, setInputValue] = useState('');
