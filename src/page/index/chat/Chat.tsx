@@ -50,6 +50,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
 
     React.useEffect(() => {
         if (conversations && Object.keys(conversations).length > 0 && conversations.list && conversations.list.length > 0) {
+            // https://stackoverflow.com/questions/76267002/how-to-locate-the-react-ocassionally-render-issue
             const newMapState = new Map<number, IConversation>(loadedConversations);
             conversations.list.forEach((item: IConversation) => {
                 newMapState.set(item.id, item);
@@ -336,7 +337,12 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             title: '删除确认',
             content: '确定要永久删除会话吗？删除后无法恢复',
             onOk() {
-                delConversation(id);
+                delConversation(id).then((response) => {
+                    if(ResponseHandler.responseSuccess(response)) {
+                        const newMap = new Map([...loadedConversations].filter(([key,value])=>key !== id));
+                        setLoadedConversations(newMap);
+                    }
+                });
             },
             onCancel() {
 
@@ -361,7 +367,11 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 </div>);
         });
         if (loadedConversations.size > 9) {
-            conversationList.push(<button onClick={loadMoreConversations}>加载更多</button>);
+            conversationList.push(
+                <div key={uuid()} className="conversation-item">
+                    <button onClick={loadMoreConversations}>加载更多</button>
+                </div>
+            );
         }
         return conversationList;
     }
