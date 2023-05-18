@@ -33,7 +33,7 @@ import GenImages from "../images/GenImages";
 
 const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [inputValue, setInputValue] = useState('');
-    const [myMap, setMyMap] = useState(new Map<string, ISseMsg>());
+    const [sseChatMsg, setSseChatMsg] = useState(new Map<string, ISseMsg>());
     const [loadings, setLoadings] = useState<boolean>(false);
     const [cid, setCid] = useState<number>(0);
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
@@ -46,6 +46,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [currConversationReq, setCurrConversationReq] = useState<IConversationReq>();
     const [loadedConversations, setLoadedConversations] = useState<Map<number, IConversation>>(new Map<number, IConversation>());
     const [showGoodsPopup, setShowGoodsPopup] = useState(false);
+    const [hasMoreConversation, setHasMoreConversation] = useState<boolean>(false);
 
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
@@ -58,6 +59,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             conversations.list.forEach((item: IConversation) => {
                 newMapState.set(item.id, item);
             });
+            setHasMoreConversation(conversations.pagination.hasNextPage);
             setLoadedConversations(newMapState);
         }
     }, [conversations]);
@@ -106,7 +108,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         if (element) {
             element.scrollTop = element.scrollHeight - element.clientHeight;
         }
-    }, [myMap]);
+    }, [sseChatMsg]);
 
     const initialCurrentSelect = async () => {
         const result = await getNewestRecord<Prompt>();
@@ -197,7 +199,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     }
 
     const appenSseMsg = (data: ISse35ServerMsg, msgType: string) => {
-        setMyMap((prevMapState) => {
+        setSseChatMsg((prevMapState) => {
             const newMapState = new Map<string, ISseMsg>(prevMapState);
             if (newMapState.has(data.id)) {
                 const legacyMsg = newMapState.get(data.id)!.msg;
@@ -313,7 +315,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                     newMap.set(item.answerTime, sseMsg);
                 }
             })
-            setMyMap(newMap);
+            setSseChatMsg(newMap);
         }
     }
 
@@ -375,7 +377,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                     <div className="conversation-item-icon"><DeleteOutlined onClick={() => delConversations(item[0])}></DeleteOutlined></div>
                 </div>);
         });
-        if (loadedConversations.size > 0) {
+        if (hasMoreConversation) {
             conversationList.push(
                 <div key={uuid()} className="conversation-item-more">
                     <button onClick={loadMoreConversations}>加载更多</button>
@@ -461,7 +463,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         if (tab === "chat") {
             return (
                 <div className="chat-container">
-                    <ChatList myMap={myMap}></ChatList>
+                    <ChatList myMap={sseChatMsg}></ChatList>
                     <div className="input-box-container">
                         <div className="input-box">
                             <textarea
