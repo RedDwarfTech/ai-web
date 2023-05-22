@@ -1,5 +1,5 @@
-import { Avatar, Button, Modal, message } from "antd";
-import React, { useState } from "react";
+import { Avatar, Button, Input, Modal, message } from "antd";
+import React, { ChangeEvent, useState } from "react";
 import { useSelector } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
@@ -12,13 +12,13 @@ import { ISse35ServerMsg } from "@/models/chat/3.5/Sse35ServerMsg";
 import dayjs from "dayjs";
 import { AuthHandler, IUserModel, ResponseHandler, TimeUtils, WheelGlobal } from "rdjs-wheel";
 import { IConversation } from "@/models/chat/3.5/Conversation";
-import { delConversation, getConversations } from "@/service/chat/ConversationService";
+import { delConversation, editConversation, getConversations } from "@/service/chat/ConversationService";
 import { IConversationReq } from "@/models/request/conversation/ConversationReq";
 import BaseMethods from 'rdjs-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "@/config/app/config-reader";
-import { ControlOutlined, DeleteOutlined, FileImageOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
+import { ControlOutlined, DeleteOutlined, EditOutlined, FileImageOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
 import { Goods } from "rd-component";
 import Profile from "@/page/user/profile/Profile";
@@ -46,7 +46,9 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [currConversationReq, setCurrConversationReq] = useState<IConversationReq>();
     const [loadedConversations, setLoadedConversations] = useState<Map<number, IConversation>>(new Map<number, IConversation>());
     const [showGoodsPopup, setShowGoodsPopup] = useState(false);
+    const [showEditTitlePopup, setShowEditTitlePopup] = useState(false);
     const [hasMoreConversation, setHasMoreConversation] = useState<boolean>(false);
+    const [currEditConversation, setCurrEditConversation] = useState<IConversation>();
 
     const handleChatInputChange = (e: any) => {
         setInputValue(e.target.value);
@@ -338,6 +340,21 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         return getConversations(convReq);
     }
 
+    const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (currEditConversation) {
+            let curr: IConversation = { ...currEditConversation };
+            curr.title = e.target.value;
+            if (curr) {
+                setCurrEditConversation(curr);
+            }
+        }
+    }
+
+    const editConversations = (conversation: IConversation) => {
+        setCurrEditConversation(conversation);
+        setShowEditTitlePopup(true);
+    }
+
     const delConversations = (id: number) => {
         Modal.confirm({
             title: '删除确认',
@@ -374,7 +391,12 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 <div key={uuid()} onClick={() => handleConversation(item[0])} className="conversation-item">
                     <img src={chatPic}></img>
                     <span title={item[1].title.toString()}>{item[1].title}</span>
-                    <div className="conversation-item-icon"><DeleteOutlined onClick={() => delConversations(item[0])}></DeleteOutlined></div>
+                    <div>
+                        <EditOutlined onClick={() => editConversations(item[1])}></EditOutlined>
+                    </div>
+                    <div className="conversation-item-icon">
+                        <DeleteOutlined onClick={() => delConversations(item[0])}></DeleteOutlined>
+                    </div>
                 </div>);
         });
         if (hasMoreConversation) {
@@ -550,6 +572,25 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 onCancel={() => setShowGoodsPopup(false)}
                 footer={null}>
                 <Goods refreshUser={true} appId={readConfig("appId")} store={store}></Goods>
+            </Modal>
+            <Modal title="编辑会话标题"
+                open={showEditTitlePopup}
+                width={600}
+                onOk={()=>{
+                    let params = {
+                        id: currEditConversation?.id,
+                        title: currEditConversation?.title
+                    };
+                    editConversation(params).then((resp) => {
+                        if (ResponseHandler.responseSuccess(resp)) {
+                            setShowEditTitlePopup(false);
+                            fetchConversations();
+                        }
+                    });
+                }}
+                onCancel={() => setShowEditTitlePopup(false)}>
+                <Input value={currEditConversation?.title.toString()}
+                    onChange={(e) => { handleTitleChange(e) }}></Input>
             </Modal>
         </div>
     );

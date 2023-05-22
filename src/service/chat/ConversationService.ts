@@ -21,3 +21,14 @@ export function delConversation(id: number) {
     const actionTypeString: string = ConversationActionType[ConversationActionType.DELETE_CONVERSATION];
     return requestWithActionType(config, actionTypeString, store);
 }
+
+export function editConversation(params: any) {
+    const config = {
+        method: 'put',
+        url: "/ai/conversation",
+        headers: {'Content-Type': 'application/json'},
+        data: JSON.stringify(params)
+    };
+    const actionTypeString: string = ConversationActionType[ConversationActionType.DELETE_CONVERSATION];
+    return requestWithActionType(config, actionTypeString, store);
+}
