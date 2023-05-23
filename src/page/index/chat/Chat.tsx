@@ -505,6 +505,10 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                                 onClick={handleSend}
                             ></Button>
                         </div>
+                        <div className="disclaimer">
+                            <span>模型：GPT3.5-turbo</span>
+                            <span>免责声明：本产品Genie提供的AI聊天服务仅供娱乐和参考之用，不能替代医生、律师和其他专业人士的意见和建议。使用本产品所产生的一切后果由用户自负，Genie不承担任何法律责任。</span>
+                        </div>
                     </div>
                 </div>
             );
@@ -576,7 +580,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             <Modal title="编辑会话标题"
                 open={showEditTitlePopup}
                 width={600}
-                onOk={()=>{
+                onOk={() => {
                     let params = {
                         id: currEditConversation?.id,
                         title: currEditConversation?.title
