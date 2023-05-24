@@ -36,6 +36,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [sseChatMsg, setSseChatMsg] = useState(new Map<string, ISseMsg>());
     const [loadings, setLoadings] = useState<boolean>(false);
     const [cid, setCid] = useState<number>(0);
+    const [promptLines, setPromptLines] = useState<number>(1);
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
     const [isGetUserLoading, setIsGetUserLoading] = useState(false);
     const [_, setUserInfo] = useState<IUserModel>();
@@ -51,7 +52,19 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [currEditConversation, setCurrEditConversation] = useState<IConversation>();
 
     const handleChatInputChange = (e: any) => {
-        setInputValue(e.target.value);
+        const inputContent = e.target.value;
+        setInputValue(inputContent);
+        if (inputContent && inputContent.length > 0) {
+            // https://stackoverflow.com/questions/76324678/how-can-i-make-a-textarea-expand-automatically-to-a-maximum-height
+            const talkInput = document.getElementById("talkInput");
+            if(!talkInput) return;
+            const lineHeight = parseInt(window.getComputedStyle(talkInput).getPropertyValue('line-height'));
+            const scrlht = talkInput.scrollHeight;
+            const lines = Math.floor(scrlht / lineHeight);
+            if (lines > 1 && lines < 4) {
+                setPromptLines(lines);
+            }
+        }
     };
 
     React.useEffect(() => {
@@ -490,7 +503,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                         <div className="input-box">
                             <textarea
                                 id="talkInput"
-                                rows={1}
+                                rows={promptLines ? promptLines : 1}
                                 value={inputValue}
                                 onChange={handleChatInputChange}
                                 onKeyDown={handleEnterKey}
