@@ -57,14 +57,65 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         if (inputContent && inputContent.length > 0) {
             // https://stackoverflow.com/questions/76324678/how-can-i-make-a-textarea-expand-automatically-to-a-maximum-height
             const talkInput = document.getElementById("talkInput");
-            if(!talkInput) return;
-            const lineHeight = parseInt(window.getComputedStyle(talkInput).getPropertyValue('line-height'));
-            const scrlht = talkInput.scrollHeight;
-            const lines = Math.floor(scrlht / lineHeight);
-            console.log(lines);
-            if (lines > 0 && lines < 4) {
-                setPromptLines(lines);
+            if (!talkInput) return;
+            const lines = calcRows();
+            if (lines) {
+                if (lines > 0 && lines < 4) {
+                    setPromptLines(lines);
+                }
             }
+        }
+    };
+
+    const calcRows = () => {
+        // https://stackoverflow.com/questions/1760629/how-to-get-number-of-rows-in-textarea-using-javascript
+        const ta = document.getElementById("talkInput");
+        if (!ta) return;
+        // This will get the line-height only if it is set in the css,
+        // otherwise it's "normal"
+        ta.style.cssText = 'line-height: 23px;';
+        const taLineHeight = parseInt(window.getComputedStyle(ta).getPropertyValue('line-height'));
+        // Get the scroll height of the textarea
+        const taHeight = calcHeight(ta, taLineHeight);
+        // calculate the number of lines
+        if (taHeight == undefined) {
+            return;
+        }
+        const numberOfLines = Math.ceil(taHeight / taLineHeight);
+        return numberOfLines;
+    };
+
+    const calcHeight = (ta: HTMLElement, scanAmount: number) => {
+        var origHeight = ta.style.height;
+        var height = ta.offsetHeight;
+        var scrollHeight = ta.scrollHeight;
+        var overflow = ta.style.overflow;
+        /// only bother if the ta is bigger than content
+        if (height >= scrollHeight) {
+            /// check that our browser supports changing dimension
+            /// calculations mid-way through a function call...
+            ta.style.height = (height + scanAmount) + 'px';
+            /// because the scrollbar can cause calculation problems
+            ta.style.overflow = 'hidden';
+            /// by checking that scrollHeight has updated
+            if (scrollHeight < ta.scrollHeight) {
+                /// now try and scan the ta's height downwards
+                /// until scrollHeight becomes larger than height
+                while (ta.offsetHeight >= ta.scrollHeight && height > 23) {
+                    ta.style.height = (height -= scanAmount) + 'px';
+                }
+                /// be more specific to get the exact height
+                while (ta.offsetHeight < ta.scrollHeight && height > 23) {
+                    ta.style.height = (height++) + 'px';
+                }
+                /// reset the ta back to it's original height
+                ta.style.height = origHeight;
+                /// put the overflow back
+                ta.style.overflow = overflow;
+                return height;
+            }
+        } else {
+            return scrollHeight;
         }
     };
 
