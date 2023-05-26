@@ -90,7 +90,6 @@
 }
 
 .conversation-item span:hover { 
-  width: auto; 
   overflow: visible;
   white-space: normal; 
 }

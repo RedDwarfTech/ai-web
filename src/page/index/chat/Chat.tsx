@@ -61,7 +61,8 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             const lineHeight = parseInt(window.getComputedStyle(talkInput).getPropertyValue('line-height'));
             const scrlht = talkInput.scrollHeight;
             const lines = Math.floor(scrlht / lineHeight);
-            if (lines > 1 && lines < 4) {
+            console.log(lines);
+            if (lines > 0 && lines < 4) {
                 setPromptLines(lines);
             }
         }
