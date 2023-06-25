@@ -1,5 +1,5 @@
 import store from '@/store/store';
-import { PayActionType, requestWithActionType } from "rd-component";
+import { PayActionType, XHRClient } from "rd-component";
 
 export function doPay(params: any) {
     const config = {
@@ -9,7 +9,7 @@ export function doPay(params: any) {
         data: JSON.stringify(params)
     };
     const actionTypeString: string = PayActionType[PayActionType.CREATE_ORDER];
-    return requestWithActionType(config, actionTypeString, store);
+    return XHRClient.requestWithActionType(config, actionTypeString, store);
 }
 
 export function doClearAlipayFormText() {
