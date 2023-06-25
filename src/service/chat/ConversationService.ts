@@ -1,7 +1,7 @@
 import { IConversationReq } from '@/models/request/conversation/ConversationReq';
 import { ConversationActionType } from '@/action/conversation/ConversationAction';
-import { requestWithActionType } from 'rd-component';
 import store from '@/store/store';
+import { XHRClient } from 'rd-component';
 
 export function getConversations(params: IConversationReq) {
     var queryString = Object.keys(params).map(key => key + '=' + params[key as keyof IConversationReq]).join('&');
@@ -10,7 +10,7 @@ export function getConversations(params: IConversationReq) {
         url: "/ai/conversation/page?" + queryString,
         data: JSON.stringify(params)
     };
-    return requestWithActionType(config, 'CONVERSATION_PAGE', store);
+    return XHRClient.requestWithActionType(config, 'CONVERSATION_PAGE', store);
 }
 
 export function delConversation(id: number) {
@@ -19,7 +19,7 @@ export function delConversation(id: number) {
         url: "/ai/conversation/del/" + id,
     };
     const actionTypeString: string = ConversationActionType[ConversationActionType.DELETE_CONVERSATION];
-    return requestWithActionType(config, actionTypeString, store);
+    return XHRClient.requestWithActionType(config, actionTypeString, store);
 }
 
 export function editConversation(params: any) {
@@ -30,5 +30,5 @@ export function editConversation(params: any) {
         data: JSON.stringify(params)
     };
     const actionTypeString: string = ConversationActionType[ConversationActionType.DELETE_CONVERSATION];
-    return requestWithActionType(config, actionTypeString, store);
+    return XHRClient.requestWithActionType(config, actionTypeString, store);
 }

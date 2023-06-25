@@ -425,7 +425,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             title: '删除确认',
             content: '确定要永久删除会话吗？删除后无法恢复',
             onOk() {
-                delConversation(id).then((response) => {
+                delConversation(id).then((response:any) => {
                     if (ResponseHandler.responseSuccess(response)) {
                         const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
                         setLoadedConversations(newMap);
@@ -588,7 +588,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         if (tab === "account") {
             return (
                 <div className="chat-container">
-                    <Goods refreshUser={true} appId={readConfig("appId")} store={store}></Goods>
+                    <Goods refreshUrl={readConfig("refreshUserUrl")} appId={readConfig("appId")} store={store}></Goods>
                 </div>
             );
         }
@@ -640,7 +640,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 width={1000}
                 onCancel={() => setShowGoodsPopup(false)}
                 footer={null}>
-                <Goods refreshUser={true} appId={readConfig("appId")} store={store}></Goods>
+                <Goods refreshUrl={readConfig("refreshUserUrl")} appId={readConfig("appId")} store={store}></Goods>
             </Modal>
             <Modal title="编辑会话标题"
                 open={showEditTitlePopup}
@@ -650,7 +650,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                         id: currEditConversation?.id,
                         title: currEditConversation?.title
                     };
-                    editConversation(params).then((resp) => {
+                    editConversation(params).then((resp:any) => {
                         if (ResponseHandler.responseSuccess(resp)) {
                             setShowEditTitlePopup(false);
                             fetchConversations();
