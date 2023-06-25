@@ -15,6 +15,15 @@
   justify-content: space-between;
 }
 
+.chat-body {
+  margin-top: 10px;
+  margin-left: 60px;
+  margin-right: 60px;
+  margin-bottom: 10px;
+  border-radius: 15px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
 .chat-header {
   padding: 2px 20px;
   background-color: #4d4d4d;
@@ -81,7 +90,6 @@
 }
 
 .conversation-item span:hover { 
-  width: auto; 
   overflow: visible;
   white-space: normal; 
 }
@@ -185,21 +193,31 @@
   align-items: center;
   padding: 10px;
   border-radius: 25px;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
+  transition: border-color 0.5s ease;
   width: 80%;
   margin: auto;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
+  margin-top: 10px;
+  box-sizing: border-box;
+  min-height: 40px;
+}
+
+.input-box:hover {
+  border: 2px solid #4285f4;
 }
 
 .input-box textarea {
   flex: 1;
   border: none;
-  padding: 5px 10px;
   border-radius: 25px;
   outline: none;
   font-size: 16px;
   font-family: sans-serif;
   resize: none;
+  padding: 6px;
+  min-height: 23px;
+  line-height: 23px;
 }
 
 textarea:focus {
@@ -214,14 +232,12 @@ textarea:focus {
   background-color: #4CAF50;
   color: white;
   border: none;
-  padding: 10px 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
   border-radius: 25px;
   cursor: pointer;
-
 }
 
 .chat-send-icon {
@@ -236,6 +252,7 @@ textarea:focus {
 }
 
 .input-box button i {
+  flex-grow: 1;
   margin-right: 5px;
 }
 
@@ -267,4 +284,19 @@ textarea:focus {
 
 .dropdown-content div:hover {
   background-color: #f1f1f1
+}
+
+.disclaimer {
+  font-size: .65rem;
+  line-height: 1rem;
+  font-family: "Google Sans","Helvetica Neue",sans-serif;
+  font-weight: 400;
+  letter-spacing: .1px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 25px;
+  gap: 5px;
+  color: #696969;
 }

@@ -1,5 +1,5 @@
-import { Avatar, Button, Modal, message } from "antd";
-import React, { useState } from "react";
+import { Avatar, Button, Input, Modal, message } from "antd";
+import React, { ChangeEvent, useState } from "react";
 import { useSelector } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
@@ -12,13 +12,13 @@ import { ISse35ServerMsg } from "@/models/chat/3.5/Sse35ServerMsg";
 import dayjs from "dayjs";
 import { AuthHandler, IUserModel, ResponseHandler, TimeUtils, WheelGlobal } from "rdjs-wheel";
 import { IConversation } from "@/models/chat/3.5/Conversation";
-import { delConversation, getConversations } from "@/service/chat/ConversationService";
+import { delConversation, editConversation, getConversations } from "@/service/chat/ConversationService";
 import { IConversationReq } from "@/models/request/conversation/ConversationReq";
 import BaseMethods from 'rdjs-wheel/dist/src/utils/data/BaseMethods';
 import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "@/config/app/config-reader";
-import { ControlOutlined, DeleteOutlined, FileImageOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
+import { ControlOutlined, DeleteOutlined, EditOutlined, FileImageOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
 import { Goods } from "rd-component";
 import Profile from "@/page/user/profile/Profile";
@@ -36,6 +36,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [sseChatMsg, setSseChatMsg] = useState(new Map<string, ISseMsg>());
     const [loadings, setLoadings] = useState<boolean>(false);
     const [cid, setCid] = useState<number>(0);
+    const [promptLines, setPromptLines] = useState<number>(1);
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
     const [isGetUserLoading, setIsGetUserLoading] = useState(false);
     const [_, setUserInfo] = useState<IUserModel>();
@@ -46,10 +47,76 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [currConversationReq, setCurrConversationReq] = useState<IConversationReq>();
     const [loadedConversations, setLoadedConversations] = useState<Map<number, IConversation>>(new Map<number, IConversation>());
     const [showGoodsPopup, setShowGoodsPopup] = useState(false);
+    const [showEditTitlePopup, setShowEditTitlePopup] = useState(false);
     const [hasMoreConversation, setHasMoreConversation] = useState<boolean>(false);
+    const [currEditConversation, setCurrEditConversation] = useState<IConversation>();
 
     const handleChatInputChange = (e: any) => {
-        setInputValue(e.target.value);
+        const inputContent = e.target.value;
+        setInputValue(inputContent);
+        if (inputContent && inputContent.length > 0) {
+            // https://stackoverflow.com/questions/76324678/how-can-i-make-a-textarea-expand-automatically-to-a-maximum-height
+            const talkInput = document.getElementById("talkInput");
+            if (!talkInput) return;
+            const lines = calcRows();
+            if (lines) {
+                if (lines > 0 && lines < 4) {
+                    setPromptLines(lines);
+                }
+            }
+        }
+    };
+
+    const calcRows = () => {
+        // https://stackoverflow.com/questions/1760629/how-to-get-number-of-rows-in-textarea-using-javascript
+        const ta = document.getElementById("talkInput");
+        if (!ta) return;
+        // This will get the line-height only if it is set in the css,
+        // otherwise it's "normal"
+        ta.style.cssText = 'line-height: 23px;';
+        const taLineHeight = parseInt(window.getComputedStyle(ta).getPropertyValue('line-height'));
+        // Get the scroll height of the textarea
+        const taHeight = calcHeight(ta, taLineHeight);
+        // calculate the number of lines
+        if (taHeight == undefined) {
+            return;
+        }
+        const numberOfLines = Math.ceil(taHeight / taLineHeight);
+        return numberOfLines;
+    };
+
+    const calcHeight = (ta: HTMLElement, scanAmount: number) => {
+        var origHeight = ta.style.height;
+        var height = ta.offsetHeight;
+        var scrollHeight = ta.scrollHeight;
+        var overflow = ta.style.overflow;
+        /// only bother if the ta is bigger than content
+        if (height >= scrollHeight) {
+            /// check that our browser supports changing dimension
+            /// calculations mid-way through a function call...
+            ta.style.height = (height + scanAmount) + 'px';
+            /// because the scrollbar can cause calculation problems
+            ta.style.overflow = 'hidden';
+            /// by checking that scrollHeight has updated
+            if (scrollHeight < ta.scrollHeight) {
+                /// now try and scan the ta's height downwards
+                /// until scrollHeight becomes larger than height
+                while (ta.offsetHeight >= ta.scrollHeight && height > 23) {
+                    ta.style.height = (height -= scanAmount) + 'px';
+                }
+                /// be more specific to get the exact height
+                while (ta.offsetHeight < ta.scrollHeight && height > 23) {
+                    ta.style.height = (height++) + 'px';
+                }
+                /// reset the ta back to it's original height
+                ta.style.height = origHeight;
+                /// put the overflow back
+                ta.style.overflow = overflow;
+                return height;
+            }
+        } else {
+            return scrollHeight;
+        }
     };
 
     React.useEffect(() => {
@@ -338,6 +405,21 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         return getConversations(convReq);
     }
 
+    const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (currEditConversation) {
+            let curr: IConversation = { ...currEditConversation };
+            curr.title = e.target.value;
+            if (curr) {
+                setCurrEditConversation(curr);
+            }
+        }
+    }
+
+    const editConversations = (conversation: IConversation) => {
+        setCurrEditConversation(conversation);
+        setShowEditTitlePopup(true);
+    }
+
     const delConversations = (id: number) => {
         Modal.confirm({
             title: '删除确认',
@@ -374,7 +456,12 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 <div key={uuid()} onClick={() => handleConversation(item[0])} className="conversation-item">
                     <img src={chatPic}></img>
                     <span title={item[1].title.toString()}>{item[1].title}</span>
-                    <div className="conversation-item-icon"><DeleteOutlined onClick={() => delConversations(item[0])}></DeleteOutlined></div>
+                    <div>
+                        <EditOutlined onClick={() => editConversations(item[1])}></EditOutlined>
+                    </div>
+                    <div className="conversation-item-icon">
+                        <DeleteOutlined onClick={() => delConversations(item[0])}></DeleteOutlined>
+                    </div>
                 </div>);
         });
         if (hasMoreConversation) {
@@ -468,7 +555,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                         <div className="input-box">
                             <textarea
                                 id="talkInput"
-                                rows={1}
+                                rows={promptLines ? promptLines : 1}
                                 value={inputValue}
                                 onChange={handleChatInputChange}
                                 onKeyDown={handleEnterKey}
@@ -482,6 +569,10 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                                 loading={loadings}
                                 onClick={handleSend}
                             ></Button>
+                        </div>
+                        <div className="disclaimer">
+                            <span>模型：GPT3.5-turbo</span>
+                            <span>免责声明：本产品Genie提供的AI聊天服务仅供娱乐和参考之用，不能替代医生、律师和其他专业人士的意见和建议。使用本产品所产生的一切后果由用户自负，Genie不承担任何法律责任。</span>
                         </div>
                     </div>
                 </div>
@@ -550,6 +641,25 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 onCancel={() => setShowGoodsPopup(false)}
                 footer={null}>
                 <Goods refreshUser={true} appId={readConfig("appId")} store={store}></Goods>
+            </Modal>
+            <Modal title="编辑会话标题"
+                open={showEditTitlePopup}
+                width={600}
+                onOk={() => {
+                    let params = {
+                        id: currEditConversation?.id,
+                        title: currEditConversation?.title
+                    };
+                    editConversation(params).then((resp) => {
+                        if (ResponseHandler.responseSuccess(resp)) {
+                            setShowEditTitlePopup(false);
+                            fetchConversations();
+                        }
+                    });
+                }}
+                onCancel={() => setShowEditTitlePopup(false)}>
+                <Input value={currEditConversation?.title.toString()}
+                    onChange={(e) => { handleTitleChange(e) }}></Input>
             </Modal>
         </div>
     );
