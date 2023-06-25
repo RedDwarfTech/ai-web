@@ -239,7 +239,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             eventSource.close();
             return;
         }
-        if (serverMsg.choices[0].delta.content && serverMsg.choices[0].delta.content.length > 0) {
+        if (serverMsg.choices[0].delta && serverMsg.choices[0].delta.content && serverMsg.choices[0].delta.content.length > 0) {
             appenSseMsg(serverMsg, "chatgpt");
         }
         if (serverMsg.choices[0].finish_reason && serverMsg.choices[0].finish_reason === "stop") {
