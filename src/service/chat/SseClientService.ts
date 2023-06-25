@@ -19,7 +19,7 @@ export function doSseChatAsk(params: ChatAsk, onSseMessage: (msg: string, eventS
   const accessToken = localStorage.getItem("x-access-token");
   // https://stackoverflow.com/questions/6623232/eventsource-and-basic-http-authentication
   var queryString = Object.keys(params).map(key => key + '=' + params[key as keyof ChatAsk]).join('&');
-  eventSource = new EventSourcePolyfill('/ai/stream/chat/ask?' + queryString, {
+  eventSource = new EventSourcePolyfill('/ai/azure/stream/chat/ask?' + queryString, {
     headers: {
       'x-access-token': accessToken ?? "",
       'x-request-id': uuid(),
