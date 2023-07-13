@@ -15,7 +15,7 @@ const routes = createBrowserRouter([
   {
     path: "/user/login",
     element: <Login />
-  }
+  },
 ]);
 
 export default routes;
