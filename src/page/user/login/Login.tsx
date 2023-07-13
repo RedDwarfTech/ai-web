@@ -5,7 +5,7 @@ import { readConfig } from "@/config/app/config-reader";
 import { UserService } from "rd-component";
 import store from "@/store/store";
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast,ToastContainer } from 'react-toastify';
 
 const Login: React.FC = () => {
 
@@ -48,11 +48,12 @@ const Login: React.FC = () => {
 
   const handlePhoneLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!phoneInputRef.current){
+    if (!phoneInputRef.current || (phoneInputRef.current as HTMLInputElement).value.length === 0) {
+      debugger
       toast("请输入用户名!");
       return;
     }
-    if(!passwordInputRef.current){
+    if (!passwordInputRef.current || (passwordInputRef.current as HTMLInputElement).value.length === 0) {
       toast("请输入密码!");
       return;
     }
@@ -65,15 +66,15 @@ const Login: React.FC = () => {
       const fp = await fpPromise
       const result = await fp.get()
       let params = {
-          ...values,
-          deviceId: result.visitorId,
-          deviceName: result.visitorId,
-          deviceType: 4,
-          appId: readConfig("appId"),
-          loginType: 1
+        ...values,
+        deviceId: result.visitorId,
+        deviceName: result.visitorId,
+        deviceType: 4,
+        appId: readConfig("appId"),
+        loginType: 1
       };
       UserService.userLoginByPhoneImpl(params, store, readConfig("loginUrl"));
-  })();
+    })();
   }
 
   return (
@@ -108,6 +109,7 @@ const Login: React.FC = () => {
         <div id="alipay" className={styles.tabcontent}>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
