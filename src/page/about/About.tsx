@@ -1,6 +1,6 @@
 import React from "react";
 import "./About.css"
-import Footer from "../component/footer/Footer";
+import { Footer } from "rd-component";
 
 const About: React.FC = (props) => {
   return (

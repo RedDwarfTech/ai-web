@@ -10,14 +10,21 @@
 .App-footer{
   position: fixed;
   bottom: 0;
-  text-align: "center";
+  text-align: center;
   background: #ffffff;
   width: 100%;
+  margin-bottom: 15px;
 }
 
 .App-footer-div{
   font-size: 15px;
   display: flex;
+  width: 90%
+}
+
+.App-footer-divider{
+  border-top: 1px solid #ccc;
+  margin-bottom: 15px;
 }
 
 .contact{
@@ -26,7 +33,7 @@
 }
 
 .custom-row {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
