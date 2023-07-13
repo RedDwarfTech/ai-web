@@ -118,3 +118,11 @@
     margin-bottom: 20px;
     width: 100px;
 }
+
+.operate {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}

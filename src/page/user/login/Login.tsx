@@ -1,9 +1,19 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./Login.module.css";
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { readConfig } from "@/config/app/config-reader";
+import { UserService } from "rd-component";
+import store from "@/store/store";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Login: React.FC = () => {
 
+  const fpPromise = FingerprintJS.load();
   const [activeTab, setActiveTab] = useState<String>("");
+  const phoneInputRef = useRef(null);
+  const passwordInputRef = useRef(null);
+
 
   React.useEffect(() => {
     setDefaultTab();
@@ -36,6 +46,36 @@ const Login: React.FC = () => {
     (evt.currentTarget as HTMLElement).className += " active";
   };
 
+  const handlePhoneLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!phoneInputRef.current){
+      toast("请输入用户名!");
+      return;
+    }
+    if(!passwordInputRef.current){
+      toast("请输入密码!");
+      return;
+    }
+    let values = {
+      phone: (phoneInputRef.current as HTMLInputElement).value,
+      password: (passwordInputRef.current as HTMLInputElement).value
+    };
+    ; (async () => {
+      // Get the visitor identifier when you need it.
+      const fp = await fpPromise
+      const result = await fp.get()
+      let params = {
+          ...values,
+          deviceId: result.visitorId,
+          deviceName: result.visitorId,
+          deviceType: 4,
+          appId: readConfig("appId"),
+          loginType: 1
+      };
+      UserService.userLoginByPhoneImpl(params, store, readConfig("loginUrl"));
+  })();
+  }
+
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginForm}>
@@ -46,27 +86,26 @@ const Login: React.FC = () => {
         </div>
         <div id="phone" className={styles.tabcontent}>
           <h3>登录</h3>
-          <form method="post" className={styles.loginElement}>
+          <form method="post" className={styles.loginElement} onSubmit={(e) => handlePhoneLogin(e)}>
             <div className={styles.userName}>
               <select id="countryCode">
                 <option value="+86">+86</option>
                 <option value="+1">+1</option>
               </select>
-              <input type="text" id="phone" placeholder="请输入手机号码" />
+              <input type="text" ref={phoneInputRef} id="phone" placeholder="请输入手机号码" />
             </div>
             <div className={styles.password}>
-              <input type="password" placeholder="密码" name="p"></input>
+              <input type="password" ref={passwordInputRef} placeholder="密码" name="p"></input>
             </div>
-            <button className={styles.loginButton} type="submit">登录</button>
+            <div className={styles.operate}>
+              <button className={styles.loginButton} type="submit">登录</button>
+              <button className={styles.loginButton} type="submit">注册</button>
+            </div>
           </form>
         </div>
-
         <div id="wechat" className={styles.tabcontent}>
-
         </div>
-
         <div id="alipay" className={styles.tabcontent}>
-
         </div>
       </div>
     </div>
