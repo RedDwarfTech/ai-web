@@ -65,7 +65,9 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
                 <div className="demo-faq">
                     <a href="https://reddwarftech.github.io/2023/04/16/genie/" target="_blank">了解Genie</a>
                 </div>
-                <div className="tips chat-tips"><strong>提示：</strong>AI生成内容不一定正确，仅做参考，所有自动生成信息请谨慎鉴别。</div>
+                <div className="demo-faq">
+                    <a href="https://reddwarftech.github.io/2023/07/13/genie-ppt/" target="_blank">用Genie快速自动生成PPT</a>
+                </div>
             </div>
         </div>
         );
@@ -74,7 +76,6 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
     const newGuide = () => {
         return (
             <div className="steps-guide">
-                
                 <div className="guide-container">
                     <Steps
                         current={1}
@@ -97,7 +98,10 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
                         ]}
                     />
                 </div>
-                <div className="tips chat-tips"><strong>提示：</strong>每天有2次免费试用额度。</div>
+                <div>
+                    {genieHomeGuide()}
+                    <div className="tips chat-tips"><strong>提示：</strong>每天有2次免费试用额度。</div>
+                </div>
             </div>
         );
     }
