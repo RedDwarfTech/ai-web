@@ -1,5 +1,5 @@
 import { Avatar, Card, Col, Row } from "antd";
-import { IUserModel, TimeUtils } from "rdjs-wheel";
+import { IUserModel } from "rdjs-wheel";
 import React, { useState } from "react";
 import "./Profile.css";
 import alipayPic from "@/asset/icon/alipay-circle.png";
@@ -9,12 +9,13 @@ import { getCurrentUser } from "@/service/user/UserService";
 import { useSelector } from "react-redux";
 import PromptHistory from "./prompt/PromptHistory";
 import { UserProfile } from "rd-component";
+import Experience from "./experience/Experience";
 
 export type ProfileProps = {
   panelUserInfo: IUserModel | undefined;
 };
 
-const Profile: React.FC = (props: any) => {
+const Profile: React.FC = () => {
 
   const [currentPanel, setCurrentPanel] = useState('userinfo');
   const [userInfo, setUserInfo] = useState<IUserModel>();
@@ -41,6 +42,9 @@ const Profile: React.FC = (props: any) => {
   }
 
   const renderPanelContent = () => {
+    if (currentPanel && currentPanel === 'experience') {
+      return <Experience></Experience>
+    }
     if (currentPanel && currentPanel === 'feedback') {
       return <Feedback></Feedback>
     }
@@ -89,6 +93,7 @@ const Profile: React.FC = (props: any) => {
       <div className="panel-menu">
         <div className="menu-item" data-target="userinfo" id="userinfo-menu" onClick={handlePanelSwitch}><span>用户信息</span></div>
         <div className="menu-item" data-target="prompt" id="userinfo-menu" onClick={handlePanelSwitch}><span>提示词</span></div>
+        <div className="menu-item" data-target="experience" id="feedback-menu" onClick={handlePanelSwitch}><span>实验特性</span></div>
         <div className="menu-item" data-target="feedback" id="feedback-menu" onClick={handlePanelSwitch}><span>意见与建议</span></div>
       </div>
       <div className="panel-content">
