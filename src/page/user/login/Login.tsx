@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Login.module.css";
 
 const Login: React.FC = () => {
 
-  React.useEffect(() => {
+  const [activeTab, setActiveTab] = useState<String>("");
 
+  React.useEffect(() => {
+    setDefaultTab();
   }, []);
 
-  const openCity = (evt: any, cityName: any): void => {
+  const setDefaultTab = () => {
+    if (!activeTab || activeTab.length === 0) {
+      const element = document.getElementById("phoneTabs") as HTMLButtonElement;
+      if (element) {
+        element.click();
+      }
+    }
+  }
+
+  const openCity = (evt: React.MouseEvent<HTMLButtonElement>, cityName: string): void => {
+    setActiveTab(cityName);
     let i: number;
     const tabcontent = document.querySelectorAll(`.${styles.tabcontent}`);
     for (i = 0; i < tabcontent.length; i++) {
@@ -28,7 +40,7 @@ const Login: React.FC = () => {
     <div className={styles.loginContainer}>
       <div className={styles.loginForm}>
         <div className={styles.loginTabs}>
-          <button className={styles.tablinks} onClick={(e) => { openCity(e, "phone") }}>手机号登录</button>
+          <button id="phoneTabs" className={styles.tablinks} onClick={(e) => { openCity(e, "phone") }}>手机号登录</button>
           <button className={styles.tablinks} onClick={(e) => { openCity(e, "wechat") }}>微信扫码登录</button>
           <button className={styles.tablinks} onClick={(e) => { openCity(e, "alipay") }}>支付宝扫码登录</button>
         </div>
@@ -40,21 +52,21 @@ const Login: React.FC = () => {
                 <option value="+86">+86</option>
                 <option value="+1">+1</option>
               </select>
-              <input type="text" id="phone" placeholder="请输入手机号码"/>
+              <input type="text" id="phone" placeholder="请输入手机号码" />
             </div>
             <div className={styles.password}>
-              <input type="password" placeholder="密码" name="p"></input> 
-            </div>  
-            <button className={styles.loginButton} type="submit">登录</button>  
+              <input type="password" placeholder="密码" name="p"></input>
+            </div>
+            <button className={styles.loginButton} type="submit">登录</button>
           </form>
         </div>
 
         <div id="wechat" className={styles.tabcontent}>
-          
+
         </div>
 
         <div id="alipay" className={styles.tabcontent}>
-          
+
         </div>
       </div>
     </div>
