@@ -45,7 +45,7 @@
     "build": "tsc && vite build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
-    "dev": "vite --host=0.0.0.0 --port=3002"
+    "dev": "vite --host=0.0.0.0 --port=3000"
   },
   "eslintConfig": {
     "extends": [

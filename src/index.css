@@ -16,3 +16,7 @@ code {
 #root {
   height: 100vh;
 }
+
+:root {
+  --login-border-radius: 10px;
+}
