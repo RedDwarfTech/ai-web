@@ -41,9 +41,11 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
+    "legacy-build": "react-app-rewired build",
+    "build": "tsc && vite build",
     "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject"
+    "eject": "react-app-rewired eject",
+    "dev": "vite --host=0.0.0.0 --port=3002"
   },
   "eslintConfig": {
     "extends": [
@@ -73,6 +75,7 @@
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
     "gulp-typescript": "6.0.0-alpha.1",
-    "react-app-rewired": "^2.2.1"
+    "react-app-rewired": "^2.2.1",
+    "vite": "^4.4.3"
   }
 }
