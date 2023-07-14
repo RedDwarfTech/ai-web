@@ -13,6 +13,10 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* 添加阴影效果 */
 }
 
+.countryCodeSelect{
+    font-size: 16px;
+}
+
 .loginTabs {
     overflow: hidden;
     border: 1px solid #ccc;
@@ -88,6 +92,7 @@
     margin-top: 20px;
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
+    font-size: 16px;
 }
 
 #countryCode {
@@ -105,6 +110,7 @@
     height: 30px;
     margin-top: 20px;
     border-radius: 15px;
+    font-size: 16px;
 }
 
 .loginButton {
