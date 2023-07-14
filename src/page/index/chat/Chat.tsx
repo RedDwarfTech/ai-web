@@ -30,6 +30,7 @@ import withConnect from "@/page/component/hoc/withConnect";
 import store from "@/store/store";
 import "rd-component/dist/style.css";
 import GenImages from "../images/GenImages";
+import avatarImg from "@/asset/icon/avatar.png";
 
 const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [inputValue, setInputValue] = useState('');
@@ -529,7 +530,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         if (isLoggedIn) {
             var avatarUrl = localStorage.getItem('avatarUrl');
             return (<a id="user-menu">
-                {avatarUrl ? <Avatar size={40} src={avatarUrl} onClick={avatarClick} /> : <Avatar onClick={avatarClick} size={40} >Me</Avatar>}
+                {avatarUrl ? <Avatar size={40} src={avatarUrl} onClick={avatarClick} /> : <Avatar src={avatarImg} onClick={avatarClick} size={40} >Me</Avatar>}
                 <div id="dropdown" className="dropdown-content">
                     <div onClick={() => handleMenuClick('account')}><PayCircleOutlined /><span>订阅</span></div>
                     <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
