@@ -5,7 +5,8 @@ import { readConfig } from "@/config/app/config-reader";
 import { UserService } from "rd-component";
 import store from "@/store/store";
 import 'react-toastify/dist/ReactToastify.css';
-import { toast,ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
 
@@ -13,7 +14,7 @@ const Login: React.FC = () => {
   const [activeTab, setActiveTab] = useState<String>("");
   const phoneInputRef = useRef(null);
   const passwordInputRef = useRef(null);
-
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     setDefaultTab();
@@ -100,7 +101,7 @@ const Login: React.FC = () => {
             </div>
             <div className={styles.operate}>
               <button className={styles.loginButton} type="submit">登录</button>
-              <button className={styles.loginButton} type="submit">注册</button>
+              <button className={styles.loginButton} onClick={() => { navigate("/user/reg") }}>注册</button>
             </div>
           </form>
         </div>
