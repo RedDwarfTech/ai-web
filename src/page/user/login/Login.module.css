@@ -38,6 +38,11 @@
     background-color: #ccc;
 }
 
+.tablinks {
+    font-size: 16px;
+    font-weight: 500;
+}
+
 .tabcontent {
     display: none;
     padding: 6px 12px;
@@ -58,6 +63,10 @@
     display: flex;
     align-items: center;
     width: 80%;
+}
+
+.countryCodeSelect{
+    font-size: 16px;
 }
 
 .password {
@@ -87,13 +96,7 @@
     margin-top: 20px;
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
-}
-
-#countryCode {
-    margin-right: 10px;
-    padding: 6px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    font-size: 16px;
 }
 
 .password input[type="password"] {
@@ -104,6 +107,7 @@
     height: 30px;
     margin-top: 20px;
     border-radius: 15px;
+    font-size: 16px;
 }
 
 .loginButton {
