@@ -7,6 +7,7 @@ import store from "@/store/store";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import { ResponseHandler } from "rdjs-wheel";
 
 const Login: React.FC = () => {
 
@@ -74,7 +75,13 @@ const Login: React.FC = () => {
         appId: readConfig("appId"),
         loginType: 1
       };
-      UserService.userLoginByPhoneImpl(params, store, readConfig("loginUrl"));
+      UserService.userLoginByPhoneImpl(params, store, readConfig("loginUrl")).then((res) => {
+        if (ResponseHandler.responseSuccess(res)) {
+          navigate("/");
+        } else {
+          toast.error(res.msg);
+        }
+      });
     })();
   }
 
