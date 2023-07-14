@@ -85,13 +85,31 @@ const Login: React.FC = () => {
     })();
   }
 
+  const userAlipayQrCodeLogin = () => {
+    let param = {
+      appId: readConfig("appId")
+    };
+    UserService.userLoginImpl(param, store, "/post/alipay/login/getQRCodeUrl").then((data: any) => {
+      window.location.href = data.result;
+    });
+  }
+
+  const userWechatQrCodeLogin = () => {
+    let param = {
+      appId: readConfig("appId")
+    };
+    UserService.userLoginImpl(param, store, "/post/wechat/login/getQRCodeUrl").then((data: any) => {
+      window.location.href = data.result;
+    });
+  }
+
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginForm}>
         <div className={styles.loginTabs}>
           <button id="phoneTabs" className={styles.tablinks} onClick={(e) => { openCity(e, "phone") }}>手机号登录</button>
-          <button className={styles.tablinks} onClick={(e) => { openCity(e, "wechat") }}>微信扫码登录</button>
-          <button className={styles.tablinks} onClick={(e) => { openCity(e, "alipay") }}>支付宝扫码登录</button>
+          <button className={styles.tablinks} onClick={(e) => { userWechatQrCodeLogin() }}>微信扫码登录</button>
+          <button className={styles.tablinks} onClick={(e) => { userAlipayQrCodeLogin() }}>支付宝扫码登录</button>
         </div>
         <div id="phone" className={styles.tabcontent}>
           <h3>登录</h3>
