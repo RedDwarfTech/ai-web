@@ -7,6 +7,7 @@ import { readConfig } from '@/config/app/config-reader';
 import { UserService } from 'rd-component';
 import store from '@/store/store';
 import { useNavigate } from 'react-router-dom';
+import { ResponseHandler } from 'rdjs-wheel';
 
 const Reg: React.FC = () => {
 
@@ -61,7 +62,14 @@ const Reg: React.FC = () => {
                 appId: readConfig("appId"),
                 loginType: 1
             };
-            UserService.userReg(params, store, readConfig("regUrl"));
+            UserService.userReg(params, store, readConfig("regUrl")).then((res) => {
+                if(ResponseHandler.responseSuccess(res)){
+                    toast.success("注册成功");
+                    navigate("/user/login");
+                }else{
+                    toast.error(res.msg);
+                }
+            });
         })();
     }
 
@@ -81,8 +89,8 @@ const Reg: React.FC = () => {
                         <input type="password" ref={passwordInputRef} placeholder="密码" name="p"></input>
                     </div>
                     <div className={styles.operate}>
-                        <button className={styles.loginButton} onClick={() => { navigate("/user/login") }}>登录</button>
                         <button className={styles.loginButton} type="submit">注册</button>
+                        <a href="/user/login">已经有账号，去登录</a>
                     </div>
                 </form>
             </div>

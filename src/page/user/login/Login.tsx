@@ -101,7 +101,7 @@ const Login: React.FC = () => {
             </div>
             <div className={styles.operate}>
               <button className={styles.loginButton} type="submit">登录</button>
-              <button className={styles.loginButton} onClick={() => { navigate("/user/reg") }}>注册</button>
+              <a href="/user/reg">没有账号，去注册</a>
             </div>
           </form>
         </div>
