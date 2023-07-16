@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState } from "react";
 import { useSelector } from "react-redux";
 import "./Chat.css"
 import { v4 as uuid } from 'uuid';
-import { doLoginOut, getCurrentUser, userLoginByPhoneImpl, userLoginImpl } from "@/service/user/UserService";
+import { getCurrentUser, userLoginImpl } from "@/service/user/UserService";
 import { ChatAsk } from "@/models/request/chat/ChatAsk";
 import { IChatAskResp } from "@/models/chat/ChatAskResp";
 import { doAskPreCheck } from "@/service/chat/SseClientService";
@@ -20,7 +20,7 @@ import { IConversationItemReq } from "@/models/request/conversation/Conversation
 import { readConfig } from "@/config/app/config-reader";
 import { ControlOutlined, DeleteOutlined, EditOutlined, FileImageOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
-import { Goods } from "rd-component";
+import { Goods, UserService } from "rd-component";
 import Profile from "@/page/user/profile/Profile";
 import ChatList from "./component/ChatList";
 import chatPic from "@/asset/icon/chat/chat.svg";
@@ -428,7 +428,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             title: '删除确认',
             content: '确定要永久删除会话吗？删除后无法恢复',
             onOk() {
-                delConversation(id).then((response:any) => {
+                delConversation(id).then((response: any) => {
                     if (ResponseHandler.responseSuccess(response)) {
                         const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
                         setLoadedConversations(newMap);
@@ -513,7 +513,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 deviceName: readConfig("deviceName"),
                 deviceType: 4
             };
-            userLoginByPhoneImpl(param);
+            UserService.userLoginByPhoneImpl(param, store, "/ai/user/login");
         }
     }
 
@@ -536,7 +536,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 <div id="dropdown" className="dropdown-content">
                     <div onClick={() => handleMenuClick('account')}><PayCircleOutlined /><span>订阅</span></div>
                     <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
-                    <div onClick={doLoginOut}><LogoutOutlined /><span>登出</span></div>
+                    <div onClick={() => UserService.doLoginOut}><LogoutOutlined /><span>登出</span></div>
                 </div>
             </a>);
         }
@@ -546,7 +546,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             loadCurrentUser();
             setIsLoggedIn(true);
         }
-        return (<Button name='aiLoginBtn' onClick={()=>{navigate("/user/login")}}>登录</Button>);
+        return (<Button name='aiLoginBtn' onClick={() => { navigate("/user/login") }}>登录</Button>);
     }
 
     const renderRightContainer = (tab: String) => {
@@ -653,7 +653,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                         id: currEditConversation?.id,
                         title: currEditConversation?.title
                     };
-                    editConversation(params).then((resp:any) => {
+                    editConversation(params).then((resp: any) => {
                         if (ResponseHandler.responseSuccess(resp)) {
                             setShowEditTitlePopup(false);
                             fetchConversations();

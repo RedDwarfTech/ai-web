@@ -1,7 +1,6 @@
 import { IUserModel, WheelGlobal } from 'rdjs-wheel';
 import { UserActionType } from '@/action/user/UserAction';
 import { requestWithActionType } from '@/common/XHRClient';
-import { readConfig } from '@/config/app/config-reader';
 
 export function getCurrentUser() {
     const config = {
@@ -21,17 +20,6 @@ export function userLoginImpl(params: any) {
         params: params
     };
     const actionTypeString: string = UserActionType[UserActionType.USER_LOGIN];
-    return requestWithActionType(config, actionTypeString);
-}
-
-export function userLoginByPhoneImpl(params: any) {
-    const config = {
-        method: 'post',
-        url: '/ai/user/login',
-        headers: {'Content-Type': 'application/json'},
-        data: JSON.stringify(params)
-    };
-    const actionTypeString: string = UserActionType[UserActionType.LOGIN_BY_PHONE];
     return requestWithActionType(config, actionTypeString);
 }
 
@@ -55,17 +43,4 @@ export function isSubscribed(): boolean {
         return true;
     }
     return false;
-}
-
-export function doLoginOut() {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem(WheelGlobal.ACCESS_TOKEN_NAME);
-    localStorage.removeItem(WheelGlobal.REFRESH_TOKEN_NAME);
-    localStorage.removeItem('avatarUrl');
-    localStorage.removeItem('userInfo');
-
-    document.cookie = 'accessToken=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    document.cookie = 'avatarUrl=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    window.location.href=  readConfig("logoutUrl");;
 }
