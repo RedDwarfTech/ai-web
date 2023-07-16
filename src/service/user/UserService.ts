@@ -1,4 +1,4 @@
-import { IUserModel, WheelGlobal } from 'rdjs-wheel';
+import { UserModel, WheelGlobal } from 'rdjs-wheel';
 import { UserActionType } from '@/action/user/UserAction';
 import { requestWithActionType } from '@/common/XHRClient';
 
@@ -37,7 +37,7 @@ export function isSubscribed(): boolean {
     if (!userInfoJson) {
         return false;
     }
-    const uInfo: IUserModel = JSON.parse(userInfoJson);
+    const uInfo: UserModel = JSON.parse(userInfoJson);
     // pay attention that the long data type in the backend server using string to avoid precise loss
     if(uInfo && Number(uInfo.autoRenewProductExpireTimeMs) > new Date().getTime()){
         return true;

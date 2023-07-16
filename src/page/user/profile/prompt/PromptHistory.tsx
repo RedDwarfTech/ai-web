@@ -2,7 +2,7 @@ import withConnect from "@/page/component/hoc/withConnect";
 import { Prompt, getPage } from "@/storage/indexdb/idb";
 import { Card, Table, TablePaginationConfig } from "antd";
 import { FilterValue, SorterResult } from "antd/es/table/interface";
-import { REST } from "rdjs-wheel";
+import { EntityList } from "rdjs-wheel";
 import React, { useState } from "react";
 
 interface TableParams {
@@ -40,7 +40,7 @@ const PromptHistory: React.FC = (props: any) => {
     }, []);
 
     const fetchPrompts = async (pagination?: TablePaginationConfig) => {
-        const promptPage:REST.EntityList<Prompt> = await getPage<Prompt>(pagination);
+        const promptPage:EntityList<Prompt> = await getPage<Prompt>(pagination);
         setData(promptPage.data);
         setTableParams({
             pagination: {

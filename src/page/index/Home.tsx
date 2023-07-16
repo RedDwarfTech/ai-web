@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Chat from "./chat/Chat";
-import { IUserModel } from "rdjs-wheel";
+import { UserModel } from "rdjs-wheel";
 import "./Home.css";
 import withConnect from "@/page/component/hoc/withConnect";
 
 const Home: React.FC = () => {
 
   const [currentPage, setCurrentPage] = useState("chat");
-  const [userInfo, setUserInfo] = useState<IUserModel>();
+  const [userInfo, setUserInfo] = useState<UserModel>();
 
   React.useEffect(() => {
     if (currentPage === 'profile') {
