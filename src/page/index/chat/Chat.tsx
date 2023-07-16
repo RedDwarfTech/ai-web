@@ -536,7 +536,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 <div id="dropdown" className="dropdown-content">
                     <div onClick={() => handleMenuClick('account')}><PayCircleOutlined /><span>订阅</span></div>
                     <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
-                    <div onClick={() => UserService.doLoginOut}><LogoutOutlined /><span>登出</span></div>
+                    <div onClick={() => UserService.doLoginOut(readConfig("logoutUrl"))}><LogoutOutlined /><span>登出</span></div>
                 </div>
             </a>);
         }
