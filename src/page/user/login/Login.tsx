@@ -108,7 +108,7 @@ const Login: React.FC = () => {
       <div className={styles.loginForm}>
         <div className={styles.loginTabs}>
           <button id="phoneTabs" className={styles.tablinks} onClick={(e) => { openCity(e, "phone") }}>手机号登录</button>
-          <button className={styles.tablinks} onClick={(e) => { userWechatQrCodeLogin() }}>微信扫码登录</button>
+          {/*<button className={styles.tablinks} onClick={(e) => { userWechatQrCodeLogin() }}>微信扫码登录</button>*/}
           <button className={styles.tablinks} onClick={(e) => { userAlipayQrCodeLogin() }}>支付宝扫码登录</button>
         </div>
         <div id="phone" className={styles.tabcontent}>
@@ -125,7 +125,9 @@ const Login: React.FC = () => {
               <input type="password" ref={passwordInputRef} placeholder="密码" name="p"></input>
             </div>
             <div className={styles.operate}>
-              <button className={styles.loginButton} type="submit">登录</button>
+              <button className={styles.loginButton} type="submit">登录</button> 
+            </div>
+            <div>
               <a href="/user/reg">没有账号，去注册</a>
             </div>
           </form>

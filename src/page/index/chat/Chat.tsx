@@ -31,6 +31,7 @@ import store from "@/store/store";
 import "rd-component/dist/style.css";
 import GenImages from "../images/GenImages";
 import avatarImg from "@/asset/icon/avatar.png";
+import { useNavigate } from "react-router-dom";
 
 const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [inputValue, setInputValue] = useState('');
@@ -51,6 +52,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [showEditTitlePopup, setShowEditTitlePopup] = useState(false);
     const [hasMoreConversation, setHasMoreConversation] = useState<boolean>(false);
     const [currEditConversation, setCurrEditConversation] = useState<IConversation>();
+    const navigate = useNavigate();
 
     const handleChatInputChange = (e: any) => {
         const inputContent = e.target.value;
@@ -544,7 +546,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             loadCurrentUser();
             setIsLoggedIn(true);
         }
-        return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
+        return (<Button name='aiLoginBtn' onClick={()=>{navigate("/usr/login")}}>登录</Button>);
     }
 
     const renderRightContainer = (tab: String) => {
