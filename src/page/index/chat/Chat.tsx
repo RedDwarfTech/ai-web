@@ -546,7 +546,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             loadCurrentUser();
             setIsLoggedIn(true);
         }
-        return (<Button name='aiLoginBtn' onClick={()=>{navigate("/usr/login")}}>登录</Button>);
+        return (<Button name='aiLoginBtn' onClick={()=>{navigate("/user/login")}}>登录</Button>);
     }
 
     const renderRightContainer = (tab: String) => {
