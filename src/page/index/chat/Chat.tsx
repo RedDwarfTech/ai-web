@@ -165,8 +165,10 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
 
     React.useEffect(() => {
         if (loginUser && Object.keys(loginUser).length > 0) {
-            saveLoginUserInfo(loginUser);
-        }
+            AuthHandler.storeLoginAuthInfo(loginUser, readConfig("baseAuthUrl"), readConfig("accessTokenUrlPath"));
+            loadCurrentUser();
+            setIsLoggedIn(true);
+          }
     }, [loginUser]);
 
     React.useEffect(() => {
@@ -205,17 +207,6 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             setCurrInputIndex(selected);
         }
     };
-
-    const saveLoginUserInfo = (userInfo: any) => {
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem(WheelGlobal.ACCESS_TOKEN_NAME, userInfo.accessToken);
-        localStorage.setItem(WheelGlobal.REFRESH_TOKEN_NAME, userInfo.refreshToken);
-        localStorage.setItem('avatarUrl', userInfo.avatarUrl);
-        localStorage.setItem(WheelGlobal.BASE_AUTH_URL, readConfig("baseAuthUrl"));
-        localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH, readConfig("accessTokenUrlPath"));
-        loadCurrentUser();
-        setIsLoggedIn(true);
-    }
 
     const fetchConversations = () => {
         const convReq: IConversationReq = {
