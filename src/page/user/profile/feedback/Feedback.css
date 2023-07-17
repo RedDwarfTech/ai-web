@@ -22,6 +22,11 @@
     flex-direction: row;
 }
 
+.feedback-area textarea {
+    border-radius: 5px;
+    min-width: 400px;
+}
+
 .feedback-area Button {
     margin-left:10px;
 }

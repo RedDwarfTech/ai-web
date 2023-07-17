@@ -34,7 +34,7 @@ const Feedback: React.FC = () => {
     return (<div id="feedback">
         <p>您可以反馈使用问题、建议。</p>
         <div className="feedback-area">
-            <input onChange={handleInputChange} placeholder="请输入反馈内容"></input>
+            <textarea rows = {3} onChange={handleInputChange} placeholder="请输入反馈内容"></textarea>
             <button onClick={handleFeedback} className="feedback-submit">提交反馈</button>
         </div>
         <ToastContainer />
