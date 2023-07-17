@@ -302,3 +302,15 @@ textarea:focus {
   gap: 5px;
   color: #696969;
 }
+
+.loginButton {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 8px 22px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 10px;
+}

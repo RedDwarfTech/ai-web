@@ -52,7 +52,6 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [loadedConversations, setLoadedConversations] = useState<Map<number, IConversation>>(new Map<number, IConversation>());
     const [showGoodsPopup, setShowGoodsPopup] = useState(false);
     const [showEditTitlePopup, setShowEditTitlePopup] = useState(false);
-    const [showDelTitlePopup, setShowDelTitlePopup] = useState(false);
     const [hasMoreConversation, setHasMoreConversation] = useState<boolean>(false);
     const [currEditConversation, setCurrEditConversation] = useState<IConversation>();
     const navigate = useNavigate();
@@ -516,7 +515,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             loadCurrentUser();
             setIsLoggedIn(true);
         }
-        return (<button name='aiLoginBtn' onClick={() => { navigate("/user/login") }}>登录</button>);
+        return (<button className="loginButton" name='aiLoginBtn' onClick={() => { navigate("/user/login") }}>登录</button>);
     }
 
     const renderRightContainer = (tab: String) => {
