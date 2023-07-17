@@ -1,4 +1,4 @@
-.feedback-submit {
+.feedbackSubmit {
     background-color: #4CAF50;
     border: none;
     color: white;
@@ -17,16 +17,22 @@
     margin-left: 10px;
 }
 
-.feedback-area {
+.feedbackArea {
     display: flex;
     flex-direction: row;
 }
 
-.feedback-area textarea {
+.feedbackArea textarea {
     border-radius: 5px;
     min-width: 400px;
 }
 
-.feedback-area Button {
+.feedbackArea textarea:focus {
+    outline: none; 
+    border-color: green; 
+    box-shadow: 0 0 5px green;
+}
+
+.feedbackArea Button {
     margin-left:10px;
 }
