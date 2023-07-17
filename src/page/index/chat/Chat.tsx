@@ -1,7 +1,8 @@
-import { Avatar, Button, Input, Modal, message } from "antd";
+import { Avatar, Button, Input, Modal } from "antd";
 import React, { ChangeEvent, useState } from "react";
 import { useSelector } from "react-redux";
-import "./Chat.css"
+import "./Chat.css";
+import { toast, ToastContainer } from 'react-toastify';
 import { v4 as uuid } from 'uuid';
 import { getCurrentUser, userLoginImpl } from "@/service/user/UserService";
 import { ChatAsk } from "@/models/request/chat/ChatAsk";
@@ -10,7 +11,7 @@ import { doAskPreCheck } from "@/service/chat/SseClientService";
 import { ISseMsg } from "@/models/chat/SseMsg";
 import { ISse35ServerMsg } from "@/models/chat/3.5/Sse35ServerMsg";
 import dayjs from "dayjs";
-import { AuthHandler, UserModel, ResponseHandler, TimeUtils, WheelGlobal } from "rdjs-wheel";
+import { AuthHandler, UserModel, ResponseHandler, TimeUtils } from "rdjs-wheel";
 import { IConversation } from "@/models/chat/3.5/Conversation";
 import { delConversation, editConversation, getConversations } from "@/service/chat/ConversationService";
 import { IConversationReq } from "@/models/request/conversation/ConversationReq";
@@ -222,14 +223,14 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         const serverMsg: ISse35ServerMsg = JSON.parse(msg);
         if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "vip-expired") {
             setLoadings(false);
-            message.info("充值会员继续使用");
+            toast.info("充值会员继续使用");
             eventSource.close();
             setShowGoodsPopup(true);
             return;
         }
         if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "rate-limit") {
             setLoadings(false);
-            message.info("超出频率限制，请稍后再试一试");
+            toast.info("超出频率限制，请稍后再试一试");
             eventSource.close();
             return;
         }
@@ -304,7 +305,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             setCurrInputIndex(Number(response));
         });
         if (!isLoggedIn) {
-            message.warning("请登录后再开启聊天");
+            toast.warning("请登录后再开启聊天");
             setLoadings(false);
             return;
         }
@@ -486,28 +487,6 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         menuClose();
     }
 
-    const userLogin = () => {
-        if (process.env.NODE_ENV === 'production') {
-            let param = {
-                appId: readConfig("appId")
-            };
-            userLoginImpl(param).then((data: any) => {
-                window.location.href = data.result;
-            });
-        } else {
-            let param = {
-                appId: readConfig("appId"),
-                phone: readConfig("phone"),
-                password: readConfig("password"),
-                loginType: 1,
-                deviceId: 1,
-                deviceName: readConfig("deviceName"),
-                deviceType: 4
-            };
-            UserService.userLoginByPhoneImpl(param, store, "/ai/user/login");
-        }
-    }
-
     const avatarClick = () => {
         const dropdown = document.getElementById("dropdown");
         if (dropdown) {
@@ -655,6 +634,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 <Input value={currEditConversation?.title.toString()}
                     onChange={(e) => { handleTitleChange(e) }}></Input>
             </Modal>
+            <ToastContainer />
         </div>
     );
 }
