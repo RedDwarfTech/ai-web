@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import PromptHistory from "./prompt/PromptHistory";
 import { UserProfile } from "rd-component";
 import Experience from "./experience/Experience";
-
+import "@/scss/style.scss";
 export type ProfileProps = {
   panelUserInfo: UserModel | undefined;
 };
@@ -52,19 +52,25 @@ const Profile: React.FC = () => {
     }
     if (currentPanel && currentPanel === 'userinfo') {
       return (<div id="userinfo">
-        <div title="基本信息" style={{ marginBottom: '20px' }}>
-          <div style={{ marginTop: '10px', marginBottom: '20px' }}>
-            <div ><span className="user-info">用户昵称</span></div>
-            <div ><span className="user-info">{userInfo ? userInfo!.nickname : ""}</span></div>
-            <div ></div>
+        <div className="card" style={{ marginBottom: '20px' }}>
+          <div className="card-header">
+            <h6 className="card-title">基本信息</h6>
           </div>
-          <div style={{ marginTop: '10px', marginBottom: '10px' }}>
-            <div ><span className="user-info">会员到期日</span></div>
-            <div ><span className="user-info">{userInfo ? UserProfile.getVipExpiredTime(userInfo) : "--"}</span></div>
-            <div ></div>
+          <div className="card-body row">
+            
+            <div className="col" style={{ marginTop: '10px', marginBottom: '20px' }}>
+              <div ><span className="user-info">用户昵称:</span></div>
+              <div ><span className="user-info">{userInfo ? userInfo!.nickname : ""}</span></div>
+              <div ></div>
+            </div>
+            <div className="col" style={{ marginTop: '10px', marginBottom: '10px' }}>
+              <div ><span className="user-info">会员到期日:</span></div>
+              <div ><span className="user-info">{userInfo ? UserProfile.getVipExpiredTime(userInfo) : "--"}</span></div>
+              <div ></div>
+            </div>
           </div>
         </div>
-        <div title="登录凭据">
+        <div className="card" title="登录凭据">
           <div style={{ marginTop: '10px', marginBottom: '10px' }}>
             <div>
               <img src={alipayPic}></img>
