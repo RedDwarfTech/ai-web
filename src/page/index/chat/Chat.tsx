@@ -1,4 +1,5 @@
-import { Avatar, Modal } from "antd";
+import { Avatar } from "antd";
+import Modal from 'react-modal';
 import React, { ChangeEvent, useState } from "react";
 import { useSelector } from "react-redux";
 import "./Chat.css";
@@ -51,6 +52,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [loadedConversations, setLoadedConversations] = useState<Map<number, IConversation>>(new Map<number, IConversation>());
     const [showGoodsPopup, setShowGoodsPopup] = useState(false);
     const [showEditTitlePopup, setShowEditTitlePopup] = useState(false);
+    const [showDelTitlePopup, setShowDelTitlePopup] = useState(false);
     const [hasMoreConversation, setHasMoreConversation] = useState<boolean>(false);
     const [currEditConversation, setCurrEditConversation] = useState<IConversation>();
     const navigate = useNavigate();
@@ -415,22 +417,20 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         setShowEditTitlePopup(true);
     }
 
-    const delConversations = (id: number) => {
-        Modal.confirm({
-            title: '删除确认',
-            content: '确定要永久删除会话吗？删除后无法恢复',
-            onOk() {
-                delConversation(id).then((response: any) => {
-                    if (ResponseHandler.responseSuccess(response)) {
-                        const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
-                        setLoadedConversations(newMap);
-                    }
-                });
-            },
-            onCancel() {
-
-            },
-        });
+    const delConversations = (showDelTitlePopup: boolean,id: number) => {
+       return(<Modal contentLabel="删除确认"
+                isOpen={showDelTitlePopup}
+                style={customStyles}>
+                <button onClick={()=>{
+                    delConversation(id).then((response: any) => {
+                        if (ResponseHandler.responseSuccess(response)) {
+                            const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
+                            setLoadedConversations(newMap);
+                        }
+                    });
+                }}>确认删除</button>
+                <button onClick={() => delConversations(false,id)}>取消</button>
+            </Modal>);
     }
 
     function compareFn(a: [number, IConversation], b: [number, IConversation]): number {
@@ -455,7 +455,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                         <EditOutlined onClick={() => editConversations(item[1])}></EditOutlined>
                     </div>
                     <div className="conversation-item-icon">
-                        <DeleteOutlined onClick={() => delConversations(item[0])}></DeleteOutlined>
+                        <DeleteOutlined onClick={() => delConversations(true,item[0])}></DeleteOutlined>
                     </div>
                 </div>);
         });
@@ -585,6 +585,17 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         return (<div>开发中，敬请期待...</div>);
     }
 
+    const customStyles = {
+        content: {
+          top: '50%',
+          left: '50%',
+          right: 'auto',
+          bottom: 'auto',
+          marginRight: '-50%',
+          transform: 'translate(-50%, -50%)',
+        },
+      };
+
     return (
         <div className="chat-main-body">
             <div className="conversation">
@@ -611,17 +622,19 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 </div>
             </div>
             {renderRightContainer(props.menu)}
-            <Modal title="订阅"
-                open={showGoodsPopup}
-                width={1000}
-                onCancel={() => setShowGoodsPopup(false)}
-                footer={null}>
+            <Modal contentLabel="订阅"
+                isOpen={showGoodsPopup}
+                style={customStyles}
+                onRequestClose={() => setShowGoodsPopup(false)}
+                >
                 <Goods refreshUrl={readConfig("refreshUserUrl")} appId={readConfig("appId")} store={store}></Goods>
             </Modal>
-            <Modal title="编辑会话标题"
-                open={showEditTitlePopup}
-                width={600}
-                onOk={() => {
+            <Modal contentLabel="编辑会话标题"
+                isOpen={showEditTitlePopup}
+                style={customStyles}>
+                <input value={currEditConversation?.title.toString()}
+                    onChange={(e) => { handleTitleChange(e) }}></input>
+                <button onClick={()=>{
                     let params = {
                         id: currEditConversation?.id,
                         title: currEditConversation?.title
@@ -632,11 +645,10 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                             fetchConversations();
                         }
                     });
-                }}
-                onCancel={() => setShowEditTitlePopup(false)}>
-                <input value={currEditConversation?.title.toString()}
-                    onChange={(e) => { handleTitleChange(e) }}></input>
+                }}>确认</button>
+                <button onClick={() => setShowEditTitlePopup(false)}>取消</button>
             </Modal>
+            
             <ToastContainer />
         </div>
     );
