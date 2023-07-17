@@ -1,15 +1,14 @@
 import withConnect from "@/page/component/hoc/withConnect";
 import { Prompt, getPage } from "@/storage/indexdb/idb";
-import { Card, Table, TablePaginationConfig } from "antd";
-import { FilterValue, SorterResult } from "antd/es/table/interface";
 import { EntityList } from "rdjs-wheel";
 import React, { useState } from "react";
+import Table from 'rc-table';
 
 interface TableParams {
-    pagination?: TablePaginationConfig;
+    pagination?: any;
     sortField?: string;
     sortOrder?: string;
-    filters?: Record<string, FilterValue>;
+    filters?: Record<string, any>;
 }
 
 const columns = [
@@ -39,7 +38,7 @@ const PromptHistory: React.FC = (props: any) => {
         fetchPrompts(tableParams.pagination);
     }, []);
 
-    const fetchPrompts = async (pagination?: TablePaginationConfig) => {
+    const fetchPrompts = async (pagination?: any) => {
         const promptPage:EntityList<Prompt> = await getPage<Prompt>(pagination);
         setData(promptPage.data);
         setTableParams({
@@ -52,8 +51,8 @@ const PromptHistory: React.FC = (props: any) => {
     }
 
     const handleTableChange = (
-        pagination: TablePaginationConfig,
-        sorter: SorterResult<Prompt>,
+        pagination: any,
+        sorter: any,
     ) => {
         setTableParams({
             pagination,
@@ -69,15 +68,15 @@ const PromptHistory: React.FC = (props: any) => {
 
     return (
         <div>
-            <Card title="本地提示词">
-                <Table dataSource={data}
-                    pagination={tableParams.pagination}
+            <div title="本地提示词">
+                <Table data={data}
+                    //pagination={tableParams.pagination}
                     rowKey={(record) => record.id}
-                    loading={loading}
-                    onChange={handleTableChange}
+                    //loading={loading}
+                    //onChange={handleTableChange}
                     columns={columns}>
                 </Table>
-            </Card>
+            </div>
         </div>
     );
 }

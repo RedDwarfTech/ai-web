@@ -1,4 +1,3 @@
-import { TablePaginationConfig } from 'antd';
 import { openDB } from 'idb';
 import { EntityList } from 'rdjs-wheel';
 
@@ -45,7 +44,7 @@ export async function getNewestRecord<T>(): Promise<T | undefined> {
     return maxIdRecord;
 }
 
-export async function getPage<T>(pagination?: TablePaginationConfig): Promise<EntityList<T>> {
+export async function getPage<T>(pagination?: any): Promise<EntityList<T>> {
     const current = pagination!.current||1;
     const pageSize = pagination?.pageSize!||10;
     let transaction = (await db).transaction(["prompt"], "readonly");
