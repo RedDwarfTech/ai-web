@@ -1,5 +1,15 @@
 .feedback-submit {
-    height: 40px; 
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 10px;
+    height: 40px;
+    margin-right: 150px;
 }
 
 .feedback p {
