@@ -41,6 +41,9 @@ dependencies:
   '@types/redux-logger':
     specifier: ^3.0.9
     version: 3.0.9
+  '@vitejs/plugin-react':
+    specifier: ^4.0.3
+    version: 4.0.3(vite@4.4.4)
   axios:
     specifier: ^1.4.0
     version: 1.4.0
