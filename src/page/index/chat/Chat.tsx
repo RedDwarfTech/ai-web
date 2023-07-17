@@ -500,7 +500,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         if (isLoggedIn) {
             var avatarUrl = localStorage.getItem('avatarUrl');
             return (<a id="user-menu">
-                {avatarUrl ? <img src={avatarUrl} onClick={avatarClick} /> : <img src={avatarImg} onClick={avatarClick} >Me</img>}
+                {avatarUrl ? <img src={avatarUrl} onClick={avatarClick} /> : <img src={'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg'} onClick={avatarClick} >Me</img>}
                 <div id="dropdown" className="dropdown-content">
                     <div onClick={() => handleMenuClick('account')}><PayCircleOutlined /><span>订阅</span></div>
                     <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
