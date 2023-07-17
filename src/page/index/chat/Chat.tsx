@@ -1,10 +1,10 @@
-import { Avatar, Button, Input, Modal } from "antd";
+import { Avatar, Modal } from "antd";
 import React, { ChangeEvent, useState } from "react";
 import { useSelector } from "react-redux";
 import "./Chat.css";
 import { toast, ToastContainer } from 'react-toastify';
 import { v4 as uuid } from 'uuid';
-import { getCurrentUser, userLoginImpl } from "@/service/user/UserService";
+import { getCurrentUser } from "@/service/user/UserService";
 import { ChatAsk } from "@/models/request/chat/ChatAsk";
 import { IChatAskResp } from "@/models/chat/ChatAskResp";
 import { doAskPreCheck } from "@/service/chat/SseClientService";
@@ -516,7 +516,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             loadCurrentUser();
             setIsLoggedIn(true);
         }
-        return (<Button name='aiLoginBtn' onClick={() => { navigate("/user/login") }}>登录</Button>);
+        return (<button name='aiLoginBtn' onClick={() => { navigate("/user/login") }}>登录</button>);
     }
 
     const renderRightContainer = (tab: String) => {
@@ -533,15 +533,18 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                                 onChange={handleChatInputChange}
                                 onKeyDown={handleEnterKey}
                                 placeholder="输入会话内容，按Enter快捷发送" />
-                            <Button icon={<SendOutlined style={{
+                            <button
+                                onClick={handleSend}
+                            >
+                                <span>
+                                <SendOutlined style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 transform: 'rotate(-45deg)',
                                 justifyContent: 'center'
-                            }} />}
-                                loading={loadings}
-                                onClick={handleSend}
-                            ></Button>
+                            }} />
+                                </span>
+                            </button>
                         </div>
                         <div className="disclaimer">
                             <span>模型：GPT3.5-turbo</span>
@@ -631,8 +634,8 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                     });
                 }}
                 onCancel={() => setShowEditTitlePopup(false)}>
-                <Input value={currEditConversation?.title.toString()}
-                    onChange={(e) => { handleTitleChange(e) }}></Input>
+                <input value={currEditConversation?.title.toString()}
+                    onChange={(e) => { handleTitleChange(e) }}></input>
             </Modal>
             <ToastContainer />
         </div>
