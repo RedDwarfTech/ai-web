@@ -57,26 +57,29 @@ const Profile: React.FC = () => {
             <h6 className="card-title">基本信息</h6>
           </div>
           <div className="card-body row">
-            
-            <div className="col" style={{ marginTop: '10px', marginBottom: '20px' }}>
+            <div className="col">
               <div ><span className="user-info">用户昵称:</span></div>
               <div ><span className="user-info">{userInfo ? userInfo!.nickname : ""}</span></div>
               <div ></div>
             </div>
-            <div className="col" style={{ marginTop: '10px', marginBottom: '10px' }}>
+            <div className="col">
               <div ><span className="user-info">会员到期日:</span></div>
               <div ><span className="user-info">{userInfo ? UserProfile.getVipExpiredTime(userInfo) : "--"}</span></div>
               <div ></div>
             </div>
           </div>
         </div>
-        <div className="card" title="登录凭据">
-          <div style={{ marginTop: '10px', marginBottom: '10px' }}>
-            <div>
-              <img src={alipayPic}></img>
+        <div className="card">
+          <div className="card-header">
+            <h6 className="card-title">登录凭据</h6>
+          </div>
+          <div className="card-body">
+            <div className="row">
+              <div>
+                <img style={{ height: '40px', width: '40px'}} src={alipayPic}></img>
+              </div>
+              <div><span>已绑定</span></div>
             </div>
-            <div><span>已绑定</span></div>
-            <div><span></span></div>
           </div>
         </div>
       </div>);
