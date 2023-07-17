@@ -6,8 +6,7 @@ import ChatContext from "./ChatContext";
 import chatMeImage from "@/asset/icon/chat-me.png";
 import chatgpt from "@/asset/icon/chatgpt.svg";
 import './ChatList.css';
-import { Steps } from "antd";
-import { isLoggedIn, isSubscribed } from "@/service/user/UserService";
+import { isSubscribed } from "@/service/user/UserService";
 import { useSelector } from "react-redux";
 import { BaseMethods } from "rdjs-wheel";
 
@@ -77,26 +76,9 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
         return (
             <div className="steps-guide">
                 <div className="guide-container">
-                    <Steps
-                        current={1}
-                        items={[
-                            {
-                                title: '第一步：登录',
-                                description: `点击左下侧按钮登录`,
-                                status: isLoggedIn() ? 'finish' : 'wait'
-                            },
-                            {
-                                title: '第二步：订阅',
-                                description: '点击订阅菜单，选择订阅套餐，最低1元试用',
-                                status: subscribed ? 'finish' : 'wait'
-                            },
-                            {
-                                title: '第三步：使用Genie',
-                                description: '页面底部输入会话内容，开启聊天',
-                                status: isLoggedIn() && subscribed ? 'finish' : 'wait'
-                            },
-                        ]}
-                    />
+                    <div className="tips chat-tips">第一步：登录,点击左下侧按钮登录</div>
+                    <div className="tips chat-tips">第二步：订阅,点击订阅菜单，选择订阅套餐，最低1元试用</div>
+                    <div className="tips chat-tips">第三步：使用Genie,页面底部输入会话内容，开启聊天</div>
                 </div>
                 <div>
                     {genieHomeGuide()}

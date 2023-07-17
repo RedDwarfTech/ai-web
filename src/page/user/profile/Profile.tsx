@@ -1,4 +1,3 @@
-import { Avatar, Card, Col, Row } from "antd";
 import { UserModel } from "rdjs-wheel";
 import React, { useState } from "react";
 import "./Profile.css";
@@ -26,17 +25,17 @@ const Profile: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    if(user && Object.keys(user).length > 0) {
+    if (user && Object.keys(user).length > 0) {
       setUserInfo(user);
     }
-  },[user]);
+  }, [user]);
 
-  const getUserInfo =() => {
+  const getUserInfo = () => {
     const userInfoJson = localStorage.getItem("userInfo");
-    if(userInfoJson){
+    if (userInfoJson) {
       const uInfo: UserModel = JSON.parse(userInfoJson);
       setUserInfo(uInfo);
-    }else{
+    } else {
       getCurrentUser();
     }
   }
@@ -48,42 +47,42 @@ const Profile: React.FC = () => {
     if (currentPanel && currentPanel === 'feedback') {
       return <Feedback></Feedback>
     }
-    if (currentPanel && currentPanel === 'prompt'){
+    if (currentPanel && currentPanel === 'prompt') {
       return (<PromptHistory></PromptHistory>);
     }
     if (currentPanel && currentPanel === 'userinfo') {
       return (<div id="userinfo">
-        <Card title="基本信息" style={{ marginBottom: '20px' }}>
-          <Row style={{ marginTop: '10px', marginBottom: '20px' }}>
-            <Col span={8}><span className="user-info">用户昵称</span></Col>
-            <Col span={8}><span className="user-info">{userInfo ? userInfo!.nickname : ""}</span></Col>
-            <Col span={8}></Col>
-          </Row>
-          <Row style={{ marginTop: '10px', marginBottom: '10px' }}>
-            <Col span={8}><span className="user-info">会员到期日</span></Col>
-            <Col span={8}><span className="user-info">{userInfo?UserProfile.getVipExpiredTime(userInfo):"--"}</span></Col>
-            <Col span={8}></Col>
-          </Row>
-        </Card>
-        <Card title="登录凭据">
-          <Row style={{ marginTop: '10px', marginBottom: '10px' }}>
-            <Col span={8}>
-              <Avatar src={alipayPic}></Avatar>
-            </Col>
-            <Col span={8}><span>已绑定</span></Col>
-            <Col span={8}><span></span></Col>
-          </Row>
-        </Card>
+        <div title="基本信息" style={{ marginBottom: '20px' }}>
+          <div style={{ marginTop: '10px', marginBottom: '20px' }}>
+            <div ><span className="user-info">用户昵称</span></div>
+            <div ><span className="user-info">{userInfo ? userInfo!.nickname : ""}</span></div>
+            <div ></div>
+          </div>
+          <div style={{ marginTop: '10px', marginBottom: '10px' }}>
+            <div ><span className="user-info">会员到期日</span></div>
+            <div ><span className="user-info">{userInfo ? UserProfile.getVipExpiredTime(userInfo) : "--"}</span></div>
+            <div ></div>
+          </div>
+        </div>
+        <div title="登录凭据">
+          <div style={{ marginTop: '10px', marginBottom: '10px' }}>
+            <div>
+              <img src={alipayPic}></img>
+            </div>
+            <div><span>已绑定</span></div>
+            <div><span></span></div>
+          </div>
+        </div>
       </div>);
     }
     return (<div></div>);
   }
 
   const handlePanelSwitch = (e: any) => {
-    e.preventDefault(); 
+    e.preventDefault();
     e.stopPropagation();
-    const targetData = e.target.getAttribute('data-target')|| e.target.parentNode.getAttribute('data-target');;
-    if(targetData){
+    const targetData = e.target.getAttribute('data-target') || e.target.parentNode.getAttribute('data-target');;
+    if (targetData) {
       setCurrentPanel(targetData);
     }
   }
