@@ -1,4 +1,3 @@
-import { Avatar } from "antd";
 import Modal from 'react-modal';
 import React, { ChangeEvent, useState } from "react";
 import { useSelector } from "react-redux";
@@ -501,7 +500,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         if (isLoggedIn) {
             var avatarUrl = localStorage.getItem('avatarUrl');
             return (<a id="user-menu">
-                {avatarUrl ? <Avatar size={40} src={avatarUrl} onClick={avatarClick} /> : <Avatar src={avatarImg} onClick={avatarClick} size={40} >Me</Avatar>}
+                {avatarUrl ? <img src={avatarUrl} onClick={avatarClick} /> : <img src={avatarImg} onClick={avatarClick} >Me</img>}
                 <div id="dropdown" className="dropdown-content">
                     <div onClick={() => handleMenuClick('account')}><PayCircleOutlined /><span>订阅</span></div>
                     <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
@@ -647,7 +646,6 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 }}>确认</button>
                 <button onClick={() => setShowEditTitlePopup(false)}>取消</button>
             </Modal>
-            
             <ToastContainer />
         </div>
     );

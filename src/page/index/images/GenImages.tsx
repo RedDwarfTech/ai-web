@@ -1,7 +1,7 @@
 import { genImage } from "@/service/images/ImageService";
-import { Button, Divider, Input, message } from "antd";
 import React, { useState } from "react";
-import "./GenImages.css"
+import "./GenImages.css";
+import { toast, ToastContainer } from 'react-toastify';
 import { withConnect } from "rd-component";
 import { useSelector } from "react-redux";
 import { IImageResp } from "@/models/images/IImageResp";
@@ -9,7 +9,6 @@ import { IImageResp } from "@/models/images/IImageResp";
 const GenImages: React.FC = () => {
     const [inputValue, setInputValue] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
-    const [loadings, setLoadings] = useState<boolean>(false);
     const { image } = useSelector((state: any) => state.image);
     const [genImageResult, setGenImageResult] = useState<IImageResp>();
 
@@ -31,19 +30,16 @@ const GenImages: React.FC = () => {
 
     const handleSend = async () => {
         if (!isLoggedIn) {
-            await message.warning("请登录后再生成图片");
-            setLoadings(false);
+            toast.warning("请登录后再生成图片");
             return;
         }
         if (!inputValue) {
             return;
         }
-        setLoadings(true);
         let params = {
             prompt: inputValue
         };
         genImage(params).then(() => {
-            setLoadings(false);
         });
     };
 
@@ -72,15 +68,16 @@ const GenImages: React.FC = () => {
     return (
         <div>
             <div className="image-input">
-                <Input id="talkInput"
+                <input id="talkInput"
                     value={inputValue}
                     onChange={handleChange}
                     onKeyPress={handleEnterKey}
                     type="text" placeholder="输入描述，如: a beautiful cat" />
-                <Button type="primary" loading={loadings} onClick={handleSend}><span>生成</span></Button>
+                <button onClick={handleSend}><span>生成</span></button>
             </div>
-            <Divider></Divider>
+            <div className="appDivider"></div>
             {renderSingleImages()}
+            <ToastContainer />
         </div>
     );
 }

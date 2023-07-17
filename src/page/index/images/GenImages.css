@@ -1,5 +1,5 @@
-.img-container{
-    display:flex;
+.img-container {
+    display: flex;
 }
 
 .img-item {
@@ -14,14 +14,42 @@
     margin-top: 15px;
     margin-left: 20px;
     margin-right: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
-.image-input Input {
-    height: 40px;
-    width: 70%;
+.image-input input {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 25px;
+    border: 2px solid #ccc;
+    transition: border-color 0.5s ease;
+    width: 80%;
+    margin: auto;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    min-height: 50px;
 }
 
-.image-input Button {
+.image-input button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 10px;
     height: 40px;
-    margin-left: 10px;
+    margin-right: 150px;
+}
+
+.appDivider {
+    border-top: 1px solid #ccc;
+    margin-bottom: 15px;
+    margin-top: 15px;
 }
