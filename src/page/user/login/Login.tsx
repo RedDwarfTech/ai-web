@@ -112,7 +112,7 @@ const Login: React.FC = () => {
           <button className={styles.tablinks} onClick={(e) => { userAlipayQrCodeLogin() }}>支付宝扫码登录</button>
         </div>
         <div id="phone" className={styles.tabcontent}>
-          <h3>登录</h3>
+          <h5>登录</h5>
           <form method="post" className={styles.loginElement} onSubmit={(e) => handlePhoneLogin(e)}>
             <div className={styles.userName}>
               <select id="countryCode" className={styles.countryCodeSelect}>
