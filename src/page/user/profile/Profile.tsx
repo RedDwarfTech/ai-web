@@ -46,7 +46,8 @@ const Profile: React.FC = () => {
   const userLogin = (url: string) => {
     let param = {
       appId: readConfig("appId"),
-      userAction: "bind"
+      userAction: "bind",
+      scope: "auth_user"
     };
     UserService.userLoginImpl(param, store, url).then((data: any) => {
       window.location.href = data.result;
