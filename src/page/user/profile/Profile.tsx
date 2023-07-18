@@ -7,9 +7,11 @@ import withConnect from "@/page/component/hoc/withConnect";
 import { getCurrentUser } from "@/service/user/UserService";
 import { useSelector } from "react-redux";
 import PromptHistory from "./prompt/PromptHistory";
-import { UserProfile } from "rd-component";
+import { UserProfile, UserService } from "rd-component";
 import Experience from "./experience/Experience";
 import "@/scss/style.scss";
+import { readConfig } from "@/config/app/config-reader";
+import store from "@/store/store";
 export type ProfileProps = {
   panelUserInfo: UserModel | undefined;
 };
@@ -38,6 +40,36 @@ const Profile: React.FC = () => {
     } else {
       getCurrentUser();
     }
+  }
+
+  const userLogin = (url: string) => {
+    let param = {
+      appId: readConfig("appId"),
+      userAction: "bind"
+    };
+    UserService.userLoginImpl(param, store, url).then((data: any) => {
+      window.location.href = data.result;
+    });
+  }
+  
+  const handleBind = (channelType: number) => {
+    if (channelType === 5) {
+      userLogin("/post/alipay/login/getQRCodeUrl");
+    }
+    if (channelType === 1) {
+      userLogin("/post/wechat/login/getQRCodeUrl");
+    }
+  }
+
+  const renderBindStatus = (channelType: number) => {
+    if (!userInfo || !userInfo.thirdBind || userInfo.thirdBind.length === 0) {
+      return (<button className="btn btn-primary" onClick={() => handleBind(channelType)}>绑定</button>);
+    }
+    const bind = userInfo.thirdBind.find(item => item.channelType === channelType);
+    if (bind && bind.bindStatus == 1) {
+      return (<button className="btn btn-primary">解绑</button>);
+    }
+    return (<button className="btn btn-primary" onClick={() => handleBind(channelType)}>绑定</button>);
   }
 
   const renderPanelContent = () => {
@@ -75,10 +107,10 @@ const Profile: React.FC = () => {
           </div>
           <div className="card-body">
             <div className="row">
-              <div>
+              <div className="col">
                 <img style={{ height: '40px', width: '40px'}} src={alipayPic}></img>
               </div>
-              <div><span>已绑定</span></div>
+              <div className="col">{renderBindStatus(5)}</div>
             </div>
           </div>
         </div>
