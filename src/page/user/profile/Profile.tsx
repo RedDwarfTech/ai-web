@@ -12,6 +12,7 @@ import Experience from "./experience/Experience";
 import "@/scss/style.scss";
 import { readConfig } from "@/config/app/config-reader";
 import store from "@/store/store";
+
 export type ProfileProps = {
   panelUserInfo: UserModel | undefined;
 };
@@ -61,15 +62,24 @@ const Profile: React.FC = () => {
     }
   }
 
+  const getLoginType = () =>  {
+    const accessToken = localStorage.getItem("x-access-token");
+    if(!accessToken){
+      return false;
+    }
+    const claim = JSON.parse(atob(accessToken.split('.')[1]));
+    return claim.lt !== 1;
+  }
+
   const renderBindStatus = (channelType: number) => {
     if (!userInfo || !userInfo.thirdBind || userInfo.thirdBind.length === 0) {
-      return (<button className="btn btn-primary" onClick={() => handleBind(channelType)}>绑定</button>);
+      return (<button disabled ={getLoginType()} className="btn btn-primary" onClick={() => handleBind(channelType)}>绑定</button>);
     }
     const bind = userInfo.thirdBind.find(item => item.channelType === channelType);
     if (bind && bind.bindStatus == 1) {
       return (<button className="btn btn-primary">解绑</button>);
     }
-    return (<button className="btn btn-primary" onClick={() => handleBind(channelType)}>绑定</button>);
+    return (<button disabled={getLoginType()} className="btn btn-primary" onClick={() => handleBind(channelType)}>绑定</button>);
   }
 
   const renderPanelContent = () => {
