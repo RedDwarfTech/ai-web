@@ -2,6 +2,7 @@ import { ResponseHandler, UserModel } from "rdjs-wheel";
 import React, { useState } from "react";
 import "./Profile.css";
 import alipayPic from "@/asset/icon/alipay-circle.png";
+import wechatPic from "@/asset/icon/wechat.png";
 import Feedback from "./feedback/Feedback";
 import withConnect from "@/page/component/hoc/withConnect";
 import { delCurUser, getCurrentUser } from "@/service/user/UserService";
@@ -95,7 +96,7 @@ const Profile: React.FC = () => {
     }
     const bind = userInfo.thirdBind.find(item => item.channelType === channelType);
     if (bind && bind.bindStatus == 1) {
-      return (<button className="btn btn-primary" onClick={() => userUnbind(channelType)}>解绑</button>);
+      return (<button disabled={getLoginType()} className="btn btn-primary" onClick={() => userUnbind(channelType)}>解绑</button>);
     }
     return (<button disabled={getLoginType()} className="btn btn-primary" onClick={() => handleBind(channelType)}>绑定</button>);
   }
@@ -146,11 +147,17 @@ const Profile: React.FC = () => {
               <h6 className="card-title">登录凭据</h6>
             </div>
             <div className="card-body">
-              <div className="row">
+              <div className="row loginRow">
                 <div className="col">
                   <img style={{ height: '40px', width: '40px' }} src={alipayPic}></img>
                 </div>
                 <div className="col">{renderBindStatus(5)}</div>
+              </div>
+              <div className="row">
+                <div className="col">
+                  <img style={{ height: '40px', width: '40px' }} src={wechatPic}></img>
+                </div>
+                <div className="col">{renderBindStatus(1)}</div>
               </div>
             </div>
           </div>
