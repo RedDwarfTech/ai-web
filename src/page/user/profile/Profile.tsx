@@ -4,7 +4,7 @@ import "./Profile.css";
 import alipayPic from "@/asset/icon/alipay-circle.png";
 import Feedback from "./feedback/Feedback";
 import withConnect from "@/page/component/hoc/withConnect";
-import { getCurrentUser } from "@/service/user/UserService";
+import { delCurUser, getCurrentUser } from "@/service/user/UserService";
 import { useSelector } from "react-redux";
 import PromptHistory from "./prompt/PromptHistory";
 import { UserProfile, UserService } from "rd-component";
@@ -12,6 +12,7 @@ import Experience from "./experience/Experience";
 import "@/scss/style.scss";
 import { readConfig } from "@/config/app/config-reader";
 import store from "@/store/store";
+import Modal from 'react-modal';
 
 export type ProfileProps = {
   panelUserInfo: UserModel | undefined;
@@ -22,6 +23,7 @@ const Profile: React.FC = () => {
   const [currentPanel, setCurrentPanel] = useState('userinfo');
   const [userInfo, setUserInfo] = useState<UserModel>();
   const { user } = useSelector((state: any) => state.user);
+  const [showDelUserPop, setShowDelUserPop] = useState(false);
 
   React.useEffect(() => {
     getUserInfo();
@@ -53,7 +55,7 @@ const Profile: React.FC = () => {
       window.location.href = data.result;
     });
   }
-  
+
   const handleBind = (channelType: number) => {
     if (channelType === 5) {
       userLogin("/post/alipay/login/getQRCodeUrl");
@@ -63,9 +65,13 @@ const Profile: React.FC = () => {
     }
   }
 
-  const getLoginType = () =>  {
+  const delUser = () => {
+    setShowDelUserPop(false);
+  }
+
+  const getLoginType = () => {
     const accessToken = localStorage.getItem("x-access-token");
-    if(!accessToken){
+    if (!accessToken) {
       return false;
     }
     const claim = JSON.parse(atob(accessToken.split('.')[1]));
@@ -74,7 +80,7 @@ const Profile: React.FC = () => {
 
   const renderBindStatus = (channelType: number) => {
     if (!userInfo || !userInfo.thirdBind || userInfo.thirdBind.length === 0) {
-      return (<button disabled ={getLoginType()} className="btn btn-primary" onClick={() => handleBind(channelType)}>绑定</button>);
+      return (<button disabled={getLoginType()} className="btn btn-primary" onClick={() => handleBind(channelType)}>绑定</button>);
     }
     const bind = userInfo.thirdBind.find(item => item.channelType === channelType);
     if (bind && bind.bindStatus == 1) {
@@ -82,6 +88,17 @@ const Profile: React.FC = () => {
     }
     return (<button disabled={getLoginType()} className="btn btn-primary" onClick={() => handleBind(channelType)}>绑定</button>);
   }
+
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };
 
   const renderPanelContent = () => {
     if (currentPanel && currentPanel === 'experience') {
@@ -94,38 +111,62 @@ const Profile: React.FC = () => {
       return (<PromptHistory></PromptHistory>);
     }
     if (currentPanel && currentPanel === 'userinfo') {
-      return (<div id="userinfo">
-        <div className="card" style={{ marginBottom: '20px' }}>
-          <div className="card-header">
-            <h6 className="card-title">基本信息</h6>
-          </div>
-          <div className="card-body row">
-            <div className="col">
-              <div ><span className="user-info">用户昵称:</span></div>
-              <div ><span className="user-info">{userInfo ? userInfo!.nickname : ""}</span></div>
-              <div ></div>
+      return (
+        <div id="userinfo">
+          <div className="card" style={{ marginBottom: '20px' }}>
+            <div className="card-header">
+              <h6 className="card-title">基本信息</h6>
             </div>
-            <div className="col">
-              <div ><span className="user-info">会员到期日:</span></div>
-              <div ><span className="user-info">{userInfo ? UserProfile.getVipExpiredTime(userInfo) : "--"}</span></div>
-              <div ></div>
-            </div>
-          </div>
-        </div>
-        <div className="card">
-          <div className="card-header">
-            <h6 className="card-title">登录凭据</h6>
-          </div>
-          <div className="card-body">
-            <div className="row">
+            <div className="card-body row">
               <div className="col">
-                <img style={{ height: '40px', width: '40px'}} src={alipayPic}></img>
+                <div ><span className="user-info">用户昵称:</span></div>
+                <div ><span className="user-info">{userInfo ? userInfo!.nickname : ""}</span></div>
+                <div ></div>
               </div>
-              <div className="col">{renderBindStatus(5)}</div>
+              <div className="col">
+                <div ><span className="user-info">会员到期日:</span></div>
+                <div ><span className="user-info">{userInfo ? UserProfile.getVipExpiredTime(userInfo) : "--"}</span></div>
+                <div ></div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>);
+          <div className="card" style={{ marginBottom: '20px' }}>
+            <div className="card-header">
+              <h6 className="card-title">登录凭据</h6>
+            </div>
+            <div className="card-body">
+              <div className="row">
+                <div className="col">
+                  <img style={{ height: '40px', width: '40px' }} src={alipayPic}></img>
+                </div>
+                <div className="col">{renderBindStatus(5)}</div>
+              </div>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-header">
+              <h6 className="card-title">危险操作</h6>
+            </div>
+            <div className="card-body">
+              <div className="dangerZoneRow">
+                <div>
+                  <span>从系统删除当前用户，此操作不可恢复。</span>
+                </div>
+                <div>
+                  <button className="btn btn-danger" onClick={() => delUser()}>注销用户</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Modal contentLabel="编辑会话标题"
+            isOpen={showDelUserPop}
+            style={customStyles}>
+            <button onClick={() => {
+              delCurUser();
+            }}>确认</button>
+            <button onClick={() => setShowDelUserPop(false)}>取消</button>
+          </Modal>
+        </div>);
     }
     return (<div></div>);
   }

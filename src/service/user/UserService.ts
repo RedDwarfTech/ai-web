@@ -12,14 +12,12 @@ export function getCurrentUser() {
     return requestWithActionType(config, actionTypeString);
 }
 
-export function userLoginImpl(params: any) {
+export function delCurUser() {
     const config = {
-        method: 'get',
-        url: '/post/alipay/login/getQRCodeUrl',
-        headers: {'Content-Type': 'application/json'},
-        params: params
+        method: 'delete',
+        url: '/ai/user/del'
     };
-    const actionTypeString: string = UserActionType[UserActionType.USER_LOGIN];
+    const actionTypeString: string = UserActionType[UserActionType.DEL_USER];
     return requestWithActionType(config, actionTypeString);
 }
 

@@ -41,3 +41,9 @@
     font-size: 17px;
     margin-top: 10px;
 }
+
+.dangerZoneRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
