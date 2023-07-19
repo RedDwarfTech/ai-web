@@ -56,6 +56,12 @@ const Profile: React.FC = () => {
     });
   }
 
+  const userUnbind = (accountType: number) => {
+    UserService.userUnbind(accountType, store).then((data: any) => {
+      
+    });
+  }
+
   const handleBind = (channelType: number) => {
     if (channelType === 5) {
       userLogin("/post/alipay/login/getQRCodeUrl");
@@ -84,7 +90,7 @@ const Profile: React.FC = () => {
     }
     const bind = userInfo.thirdBind.find(item => item.channelType === channelType);
     if (bind && bind.bindStatus == 1) {
-      return (<button className="btn btn-primary">解绑</button>);
+      return (<button className="btn btn-primary" onClick={() => userUnbind(channelType)}>解绑</button>);
     }
     return (<button disabled={getLoginType()} className="btn btn-primary" onClick={() => handleBind(channelType)}>绑定</button>);
   }
