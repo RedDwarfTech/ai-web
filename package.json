@@ -27,7 +27,7 @@
     "postcss": "^8.4.26",
     "query-string": "8.1.0",
     "rc-table": "^7.32.1",
-    "rd-component": "^0.1.118",
+    "rd-component": "^0.1.119",
     "rdjs-wheel": "0.0.19",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

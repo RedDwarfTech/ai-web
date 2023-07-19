@@ -1,4 +1,4 @@
-import { UserModel } from "rdjs-wheel";
+import { ResponseHandler, UserModel } from "rdjs-wheel";
 import React, { useState } from "react";
 import "./Profile.css";
 import alipayPic from "@/asset/icon/alipay-circle.png";
@@ -13,6 +13,7 @@ import "@/scss/style.scss";
 import { readConfig } from "@/config/app/config-reader";
 import store from "@/store/store";
 import ReactModal from 'react-modal';
+import { toast } from "react-toastify";
 
 export type ProfileProps = {
   panelUserInfo: UserModel | undefined;
@@ -58,7 +59,11 @@ const Profile: React.FC = () => {
 
   const userUnbind = (accountType: number) => {
     UserService.userUnbind(accountType,"/ai/user/unbind", store).then((data: any) => {
-      
+      if(ResponseHandler.responseSuccess(data)){
+        
+      }else{
+        toast(data.result.msg);
+      }
     });
   }
 
