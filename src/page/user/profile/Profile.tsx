@@ -12,7 +12,7 @@ import Experience from "./experience/Experience";
 import "@/scss/style.scss";
 import { readConfig } from "@/config/app/config-reader";
 import store from "@/store/store";
-import Modal from 'react-modal';
+import ReactModal from 'react-modal';
 
 export type ProfileProps = {
   panelUserInfo: UserModel | undefined;
@@ -23,7 +23,7 @@ const Profile: React.FC = () => {
   const [currentPanel, setCurrentPanel] = useState('userinfo');
   const [userInfo, setUserInfo] = useState<UserModel>();
   const { user } = useSelector((state: any) => state.user);
-  const [showDelUserPop, setShowDelUserPop] = useState(false);
+  const [showDelUserPop, setShowDelUserPop] = useState<boolean>(false);
 
   React.useEffect(() => {
     getUserInfo();
@@ -66,7 +66,7 @@ const Profile: React.FC = () => {
   }
 
   const delUser = () => {
-    setShowDelUserPop(false);
+    setShowDelUserPop(true);
   }
 
   const getLoginType = () => {
@@ -158,14 +158,6 @@ const Profile: React.FC = () => {
               </div>
             </div>
           </div>
-          <Modal contentLabel="编辑会话标题"
-            isOpen={showDelUserPop}
-            style={customStyles}>
-            <button onClick={() => {
-              delCurUser();
-            }}>确认</button>
-            <button onClick={() => setShowDelUserPop(false)}>取消</button>
-          </Modal>
         </div>);
     }
     return (<div></div>);
@@ -191,6 +183,15 @@ const Profile: React.FC = () => {
       <div className="panel-content">
         {renderPanelContent()}
       </div>
+      <ReactModal contentLabel="注销用户"
+        isOpen={showDelUserPop}
+        style={customStyles}>
+        <div>注销用户将会删除当前用户的所有数据且不可恢复！请谨慎操作</div>
+        <button className="btn btn-danger" onClick={() => {
+          delCurUser();
+        }}>确认</button>
+        <button className="btn btn-primary" onClick={() => setShowDelUserPop(false)}>取消</button>
+      </ReactModal>
     </div>
   );
 }
