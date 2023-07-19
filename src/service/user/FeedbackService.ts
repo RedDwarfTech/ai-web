@@ -1,5 +1,6 @@
 import { UserActionType } from "@/action/user/UserAction";
-import { requestWithActionType } from "@/common/XHRClient";
+import store from "@/store/store";
+import { XHRClient } from "rd-component";
 
 export function submitFeedback(params: any) {
     const config = {
@@ -9,5 +10,5 @@ export function submitFeedback(params: any) {
         data: JSON.stringify(params)
     };
     const actionTypeString: string = UserActionType[UserActionType.GET_CURRENT_USER];
-    return requestWithActionType(config, actionTypeString);
+    return  XHRClient.requestWithActionType(config, actionTypeString,store);
 }

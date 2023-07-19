@@ -1,15 +1,16 @@
 import { UserModel, WheelGlobal } from 'rdjs-wheel';
 import { UserActionType } from '@/action/user/UserAction';
-import { requestWithActionType } from '@/common/XHRClient';
+import { XHRClient } from 'rd-component';
+import store from '@/store/store';
 
 export function getCurrentUser() {
     const config = {
         method: 'get',
         url: '/post/user/current-user',
-        headers: {'Content-Type': 'application/json'}
+        headers: { 'Content-Type': 'application/json' }
     };
     const actionTypeString: string = UserActionType[UserActionType.GET_CURRENT_USER];
-    return requestWithActionType(config, actionTypeString);
+    return XHRClient.requestWithActionType(config, actionTypeString, store);
 }
 
 export function delCurUser() {
@@ -18,14 +19,14 @@ export function delCurUser() {
         url: '/ai/user/del'
     };
     const actionTypeString: string = UserActionType[UserActionType.DEL_USER];
-    return requestWithActionType(config, actionTypeString);
+    return XHRClient.requestWithActionType(config, actionTypeString, store);
 }
 
-export function isLoggedIn(){
+export function isLoggedIn() {
     const accessToken = localStorage.getItem(WheelGlobal.ACCESS_TOKEN_NAME);
-    if(accessToken == null){
+    if (accessToken == null) {
         return false;
-    }else{
+    } else {
         return true;
     }
 }
@@ -37,7 +38,7 @@ export function isSubscribed(): boolean {
     }
     const uInfo: UserModel = JSON.parse(userInfoJson);
     // pay attention that the long data type in the backend server using string to avoid precise loss
-    if(uInfo && Number(uInfo.autoRenewProductExpireTimeMs) > new Date().getTime()){
+    if (uInfo && Number(uInfo.autoRenewProductExpireTimeMs) > new Date().getTime()) {
         return true;
     }
     return false;
