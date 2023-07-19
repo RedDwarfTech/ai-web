@@ -19,12 +19,12 @@ export interface IChatAskList {
  * so add the React.memo to avoid the dulplicate rerender 
  */
 const ChatList: React.FC<IChatAskList> = React.memo((props) => {
-    const [subscribed, setSubscribed] = useState(isSubscribed()||false);
+    const [subscribed, setSubscribed] = useState(isSubscribed() || false);
     const { user } = useSelector((state: any) => state.user)
- 
+
     useEffect(() => {
         if (!BaseMethods.isNull(user)) {
-            if(Number(user.autoRenewProductExpireTimeMs) > new Date().getTime()){
+            if (Number(user.autoRenewProductExpireTimeMs) > new Date().getTime()) {
                 setSubscribed(true);
             }
         }
@@ -34,7 +34,7 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
         const tagList: JSX.Element[] = [];
         if (props.myMap.size === 0 && !subscribed) {
             return newGuide();
-        } else if(props.myMap.size === 0 && subscribed){
+        } else if (props.myMap.size === 0 && subscribed) {
             return genieHomeGuide();
         } else {
             props.myMap.forEach((value, key) => {
@@ -57,18 +57,18 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
         }
     };
 
-    const genieHomeGuide =()=>{
+    const genieHomeGuide = () => {
         return (
-        <div className="use-guide">
-            <div className="use-guide-container">
-                <div className="demo-faq">
-                    <a href="https://reddwarftech.github.io/2023/04/16/genie/" target="_blank">了解Genie</a>
-                </div>
-                <div className="demo-faq">
-                    <a href="https://reddwarftech.github.io/2023/07/13/genie-ppt/" target="_blank">用Genie快速自动生成PPT</a>
+            <div className="use-guide">
+                <div className="use-guide-container">
+                    <div className="demo-faq">
+                        <a href="https://reddwarftech.github.io/2023/04/16/genie/" target="_blank">了解Genie</a>
+                    </div>
+                    <div className="demo-faq">
+                        <a href="https://reddwarftech.github.io/2023/07/13/genie-ppt/" target="_blank">用Genie快速自动生成PPT</a>
+                    </div>
                 </div>
             </div>
-        </div>
         );
     }
 
@@ -77,7 +77,7 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
             <div className="steps-guide">
                 <div className="guide-container">
                     <div className="tips chat-tips">第一步：登录,点击左下侧按钮登录</div>
-                    <div className="tips chat-tips">第二步：订阅,点击订阅菜单，选择订阅套餐，最低1元试用</div>
+                    <div className="tips chat-tips">第二步：订阅,点击登录头像-订阅菜单，选择订阅套餐，最低1元试用</div>
                     <div className="tips chat-tips">第三步：使用Genie,页面底部输入会话内容，开启聊天</div>
                 </div>
                 <div>
