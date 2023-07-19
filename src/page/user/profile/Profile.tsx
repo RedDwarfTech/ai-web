@@ -73,7 +73,7 @@ const Profile: React.FC = () => {
       userLogin("/post/alipay/login/getQRCodeUrl");
     }
     if (channelType === 1) {
-      userLogin("/post/wechat/login/getQRCodeUrl");
+      userLogin("/post/wechat/login/getTempTicket");
     }
   }
 
