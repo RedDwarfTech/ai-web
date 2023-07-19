@@ -57,7 +57,7 @@ const Profile: React.FC = () => {
   }
 
   const userUnbind = (accountType: number) => {
-    UserService.userUnbind(accountType, store).then((data: any) => {
+    UserService.userUnbind(accountType,"/ai/user/unbind", store).then((data: any) => {
       
     });
   }
