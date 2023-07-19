@@ -153,12 +153,14 @@ const Profile: React.FC = () => {
                 </div>
                 <div className="col">{renderBindStatus(5)}</div>
               </div>
-              <div className="row">
+              {
+              /*<div className="row">
                 <div className="col">
                   <img style={{ height: '40px', width: '40px' }} src={wechatPic}></img>
                 </div>
                 <div className="col">{renderBindStatus(1)}</div>
-              </div>
+                </div>*/
+              }
             </div>
           </div>
           <div className="card">
