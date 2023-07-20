@@ -77,7 +77,7 @@ const Reg: React.FC = () => {
         <div className={styles.regContainer}>
             <div className={styles.regForm}>
                 <form method="post" className={styles.loginElement} onSubmit={(e) => handlePhoneLogin(e)}>
-                    <h3>注册</h3>
+                    <h5>注册</h5>
                     <div className={styles.userName}>
                         <select id="countryCode" className={styles.countryCodeSelect}>
                             <option value="+86">+86</option>

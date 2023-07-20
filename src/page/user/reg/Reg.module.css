@@ -133,3 +133,7 @@
     justify-content: center;
     gap: 30px;
 }
+
+h5 {
+    margin-top: 25px;
+}
