@@ -3,7 +3,7 @@ import { Prompt, getPage } from "@/storage/indexdb/idb";
 import { EntityList } from "rdjs-wheel";
 import React, { useState } from "react";
 import Table from 'rc-table';
-import "@/scss/style.scss";
+import 'rc-table/assets/index.css';
 
 interface TableParams {
     pagination?: any;
@@ -70,12 +70,8 @@ const PromptHistory: React.FC = (props: any) => {
     return (
         <div>
             <div title="本地提示词">
-                <Table data={data}
-                    className="table table-striped"
-                    //pagination={tableParams.pagination}
+                <Table className="table-striped" data={data}
                     rowKey={(record) => record.id}
-                    //loading={loading}
-                    //onChange={handleTableChange}
                     columns={columns}>
                 </Table>
             </div>
