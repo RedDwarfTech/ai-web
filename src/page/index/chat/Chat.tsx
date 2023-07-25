@@ -169,7 +169,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             AuthHandler.storeLoginAuthInfo(loginUser, readConfig("baseAuthUrl"), readConfig("accessTokenUrlPath"));
             loadCurrentUser();
             setIsLoggedIn(true);
-          }
+        }
     }, [loginUser]);
 
     React.useEffect(() => {
@@ -415,20 +415,20 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         setShowEditTitlePopup(true);
     }
 
-    const delConversations = (showDelTitlePopup: boolean,id: number) => {
-       return(<Modal contentLabel="删除确认"
-                isOpen={showDelTitlePopup}
-                style={customStyles}>
-                <button onClick={()=>{
-                    delConversation(id).then((response: any) => {
-                        if (ResponseHandler.responseSuccess(response)) {
-                            const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
-                            setLoadedConversations(newMap);
-                        }
-                    });
-                }}>确认删除</button>
-                <button onClick={() => delConversations(false,id)}>取消</button>
-            </Modal>);
+    const delConversations = (showDelTitlePopup: boolean, id: number) => {
+        return (<Modal contentLabel="删除确认"
+            isOpen={showDelTitlePopup}
+            style={customStyles}>
+            <button onClick={() => {
+                delConversation(id).then((response: any) => {
+                    if (ResponseHandler.responseSuccess(response)) {
+                        const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
+                        setLoadedConversations(newMap);
+                    }
+                });
+            }}>确认删除</button>
+            <button onClick={() => delConversations(false, id)}>取消</button>
+        </Modal>);
     }
 
     function compareFn(a: [number, IConversation], b: [number, IConversation]): number {
@@ -453,7 +453,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                         <EditOutlined onClick={() => editConversations(item[1])}></EditOutlined>
                     </div>
                     <div className="conversation-item-icon">
-                        <DeleteOutlined onClick={() => delConversations(true,item[0])}></DeleteOutlined>
+                        <DeleteOutlined onClick={() => delConversations(true, item[0])}></DeleteOutlined>
                     </div>
                 </div>);
         });
@@ -499,14 +499,16 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const renderLogin = () => {
         if (isLoggedIn) {
             var avatarUrl = localStorage.getItem('avatarUrl');
-            return (<a id="user-menu">
-                {avatarUrl ? <img className="avatarImg" src={avatarUrl} onClick={avatarClick} /> : <img className="avatarImg" src={avatarImg} onClick={avatarClick} ></img>}
-                <div id="dropdown" className="dropdown-content">
-                    <div onClick={() => handleMenuClick('account')}><PayCircleOutlined /><span>订阅</span></div>
-                    <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
-                    <div onClick={() => UserService.doLoginOut(readConfig("logoutUrl"))}><LogoutOutlined /><span>登出</span></div>
-                </div>
-            </a>);
+            return (
+                <a id="user-menu">
+                    {avatarUrl ? <img className="avatarImg" src={avatarUrl} onClick={avatarClick} /> : <img className="avatarImg" src={avatarImg} onClick={avatarClick} ></img>}
+                    <div id="dropdown" className="dropdown-content">
+                        <div onClick={() => handleMenuClick('account')}><PayCircleOutlined /><span>订阅</span></div>
+                        <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
+                        <div onClick={() => UserService.doLoginOut(readConfig("logoutUrl"))}><LogoutOutlined /><span>登出</span></div>
+                    </div>
+                </a>
+            );
         }
         const accessTokenOrigin = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
         if (accessTokenOrigin) {
@@ -535,12 +537,12 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                                 onClick={handleSend}
                             >
                                 <span>
-                                <SendOutlined style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                transform: 'rotate(-45deg)',
-                                justifyContent: 'center'
-                            }} />
+                                    <SendOutlined style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        transform: 'rotate(-45deg)',
+                                        justifyContent: 'center'
+                                    }} />
                                 </span>
                             </button>
                         </div>
@@ -585,14 +587,14 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
 
     const customStyles = {
         content: {
-          top: '50%',
-          left: '50%',
-          right: 'auto',
-          bottom: 'auto',
-          marginRight: '-50%',
-          transform: 'translate(-50%, -50%)',
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
         },
-      };
+    };
 
     return (
         <div className="chat-main-body">
@@ -624,7 +626,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 isOpen={showGoodsPopup}
                 style={customStyles}
                 onRequestClose={() => setShowGoodsPopup(false)}
-                >
+            >
                 <Goods refreshUrl={readConfig("refreshUserUrl")} appId={readConfig("appId")} store={store}></Goods>
             </Modal>
             <Modal contentLabel="编辑会话标题"
@@ -632,7 +634,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 style={customStyles}>
                 <input value={currEditConversation?.title.toString()}
                     onChange={(e) => { handleTitleChange(e) }}></input>
-                <button onClick={()=>{
+                <button onClick={() => {
                     let params = {
                         id: currEditConversation?.id,
                         title: currEditConversation?.title
