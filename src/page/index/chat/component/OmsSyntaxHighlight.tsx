@@ -1,7 +1,8 @@
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus, darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import Cursor from './Cursor';
 import './OmsSyntaxHighlight.css';
+import { useState } from 'react';
+import React from 'react';
 
 // vscDarkPlus vscode 暗色主题
 // darcula  webstorm 暗色主题
@@ -26,6 +27,20 @@ const OmsSyntaxHighlight = (props: tProps) => {
   if (typeof darkMode === 'boolean') {
     them.light = darcula;
   }
+
+  React.useEffect(() => {
+    import('react-syntax-highlighter').then((module) => {
+      const { PrismAsyncLight: SyntaxHighlighter } = module;
+      setSyntaxHighlighter(() => SyntaxHighlighter);
+    });
+  }, []);
+
+  const [SyntaxHighlighter, setSyntaxHighlighter] = useState<any>();
+
+  if (!SyntaxHighlighter) {
+    return <div>Loading...</div>;
+  }
+
   return (
       <SyntaxHighlighter
         showLineNumbers={true} 

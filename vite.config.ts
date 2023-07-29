@@ -31,9 +31,7 @@ export default defineConfig({
         manualChunks: {
           react: ['react','react-router-dom','react-dom'],
           reddwarf: ['rd-component','rdjs-wheel'],
-          'vendor-redux': ['redux','redux-logger','redux-thunk','react-redux','react-modal','react-toastify','event-source-polyfill','@reduxjs/toolkit'],
-          syntax: ['react-syntax-highlighter'],
-          vendor: ['axios','dayjs','hashmap','idb','react-markdown','@fingerprintjs/fingerprintjs','uuid','rc-table','query-string','tslib']
+          highlighter: ['react-syntax-highlighter'],
         }
       }
     }
