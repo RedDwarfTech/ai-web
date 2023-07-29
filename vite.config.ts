@@ -43,6 +43,6 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['react-syntax-highlighter','highlighter'],
+    include: ['react-syntax-highlighter','highlighter-8e53d219'],
   }
 })
