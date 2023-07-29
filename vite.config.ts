@@ -17,10 +17,9 @@ export default defineConfig({
     outDir: "build",
     rollupOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
+        manualChunks: {
+          react: ['react','react-router-dom','react-dom'],
+          reddwarf: ['rd-component','rdjs-wheel']
         }
       }
     }
