@@ -41,5 +41,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
       '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
     }
+  },
+  optimizeDeps: {
+    include: ['react-syntax-highlighter','highlighter'],
   }
 })
