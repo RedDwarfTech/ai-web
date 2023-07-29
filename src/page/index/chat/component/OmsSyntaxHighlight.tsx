@@ -1,12 +1,8 @@
 // import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus, darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+// import { vscDarkPlus, darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './OmsSyntaxHighlight.css';
 import { useState } from 'react';
 import React from 'react';
-
-// vscDarkPlus vscode 暗色主题
-// darcula  webstorm 暗色主题
-// coyWithoutShadows 上面展示的效果
 
 type tProps = {
   textContent: string;
@@ -14,50 +10,46 @@ type tProps = {
   darkMode?: boolean;
 }
 
-const them = {
-  dark: vscDarkPlus,
-  light: darcula
-};
-
 const OmsSyntaxHighlight = (props: tProps) => {
   const { textContent, darkMode, language = 'txt' } = props;
-  if (typeof darkMode === 'undefined') {
-    them.light = darcula;
-  }
-  if (typeof darkMode === 'boolean') {
-    them.light = darcula;
-  }
+
+  const [SyntaxHighlighter, setSyntaxHighlighter] = useState<any>();
+  const [ThemeDark, setThemeDark] = useState<any>();
+  const [ThemeLight, setThemeLight] = useState<any>();
 
   React.useEffect(() => {
     import('react-syntax-highlighter').then((module) => {
       const { PrismAsyncLight: SyntaxHighlighter } = module;
       setSyntaxHighlighter(() => SyntaxHighlighter);
     });
+    import('react-syntax-highlighter/dist/esm/styles/prism').then((module) => {
+      const { vscDarkPlus, darcula } = module;
+      setThemeDark(vscDarkPlus);
+      setThemeLight(darcula);
+    });
   }, []);
 
-  const [SyntaxHighlighter, setSyntaxHighlighter] = useState<any>();
-
-  if (!SyntaxHighlighter) {
+  if (!SyntaxHighlighter || !ThemeDark || !ThemeLight) {
     return <div>Loading...</div>;
   }
 
   return (
-      <SyntaxHighlighter
-        showLineNumbers={true} 
-        lineNumberStyle={{ color: '#ddd', fontSize: 10 }} 
-        style={darkMode ? them.dark : them.light}  
-        language={language}
-        PreTag='div'
-        codeTagProps= {{
-          style: {
-            fontSize: "inherit",
-            borderRadius: "inherit",
-          }
-        }}   
-        customStyle={{ fontSize: '17px',borderRadius: "6px" }} 
-      >
-        {String(textContent).replace(/\n$/, '')}
-      </SyntaxHighlighter>
+    <SyntaxHighlighter
+      showLineNumbers={true}
+      lineNumberStyle={{ color: '#ddd', fontSize: 10 }}
+      style={darkMode ? ThemeDark : ThemeLight}
+      language={language}
+      PreTag='div'
+      codeTagProps={{
+        style: {
+          fontSize: "inherit",
+          borderRadius: "inherit",
+        }
+      }}
+      customStyle={{ fontSize: '17px', borderRadius: "6px" }}
+    >
+      {String(textContent).replace(/\n$/, '')}
+    </SyntaxHighlighter>
   );
 };
 
