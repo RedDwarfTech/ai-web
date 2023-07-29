@@ -31,7 +31,7 @@ export default defineConfig({
         manualChunks: {
           react: ['react','react-router-dom','react-dom'],
           reddwarf: ['rd-component','rdjs-wheel'],
-          vendor: ['axios','dayjs','hashmap','idb']
+          vendor: ['axios','dayjs','hashmap','idb','react-markdown','@fingerprintjs/fingerprintjs','uuid']
         }
       }
     }
