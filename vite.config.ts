@@ -30,7 +30,8 @@ export default defineConfig({
       output: {
         manualChunks: {
           react: ['react', 'react-router-dom', 'react-dom'],
-          reddwarf: ['rd-component', 'rdjs-wheel']
+          reddwarf: ['rd-component', 'rdjs-wheel'],
+          vendor: ['@fingerprintjs/fingerprintjs', 'event-source-polyfill', 'react-markdown', '@reduxjs/toolkit']
         }
       }
     }
