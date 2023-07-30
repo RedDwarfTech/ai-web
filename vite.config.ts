@@ -14,7 +14,7 @@ export default defineConfig({
       brotliSize: true,
       emitFile: false,
       filename: "test.html",
-      open:true 
+      open: true
     }) as PluginOption
   ],
   css: {
@@ -29,8 +29,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          react: ['react','react-router-dom','react-dom'],
-          reddwarf: ['rd-component','rdjs-wheel']
+          react: ['react', 'react-router-dom', 'react-dom'],
+          reddwarf: ['rd-component', 'rdjs-wheel']
         }
       }
     }
@@ -42,6 +42,5 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    //include: ['react-syntax-highlighter'],
   }
 })
