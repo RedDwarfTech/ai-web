@@ -30,8 +30,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           react: ['react','react-router-dom','react-dom'],
-          reddwarf: ['rd-component','rdjs-wheel'],
-          highlighter: ['react-syntax-highlighter'],
+          reddwarf: ['rd-component','rdjs-wheel']
         }
       }
     }
@@ -43,6 +42,6 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['react-syntax-highlighter','highlighter-8e53d219'],
+    //include: ['react-syntax-highlighter'],
   }
 })
