@@ -416,19 +416,21 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     }
 
     const delConversations = (showDelTitlePopup: boolean, id: number) => {
-        return (<Modal contentLabel="删除确认"
-            isOpen={showDelTitlePopup}
-            style={customStyles}>
-            <button onClick={() => {
-                delConversation(id).then((response: any) => {
-                    if (ResponseHandler.responseSuccess(response)) {
-                        const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
-                        setLoadedConversations(newMap);
-                    }
-                });
-            }}>确认删除</button>
-            <button onClick={() => delConversations(false, id)}>取消</button>
-        </Modal>);
+        return (
+            <Modal contentLabel="删除确认"
+                isOpen={showDelTitlePopup}
+                style={customStyles}>
+                <button onClick={() => {
+                    delConversation(id).then((response: any) => {
+                        if (ResponseHandler.responseSuccess(response)) {
+                            const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
+                            setLoadedConversations(newMap);
+                        }
+                    });
+                }}>确认删除</button>
+                <button onClick={() => delConversations(false, id)}>取消</button>
+            </Modal>
+            );
     }
 
     function compareFn(a: [number, IConversation], b: [number, IConversation]): number {
@@ -632,9 +634,9 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             <Modal contentLabel="编辑会话标题"
                 isOpen={showEditTitlePopup}
                 style={customStyles}>
-                <input value={currEditConversation?.title.toString()}
+                <input className="mb-3" value={currEditConversation?.title.toString()}
                     onChange={(e) => { handleTitleChange(e) }}></input>
-                <button onClick={() => {
+                <button className="btn btn-primary" onClick={() => {
                     let params = {
                         id: currEditConversation?.id,
                         title: currEditConversation?.title
