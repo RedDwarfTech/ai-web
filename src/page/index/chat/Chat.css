@@ -320,7 +320,7 @@ textarea:focus {
   width: 35px;
 }
 
-.delContainer {
+.editContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -330,6 +330,6 @@ textarea:focus {
   min-height: 90px;
 }
 
-.delContainer button {
+.editContainer button {
   min-width: 70px;
 }

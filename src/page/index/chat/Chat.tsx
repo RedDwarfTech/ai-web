@@ -51,6 +51,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [loadedConversations, setLoadedConversations] = useState<Map<number, IConversation>>(new Map<number, IConversation>());
     const [showGoodsPopup, setShowGoodsPopup] = useState(false);
     const [showEditTitlePopup, setShowEditTitlePopup] = useState(false);
+    const [showDelTitlePopup, setShowDelTitlePopup] = useState(false);
     const [hasMoreConversation, setHasMoreConversation] = useState<boolean>(false);
     const [currEditConversation, setCurrEditConversation] = useState<IConversation>();
     const navigate = useNavigate();
@@ -415,22 +416,9 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         setShowEditTitlePopup(true);
     }
 
-    const delConversations = (showDelTitlePopup: boolean, id: number) => {
-        return (
-            <Modal contentLabel="删除确认"
-                isOpen={showDelTitlePopup}
-                style={customStyles}>
-                <button onClick={() => {
-                    delConversation(id).then((response: any) => {
-                        if (ResponseHandler.responseSuccess(response)) {
-                            const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
-                            setLoadedConversations(newMap);
-                        }
-                    });
-                }}>确认删除</button>
-                <button onClick={() => delConversations(false, id)}>取消</button>
-            </Modal>
-            );
+    const delConversations = (conversation: IConversation) => {
+        setCurrEditConversation(conversation);
+        setShowDelTitlePopup(true);
     }
 
     function compareFn(a: [number, IConversation], b: [number, IConversation]): number {
@@ -455,7 +443,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                         <EditOutlined onClick={() => editConversations(item[1])}></EditOutlined>
                     </div>
                     <div className="conversation-item-icon">
-                        <DeleteOutlined onClick={() => delConversations(true, item[0])}></DeleteOutlined>
+                        <DeleteOutlined onClick={() => delConversations(item[1])}></DeleteOutlined>
                     </div>
                 </div>);
         });
@@ -595,6 +583,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             bottom: 'auto',
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
+            borderRadius: '10px'
         },
     };
 
@@ -634,7 +623,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             <Modal
                 isOpen={showEditTitlePopup}
                 style={customStyles}>
-                <div className="delContainer">
+                <div className="editContainer">
                     <input className="form-control" value={currEditConversation?.title.toString()}
                         onChange={(e) => { handleTitleChange(e) }}></input>
                     <button className="btn btn-primary" onClick={() => {
@@ -650,6 +639,24 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                         });
                     }}>确认</button>
                     <button className="btn btn-primary" onClick={() => setShowEditTitlePopup(false)}>取消</button>
+                </div>
+            </Modal>
+            <Modal contentLabel="删除确认"
+                isOpen={showDelTitlePopup}
+                style={customStyles}>
+                <div>确定要删除会话吗？</div>
+                <div className="editContainer">
+                    <button className="btn btn-primary" onClick={() => {
+                        let id = currEditConversation?.id;
+                        if(!id) return;
+                        delConversation(id).then((response: any) => {
+                            if (ResponseHandler.responseSuccess(response)) {
+                                const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
+                                setLoadedConversations(newMap);
+                            }
+                        });
+                    }}>确认删除</button>
+                    <button className="btn btn-primary" onClick={() => {setShowDelTitlePopup(false)}}>取消</button>
                 </div>
             </Modal>
             <ToastContainer />
