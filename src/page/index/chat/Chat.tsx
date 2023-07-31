@@ -631,24 +631,26 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             >
                 <Goods refreshUrl={readConfig("refreshUserUrl")} appId={readConfig("appId")} store={store}></Goods>
             </Modal>
-            <Modal contentLabel="编辑会话标题"
+            <Modal
                 isOpen={showEditTitlePopup}
                 style={customStyles}>
-                <input className="mb-3" value={currEditConversation?.title.toString()}
-                    onChange={(e) => { handleTitleChange(e) }}></input>
-                <button className="btn btn-primary" onClick={() => {
-                    let params = {
-                        id: currEditConversation?.id,
-                        title: currEditConversation?.title
-                    };
-                    editConversation(params).then((resp: any) => {
-                        if (ResponseHandler.responseSuccess(resp)) {
-                            setShowEditTitlePopup(false);
-                            fetchConversations();
-                        }
-                    });
-                }}>确认</button>
-                <button onClick={() => setShowEditTitlePopup(false)}>取消</button>
+                <div className="delContainer">
+                    <input className="form-control" value={currEditConversation?.title.toString()}
+                        onChange={(e) => { handleTitleChange(e) }}></input>
+                    <button className="btn btn-primary" onClick={() => {
+                        let params = {
+                            id: currEditConversation?.id,
+                            title: currEditConversation?.title
+                        };
+                        editConversation(params).then((resp: any) => {
+                            if (ResponseHandler.responseSuccess(resp)) {
+                                setShowEditTitlePopup(false);
+                                fetchConversations();
+                            }
+                        });
+                    }}>确认</button>
+                    <button className="btn btn-primary" onClick={() => setShowEditTitlePopup(false)}>取消</button>
+                </div>
             </Modal>
             <ToastContainer />
         </div>
