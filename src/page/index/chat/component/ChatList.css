@@ -1,6 +1,6 @@
-.chat-body {
+.chat-list-body {
     padding: 20px;
-    overflow-y: hidden;
+    overflow-y: auto;
     overflow-x: hidden;
     height: 100%;
 }

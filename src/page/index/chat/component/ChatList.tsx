@@ -89,7 +89,7 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
     }
 
     return (
-        <div className="chat-body">
+        <div className="chat-list-body">
             {renderChat()}
         </div>
     )
