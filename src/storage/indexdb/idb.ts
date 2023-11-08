@@ -1,6 +1,5 @@
-import { TablePaginationConfig } from 'antd';
 import { openDB } from 'idb';
-import { REST } from 'rdjs-wheel';
+import { EntityList } from 'rdjs-wheel';
 
 interface GenieDB {
     prompt: {
@@ -45,7 +44,7 @@ export async function getNewestRecord<T>(): Promise<T | undefined> {
     return maxIdRecord;
 }
 
-export async function getPage<T>(pagination?: TablePaginationConfig): Promise<REST.EntityList<T>> {
+export async function getPage<T>(pagination?: any): Promise<EntityList<T>> {
     const current = pagination!.current||1;
     const pageSize = pagination?.pageSize!||10;
     let transaction = (await db).transaction(["prompt"], "readonly");
@@ -67,7 +66,7 @@ export async function getPage<T>(pagination?: TablePaginationConfig): Promise<RE
         }
     }
     await transaction.done;
-    let resp: REST.EntityList<T> = {
+    let resp: EntityList<T> = {
         pagination: {
             total: totalCount,
             per_page: pageSize,

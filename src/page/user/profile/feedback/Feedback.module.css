@@ -1,0 +1,38 @@
+.feedbackSubmit {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 10px;
+    height: 40px;
+    margin-right: 150px;
+}
+
+.feedback p {
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+.feedbackArea {
+    display: flex;
+    flex-direction: row;
+}
+
+.feedbackArea textarea {
+    border-radius: 5px;
+    min-width: 400px;
+}
+
+.feedbackArea textarea:focus {
+    outline: none; 
+    border-color: green; 
+    box-shadow: 0 0 5px green;
+}
+
+.feedbackArea Button {
+    margin-left:10px;
+}

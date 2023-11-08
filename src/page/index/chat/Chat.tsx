@@ -1,26 +1,27 @@
-import { Avatar, Button, Input, Modal, message } from "antd";
+import Modal from 'react-modal';
 import React, { ChangeEvent, useState } from "react";
 import { useSelector } from "react-redux";
-import "./Chat.css"
+import "./Chat.css";
+import { toast, ToastContainer } from 'react-toastify';
 import { v4 as uuid } from 'uuid';
-import { doLoginOut, getCurrentUser, userLoginByPhoneImpl, userLoginImpl } from "@/service/user/UserService";
+import { getCurrentUser } from "@/service/user/UserService";
 import { ChatAsk } from "@/models/request/chat/ChatAsk";
 import { IChatAskResp } from "@/models/chat/ChatAskResp";
 import { doAskPreCheck } from "@/service/chat/SseClientService";
 import { ISseMsg } from "@/models/chat/SseMsg";
 import { ISse35ServerMsg } from "@/models/chat/3.5/Sse35ServerMsg";
 import dayjs from "dayjs";
-import { AuthHandler, IUserModel, ResponseHandler, TimeUtils, WheelGlobal } from "rdjs-wheel";
+import { AuthHandler, UserModel, ResponseHandler, TimeUtils } from "rdjs-wheel";
 import { IConversation } from "@/models/chat/3.5/Conversation";
 import { delConversation, editConversation, getConversations } from "@/service/chat/ConversationService";
 import { IConversationReq } from "@/models/request/conversation/ConversationReq";
-import BaseMethods from 'rdjs-wheel/dist/src/utils/data/BaseMethods';
+import { BaseMethods } from 'rdjs-wheel';
 import { getConversationItems } from "@/service/chat/ConversationItemService";
 import { IConversationItemReq } from "@/models/request/conversation/ConversationItemReq";
 import { readConfig } from "@/config/app/config-reader";
 import { ControlOutlined, DeleteOutlined, EditOutlined, FileImageOutlined, InfoCircleOutlined, LogoutOutlined, MessageOutlined, PayCircleOutlined, SendOutlined } from "@ant-design/icons";
 import About from "@/page/about/About";
-import { Goods } from "rd-component";
+import { Goods, UserService } from "rd-component";
 import Profile from "@/page/user/profile/Profile";
 import ChatList from "./component/ChatList";
 import chatPic from "@/asset/icon/chat/chat.svg";
@@ -30,6 +31,8 @@ import withConnect from "@/page/component/hoc/withConnect";
 import store from "@/store/store";
 import "rd-component/dist/style.css";
 import GenImages from "../images/GenImages";
+import avatarImg from "@/asset/icon/avatar.png";
+import { useNavigate } from "react-router-dom";
 
 const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [inputValue, setInputValue] = useState('');
@@ -39,7 +42,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [promptLines, setPromptLines] = useState<number>(1);
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || false);
     const [isGetUserLoading, setIsGetUserLoading] = useState(false);
-    const [_, setUserInfo] = useState<IUserModel>();
+    const [_, setUserInfo] = useState<UserModel>();
     const { citem } = useSelector((state: any) => state.citem);
     const { loginUser } = useSelector((state: any) => state.user);
     const { conversations } = useSelector((state: any) => state.conversation);
@@ -48,8 +51,10 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [loadedConversations, setLoadedConversations] = useState<Map<number, IConversation>>(new Map<number, IConversation>());
     const [showGoodsPopup, setShowGoodsPopup] = useState(false);
     const [showEditTitlePopup, setShowEditTitlePopup] = useState(false);
+    const [showDelTitlePopup, setShowDelTitlePopup] = useState(false);
     const [hasMoreConversation, setHasMoreConversation] = useState<boolean>(false);
     const [currEditConversation, setCurrEditConversation] = useState<IConversation>();
+    const navigate = useNavigate();
 
     const handleChatInputChange = (e: any) => {
         const inputContent = e.target.value;
@@ -162,7 +167,9 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
 
     React.useEffect(() => {
         if (loginUser && Object.keys(loginUser).length > 0) {
-            saveLoginUserInfo(loginUser);
+            AuthHandler.storeLoginAuthInfo(loginUser, readConfig("baseAuthUrl"), readConfig("accessTokenUrlPath"));
+            loadCurrentUser();
+            setIsLoggedIn(true);
         }
     }, [loginUser]);
 
@@ -203,17 +210,6 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         }
     };
 
-    const saveLoginUserInfo = (userInfo: any) => {
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem(WheelGlobal.ACCESS_TOKEN_NAME, userInfo.accessToken);
-        localStorage.setItem(WheelGlobal.REFRESH_TOKEN_NAME, userInfo.refreshToken);
-        localStorage.setItem('avatarUrl', userInfo.avatarUrl);
-        localStorage.setItem(WheelGlobal.BASE_AUTH_URL, readConfig("baseAuthUrl"));
-        localStorage.setItem(WheelGlobal.ACCESS_TOKEN_URL_PATH, readConfig("accessTokenUrlPath"));
-        loadCurrentUser();
-        setIsLoggedIn(true);
-    }
-
     const fetchConversations = () => {
         const convReq: IConversationReq = {
             title: '',
@@ -228,18 +224,18 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         const serverMsg: ISse35ServerMsg = JSON.parse(msg);
         if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "vip-expired") {
             setLoadings(false);
-            message.info("充值会员继续使用");
+            toast.info("充值会员继续使用");
             eventSource.close();
             setShowGoodsPopup(true);
             return;
         }
         if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "rate-limit") {
             setLoadings(false);
-            message.info("超出频率限制，请稍后再试一试");
+            toast.info("超出频率限制，请稍后再试一试");
             eventSource.close();
             return;
         }
-        if (serverMsg.choices[0].delta.content && serverMsg.choices[0].delta.content.length > 0) {
+        if (serverMsg.choices[0].delta && serverMsg.choices[0].delta.content && serverMsg.choices[0].delta.content.length > 0) {
             appenSseMsg(serverMsg, "chatgpt");
         }
         if (serverMsg.choices[0].finish_reason && serverMsg.choices[0].finish_reason === "stop") {
@@ -310,7 +306,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             setCurrInputIndex(Number(response));
         });
         if (!isLoggedIn) {
-            message.warning("请登录后再开启聊天");
+            toast.warning("请登录后再开启聊天");
             setLoadings(false);
             return;
         }
@@ -420,22 +416,9 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         setShowEditTitlePopup(true);
     }
 
-    const delConversations = (id: number) => {
-        Modal.confirm({
-            title: '删除确认',
-            content: '确定要永久删除会话吗？删除后无法恢复',
-            onOk() {
-                delConversation(id).then((response:any) => {
-                    if (ResponseHandler.responseSuccess(response)) {
-                        const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
-                        setLoadedConversations(newMap);
-                    }
-                });
-            },
-            onCancel() {
-
-            },
-        });
+    const delConversations = (conversation: IConversation) => {
+        setCurrEditConversation(conversation);
+        setShowDelTitlePopup(true);
     }
 
     function compareFn(a: [number, IConversation], b: [number, IConversation]): number {
@@ -460,7 +443,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                         <EditOutlined onClick={() => editConversations(item[1])}></EditOutlined>
                     </div>
                     <div className="conversation-item-icon">
-                        <DeleteOutlined onClick={() => delConversations(item[0])}></DeleteOutlined>
+                        <DeleteOutlined onClick={() => delConversations(item[1])}></DeleteOutlined>
                     </div>
                 </div>);
         });
@@ -492,28 +475,6 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         menuClose();
     }
 
-    const userLogin = () => {
-        if (process.env.NODE_ENV === 'production') {
-            let param = {
-                appId: readConfig("appId")
-            };
-            userLoginImpl(param).then((data: any) => {
-                window.location.href = data.result;
-            });
-        } else {
-            let param = {
-                appId: readConfig("appId"),
-                phone: readConfig("phone"),
-                password: readConfig("password"),
-                loginType: 1,
-                deviceId: 1,
-                deviceName: readConfig("deviceName"),
-                deviceType: 4
-            };
-            userLoginByPhoneImpl(param);
-        }
-    }
-
     const avatarClick = () => {
         const dropdown = document.getElementById("dropdown");
         if (dropdown) {
@@ -528,14 +489,16 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const renderLogin = () => {
         if (isLoggedIn) {
             var avatarUrl = localStorage.getItem('avatarUrl');
-            return (<a id="user-menu">
-                {avatarUrl ? <Avatar size={40} src={avatarUrl} onClick={avatarClick} /> : <Avatar onClick={avatarClick} size={40} >Me</Avatar>}
-                <div id="dropdown" className="dropdown-content">
-                    <div onClick={() => handleMenuClick('account')}><PayCircleOutlined /><span>订阅</span></div>
-                    <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
-                    <div onClick={doLoginOut}><LogoutOutlined /><span>登出</span></div>
-                </div>
-            </a>);
+            return (
+                <a id="user-menu">
+                    {avatarUrl ? <img className="avatarImg" src={avatarUrl} onClick={avatarClick} /> : <img className="avatarImg" src={avatarImg} onClick={avatarClick} ></img>}
+                    <div id="dropdown" className="dropdown-content">
+                        <div onClick={() => handleMenuClick('account')}><PayCircleOutlined /><span>订阅</span></div>
+                        <div onClick={showUserProfile}><ControlOutlined /><span>控制台</span></div>
+                        <div onClick={() => UserService.doLoginOut(readConfig("logoutUrl"))}><LogoutOutlined /><span>登出</span></div>
+                    </div>
+                </a>
+            );
         }
         const accessTokenOrigin = document.cookie.split('; ').find(row => row.startsWith('accessToken='));
         if (accessTokenOrigin) {
@@ -543,7 +506,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             loadCurrentUser();
             setIsLoggedIn(true);
         }
-        return (<Button name='aiLoginBtn' onClick={userLogin}>登录</Button>);
+        return (<button className="loginButton" name='aiLoginBtn' onClick={() => { navigate("/user/login") }}>登录</button>);
     }
 
     const renderRightContainer = (tab: String) => {
@@ -560,15 +523,18 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                                 onChange={handleChatInputChange}
                                 onKeyDown={handleEnterKey}
                                 placeholder="输入会话内容，按Enter快捷发送" />
-                            <Button icon={<SendOutlined style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                transform: 'rotate(-45deg)',
-                                justifyContent: 'center'
-                            }} />}
-                                loading={loadings}
+                            <button
                                 onClick={handleSend}
-                            ></Button>
+                            >
+                                <span>
+                                    <SendOutlined style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        transform: 'rotate(-45deg)',
+                                        justifyContent: 'center'
+                                    }} />
+                                </span>
+                            </button>
                         </div>
                         <div className="disclaimer">
                             <span>模型：GPT3.5-turbo</span>
@@ -609,6 +575,18 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         return (<div>开发中，敬请期待...</div>);
     }
 
+    const customStyles = {
+        content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+            borderRadius: '10px'
+        },
+    };
+
     return (
         <div className="chat-main-body">
             <div className="conversation">
@@ -635,32 +613,53 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 </div>
             </div>
             {renderRightContainer(props.menu)}
-            <Modal title="订阅"
-                open={showGoodsPopup}
-                width={1000}
-                onCancel={() => setShowGoodsPopup(false)}
-                footer={null}>
+            <Modal contentLabel="订阅"
+                isOpen={showGoodsPopup}
+                style={customStyles}
+                onRequestClose={() => setShowGoodsPopup(false)}
+            >
                 <Goods refreshUrl={readConfig("refreshUserUrl")} appId={readConfig("appId")} store={store}></Goods>
             </Modal>
-            <Modal title="编辑会话标题"
-                open={showEditTitlePopup}
-                width={600}
-                onOk={() => {
-                    let params = {
-                        id: currEditConversation?.id,
-                        title: currEditConversation?.title
-                    };
-                    editConversation(params).then((resp:any) => {
-                        if (ResponseHandler.responseSuccess(resp)) {
-                            setShowEditTitlePopup(false);
-                            fetchConversations();
-                        }
-                    });
-                }}
-                onCancel={() => setShowEditTitlePopup(false)}>
-                <Input value={currEditConversation?.title.toString()}
-                    onChange={(e) => { handleTitleChange(e) }}></Input>
+            <Modal
+                isOpen={showEditTitlePopup}
+                style={customStyles}>
+                <div className="editContainer">
+                    <input className="form-control" value={currEditConversation?.title.toString()}
+                        onChange={(e) => { handleTitleChange(e) }}></input>
+                    <button className="btn btn-primary" onClick={() => {
+                        let params = {
+                            id: currEditConversation?.id,
+                            title: currEditConversation?.title
+                        };
+                        editConversation(params).then((resp: any) => {
+                            if (ResponseHandler.responseSuccess(resp)) {
+                                setShowEditTitlePopup(false);
+                                fetchConversations();
+                            }
+                        });
+                    }}>确认</button>
+                    <button className="btn btn-primary" onClick={() => setShowEditTitlePopup(false)}>取消</button>
+                </div>
             </Modal>
+            <Modal contentLabel="删除确认"
+                isOpen={showDelTitlePopup}
+                style={customStyles}>
+                <div>确定要删除会话吗？</div>
+                <div className="editContainer">
+                    <button className="btn btn-primary" onClick={() => {
+                        let id = currEditConversation?.id;
+                        if(!id) return;
+                        delConversation(id).then((response: any) => {
+                            if (ResponseHandler.responseSuccess(response)) {
+                                const newMap = new Map([...loadedConversations].filter(([key, value]) => key !== id));
+                                setLoadedConversations(newMap);
+                            }
+                        });
+                    }}>确认删除</button>
+                    <button className="btn btn-primary" onClick={() => {setShowDelTitlePopup(false)}}>取消</button>
+                </div>
+            </Modal>
+            <ToastContainer />
         </div>
     );
 }

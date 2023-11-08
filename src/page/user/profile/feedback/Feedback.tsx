@@ -1,12 +1,12 @@
 import withConnect from "@/page/component/hoc/withConnect";
-import { Button, Input, message } from "antd";
 import { useState } from "react";
-import './Feedback.css';
+import styles from "./Feedback.module.css";
 import { submitFeedback } from "@/service/user/FeedbackService";
 import { isLoggedIn } from "@/service/user/UserService";
 import { ResponseHandler } from "rdjs-wheel";
+import { toast, ToastContainer } from 'react-toastify';
 
-const Feedback: React.FC = (props: any) => {
+const Feedback: React.FC = () => {
 
     const [feedbackValue, setFeedbackValue] = useState('');
 
@@ -15,8 +15,8 @@ const Feedback: React.FC = (props: any) => {
     }
 
     const handleFeedback = () => {
-        if(!isLoggedIn){
-            message.warning("请登录后提交反馈");
+        if (!isLoggedIn) {
+            toast.warning("请登录后提交反馈");
         }
         if (feedbackValue == null || feedbackValue.length == 0) {
             return;
@@ -25,19 +25,22 @@ const Feedback: React.FC = (props: any) => {
             feedback: feedbackValue
         };
         submitFeedback(params).then((data) => {
-            if(ResponseHandler.responseSuccess(data)){
-                message.info("提交成功");
+            if (ResponseHandler.responseSuccess(data)) {
+                toast.info("提交成功");
             }
         });
     }
 
-    return (<div id="feedback">
-        <p>您可以反馈使用问题、建议。</p>
-        <div className="feedback-area">
-            <Input onChange={handleInputChange} placeholder="请输入反馈内容"></Input>
-            <Button type="primary" onClick={handleFeedback} className="feedback-submit">提交反馈</Button>
+    return (
+        <div id="feedback">
+            <p>您可以反馈使用问题、建议。</p>
+            <div className={styles.feedbackArea}>
+                <textarea rows={3} onChange={handleInputChange} placeholder="请输入反馈内容"></textarea>
+                <button onClick={handleFeedback} className={styles.feedbackSubmit}>提交反馈</button>
+            </div>
+            <ToastContainer />
         </div>
-    </div>);
+    );
 }
 
 export default withConnect(Feedback);

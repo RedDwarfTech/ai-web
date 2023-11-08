@@ -42,4 +42,12 @@
     margin-top: 10px;
 }
 
+.dangerZoneRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 
+.loginRow {
+    margin-bottom: 20px;
+}

@@ -16,3 +16,8 @@ code {
 #root {
   height: 100vh;
 }
+
+:root {
+  --login-border-radius: 10px;
+  --login-input-height: 45px;
+}

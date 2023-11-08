@@ -1,5 +1,6 @@
 import { genImageAction } from "@/action/images/ImageAction";
-import { requestWithAction } from "@/common/XHRClient";
+import store from "@/store/store";
+import { XHRClient } from "rd-component";
 
 export function genImage(params: any) {
     const config = {
@@ -8,5 +9,5 @@ export function genImage(params: any) {
         headers: {'Content-Type': 'application/json'},
         data: JSON.stringify(params)
     };
-    return requestWithAction(config, genImageAction);
+    return XHRClient.requestWithAction(config, genImageAction,store);
 }

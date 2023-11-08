@@ -2,6 +2,7 @@ import React from "react";
 import "./ChatContext.css"
 import ReactMarkdown from 'react-markdown';
 import OmsSyntaxHighlight from "./OmsSyntaxHighlight";
+// const OmsSyntaxHighlight = React.lazy(() => import('./OmsSyntaxHighlight'));
 
 export interface IChatMsg {
     msg: string
