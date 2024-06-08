@@ -6,7 +6,7 @@ let devConfigMap = new Map([
     ["appHome","http://192.168.10.93:8084"],
     ["appId" , "vOghoo10L9"],
     ["phone","+8615683761628"],
-    ["password","12345678"],
+    ["password",""],
     ["deviceName","dolphin's macbook pro"]
 ]); 
 
