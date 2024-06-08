@@ -2,7 +2,7 @@ let devConfigMap = new Map([
     ["wssUrl", "ws://192.168.10.93:58080/post/websocket"],
     ["logoutUrl", "http://dev-ai.poemhub.top"],
     ["baseAuthUrl","http://192.168.10.93:11014"],
-    ["accessTokenUrlPath","/ai/auth/access-token/refresh"],
+    ["accessTokenUrlPath","/infra/auth/access-token/refresh"],
     ["appHome","http://192.168.10.93:8084"],
     ["appId" , "vOghoo10L9"],
     ["phone","+8615683761628"],
