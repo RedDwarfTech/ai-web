@@ -220,7 +220,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         return getConversations(convReq);
     }
 
-    const onSseMessage = (msg: string, eventSource: EventSourcePolyfill) => {
+    const onSseMessage = (msg: string, eventSource: EventSource) => {
         const serverMsg: ISse35ServerMsg = JSON.parse(msg);
         if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "vip-expired") {
             setLoadings(false);
@@ -325,9 +325,11 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         };
         appenSseMsg(msg, "prompt");
         setInputValue('');
+        const accessToken = localStorage.getItem("x-access-token");
         let ask: ChatAsk = {
             prompt: encodeURIComponent(inputValue),
-            cid: cid
+            cid: cid,
+            access_token: accessToken!
         };
         setTimeout(() => setLoadings(false), 15000);
         doAskPreCheck(ask, onSseMessage);
