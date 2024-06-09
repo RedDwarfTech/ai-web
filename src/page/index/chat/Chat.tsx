@@ -236,7 +236,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
             return;
         }
         if (serverMsg.choices && serverMsg.choices.length > 0) {
-            appenSseMsg(serverMsg, "chatgpt");
+            appendChatSseMsg(serverMsg, "chatgpt");
         }
         if (serverMsg.choices[0].finish_reason && serverMsg.choices[0].finish_reason === "stop") {
             setLoadings(false);
@@ -261,13 +261,42 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         })
     }
 
+    const appendChatSseMsg = (data: ISse35ServerMsg, msgType: string) => {
+        setSseChatMsg((prevMapState) => {
+            const newMapState = new Map<string, ISseMsg>(prevMapState);
+            if (newMapState.has(data.id)) {
+                const legacyMsg = newMapState.get(data.id)!.msg;
+                let message;
+                if (data.choices !== undefined && data.choices.length > 0) {
+                    message = legacyMsg + data.choices[0].message.content
+                }
+                const sseMsg: ISseMsg = {
+                    id: data.id,
+                    msg: message ?? "",
+                    created: TimeUtils.getFormattedTime(data.created * 1000),
+                    type: msgType
+                };
+                newMapState.set(data.id, sseMsg);
+            } else {
+                const sseMsg: ISseMsg = {
+                    id: data.id,
+                    created: TimeUtils.getFormattedTime(data.created * 1000),
+                    msg: data.choices[0].message.content,
+                    type: msgType
+                };
+                newMapState.set(data.id, sseMsg);
+            }
+            return newMapState;
+        });
+    }
+
     const appenSseMsg = (data: ISse35ServerMsg, msgType: string) => {
         setSseChatMsg((prevMapState) => {
             const newMapState = new Map<string, ISseMsg>(prevMapState);
             if (newMapState.has(data.id)) {
                 const legacyMsg = newMapState.get(data.id)!.msg;
                 let message;
-                if (data.choices != undefined && data.choices.length > 0) {
+                if (data.choices !== undefined && data.choices.length > 0) {
                     message = legacyMsg + data.choices[0].delta.content
                 }
                 const sseMsg: ISseMsg = {
@@ -317,6 +346,9 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                 {
                     delta: {
                         content: inputValue
+                    },
+                    message: {
+                        content: ""
                     },
                     index: 0,
                     finish_reason: ""

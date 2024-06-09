@@ -7,9 +7,14 @@ export interface ISse35ServerMsg {
 interface Choice35 {
     index: number,
     finish_reason: string,
-    delta: Content
+    delta: Content,
+    message: ChatMsg
 }
 
 interface Content {
+    content: string
+}
+
+interface ChatMsg {
     content: string
 }
