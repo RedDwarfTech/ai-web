@@ -127,7 +127,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         if (conversations && Object.keys(conversations).length > 0 && conversations.data && conversations.data.length > 0) {
             // https://stackoverflow.com/questions/76267002/how-to-locate-the-react-ocassionally-render-issue
             const newMapState = new Map<number, IConversation>(loadedConversations);
-            conversations.list.forEach((item: IConversation) => {
+            conversations.data.forEach((item: IConversation) => {
                 newMapState.set(item.id, item);
             });
             setHasMoreConversation(conversations.pagination.hasNextPage);
