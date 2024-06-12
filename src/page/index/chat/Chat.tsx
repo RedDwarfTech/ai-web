@@ -82,7 +82,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         // Get the scroll height of the textarea
         const taHeight = calcHeight(ta, taLineHeight);
         // calculate the number of lines
-        if (taHeight == undefined) {
+        if (taHeight === undefined) {
             return;
         }
         const numberOfLines = Math.ceil(taHeight / taLineHeight);
@@ -124,7 +124,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     };
 
     React.useEffect(() => {
-        if (conversations && Object.keys(conversations).length > 0 && conversations.list && conversations.list.length > 0) {
+        if (conversations && Object.keys(conversations).length > 0 && conversations.data && conversations.data.length > 0) {
             // https://stackoverflow.com/questions/76267002/how-to-locate-the-react-ocassionally-render-issue
             const newMapState = new Map<number, IConversation>(loadedConversations);
             conversations.list.forEach((item: IConversation) => {
