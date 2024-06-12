@@ -26,7 +26,6 @@ import Profile from "@/page/user/profile/Profile";
 import ChatList from "./component/ChatList";
 import chatPic from "@/asset/icon/chat/chat.svg";
 import { Prompt, getNewestRecord, getToIdb, insertToIdb } from "@/storage/indexdb/idb";
-import { EventSourcePolyfill } from "event-source-polyfill";
 import withConnect from "@/page/component/hoc/withConnect";
 import store from "@/store/store";
 import "rd-component/dist/style.css";
@@ -471,7 +470,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
         sortedConversations.forEach((item) => {
             conversationList.push(
                 <div key={uuid()} onClick={() => handleConversation(item[0])} className="conversation-item">
-                    <img src={chatPic}></img>
+                    <img src={chatPic} alt=''></img>
                     <span title={item[1].title.toString()}>{item[1].title}</span>
                     <div>
                         <EditOutlined onClick={() => editConversations(item[1])}></EditOutlined>
