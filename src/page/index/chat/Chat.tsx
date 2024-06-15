@@ -32,6 +32,7 @@ import "rd-component/dist/style.css";
 import GenImages from "../images/GenImages";
 import avatarImg from "@/asset/icon/avatar.png";
 import { useNavigate } from "react-router-dom";
+import { ConversationItem } from '@/models/response/conversation/conversation_item';
 
 const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const [inputValue, setInputValue] = useState('');
@@ -173,7 +174,9 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     }, [loginUser]);
 
     React.useEffect(() => {
-        putCitems(citem);
+        if(citem){
+            putCitems(citem);
+        }
     }, [citem]);
 
     React.useEffect(() => {
@@ -387,28 +390,28 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     }
 
     const putCitems = (resp: any) => {
-        if (resp && resp.list && resp.list.length > 0) {
+        if (resp && resp.data && resp.data.length > 0) {
             const newMap = new Map<string, ISseMsg>();
-            const itemList = resp.list;
+            const itemList = resp.data;
             itemList.sort((a: any, b: any) => Number(a.createdTime) - Number(b.createdTime));
-            itemList.forEach((item: any) => {
-                if (item.questionTime) {
+            itemList.forEach((item: ConversationItem) => {
+                if (item.question_time) {
                     const sseMsg: ISseMsg = {
                         id: "x",
-                        created: TimeUtils.getFormattedTime(Number(item.questionTime)),
+                        created: TimeUtils.getFormattedTime(Number(item.question_time)),
                         msg: item.question,
                         type: "prompt"
                     };
-                    newMap.set(item.questionTime, sseMsg);
+                    newMap.set(item.question_time, sseMsg);
                 }
-                if (item.answerTime) {
+                if (item.answer_time) {
                     const sseMsg: ISseMsg = {
                         id: "x1",
-                        created: TimeUtils.getFormattedTime(Number(item.answerTime)),
+                        created: TimeUtils.getFormattedTime(Number(item.answer_time)),
                         msg: item.answer,
                         type: "chatgpt"
                     };
-                    newMap.set(item.answerTime, sseMsg);
+                    newMap.set(item.answer_time, sseMsg);
                 }
             })
             setSseChatMsg(newMap);
