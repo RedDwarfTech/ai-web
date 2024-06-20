@@ -1,7 +1,7 @@
 import { ISseMsg } from "@/models/chat/SseMsg";
 import withConnect from "@/page/component/hoc/withConnect";
 import { v4 as uuid } from 'uuid';
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import ChatContext from "./ChatContext";
 import chatMeImage from "@/asset/icon/chat-me.png";
 import chatgpt from "@/asset/icon/chatgpt.svg";
@@ -20,15 +20,26 @@ export interface IChatAskList {
  */
 const ChatList: React.FC<IChatAskList> = React.memo((props) => {
     const [subscribed, setSubscribed] = useState(isSubscribed() || false);
-    const { user } = useSelector((state: any) => state.user)
+    const { user } = useSelector((state: any) => state.user);
+    const messagesEnd = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
+    React.useEffect(() => {
+        scrollToBottom();
+    }, []);
+
+    React.useEffect(() => {
         if (!BaseMethods.isNull(user)) {
             if (Number(user.autoRenewProductExpireTimeMs) > new Date().getTime()) {
                 setSubscribed(true);
             }
         }
     }, [user]);
+
+    const scrollToBottom = () => {
+        if (messagesEnd && messagesEnd.current) {
+          messagesEnd.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
 
     const renderChat = () => {
         const tagList: JSX.Element[] = [];
@@ -42,13 +53,13 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
                 if (value.type === "prompt") {
                     tagList.push(
                         <div key={uuid()} className="chat-message">
-                            <img className="chat-me" src={chatMeImage}></img>
+                            <img alt="" className="chat-me" src={chatMeImage}></img>
                             <ChatContext msg={chatValue.msg}></ChatContext>
                         </div>);
                 } else {
                     tagList.push(
                         <div key={uuid()} className="chat-message">
-                            <img className="chat-me" src={chatgpt}></img>
+                            <img alt="" className="chat-me" src={chatgpt}></img>
                             <ChatContext msg={chatValue.msg}></ChatContext>
                         </div>);
                 }
@@ -62,10 +73,10 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
             <div className="use-guide">
                 <div className="use-guide-container">
                     <div className="demo-faq">
-                        <a href="https://reddwarftech.github.io/2023/04/16/genie/" target="_blank">了解Genie</a>
+                        <a href="https://reddwarftech.github.io/2023/04/16/genie/" target="_blank" rel="noreferrer">了解Genie</a>
                     </div>
                     <div className="demo-faq">
-                        <a href="https://reddwarftech.github.io/2023/07/13/genie-ppt/" target="_blank">用Genie快速自动生成PPT</a>
+                        <a href="https://reddwarftech.github.io/2023/07/13/genie-ppt/" target="_blank" rel="noreferrer">用Genie快速自动生成PPT</a>
                     </div>
                 </div>
             </div>
@@ -89,7 +100,7 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
     }
 
     return (
-        <div className="chat-list-body">
+        <div className="chat-list-body" ref={messagesEnd}>
             {renderChat()}
         </div>
     )
