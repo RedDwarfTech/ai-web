@@ -21,7 +21,7 @@ export interface IChatAskList {
 const ChatList: React.FC<IChatAskList> = React.memo((props) => {
   const [subscribed, setSubscribed] = useState(isSubscribed() || false);
   const { user } = useSelector((state: any) => state.user);
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     
