@@ -23,23 +23,9 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
   const { user } = useSelector((state: any) => state.user);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
-    
+  React.useLayoutEffect(() => {
+    scrollToBottom();
   }, [props.myMap]);
-
-  React.useEffect(() => {
-    setTimeout(
-        function() {
-            scrollToBottom();
-        }
-        .bind(this),
-        100
-    );
-  });
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
 
   React.useEffect(() => {
     if (!BaseMethods.isNull(user)) {
@@ -49,14 +35,18 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
     }
   }, [user]);
 
-  
+  const scrollToBottom = () => {
+    if (messagesEndRef && messagesEndRef.current) {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const renderChat = () => {
     const tagList: JSX.Element[] = [];
     if (props.myMap.size === 0 && !subscribed) {
-      // return newGuide();
+      return newGuide();
     } else if (props.myMap.size === 0 && subscribed) {
-      // return genieHomeGuide();
+      return genieHomeGuide();
     } else {
       props.myMap.forEach((value, key) => {
         let chatValue: ISseMsg = value;
@@ -80,10 +70,59 @@ const ChatList: React.FC<IChatAskList> = React.memo((props) => {
     }
   };
 
+  const genieHomeGuide = () => {
+    return (
+      <div className="use-guide">
+        <div className="use-guide-container">
+          <div className="demo-faq">
+            <a
+              href="https://reddwarftech.github.io/2023/04/16/genie/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              了解Genie
+            </a>
+          </div>
+          <div className="demo-faq">
+            <a
+              href="https://reddwarftech.github.io/2023/07/13/genie-ppt/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              用Genie快速自动生成PPT
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const newGuide = () => {
+    return (
+      <div className="steps-guide">
+        <div className="guide-container">
+          <div className="tips chat-tips">第一步：登录,点击左下侧按钮登录</div>
+          <div className="tips chat-tips">
+            第二步：订阅,点击登录头像-订阅菜单，选择订阅套餐，最低1元试用
+          </div>
+          <div className="tips chat-tips">
+            第三步：使用Genie,页面底部输入会话内容，开启聊天
+          </div>
+        </div>
+        <div>
+          {genieHomeGuide()}
+          <div className="tips chat-tips">
+            <strong>提示：</strong>每天有2次免费试用额度。
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="chat-list-body">
       {renderChat()}
-      <div ref={messagesEndRef} />
+      <div ref={messagesEndRef}></div>
     </div>
   );
 });
