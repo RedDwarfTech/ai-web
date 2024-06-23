@@ -615,8 +615,8 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
     const customStyles = {
         content: {
             top: '50%',
-            left: '50%',
-            right: 'auto',
+            left: '45%',
+            right: '45%',
             bottom: 'auto',
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)',
