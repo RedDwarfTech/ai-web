@@ -224,7 +224,7 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
 
     const onSseMessage = (msg: string, eventSource: EventSource) => {
         const serverMsg: ISse35ServerMsg = JSON.parse(msg);
-        if (serverMsg.choices[0] && serverMsg.choices[0].finish_reason === "vip-expired") {
+        if (serverMsg.choices[0] && serverMsg.choices[0].text === "vip-expired") {
             setLoadings(false);
             toast.info("充值会员继续使用");
             eventSource.close();

@@ -8,7 +8,8 @@ interface Choice35 {
     index: number,
     finish_reason: string,
     delta: Content,
-    message: ChatMsg
+    message: ChatMsg,
+    text: string
 }
 
 interface Content {

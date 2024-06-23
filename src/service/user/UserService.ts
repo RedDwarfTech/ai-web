@@ -6,7 +6,7 @@ import store from '@/store/store';
 export function getCurrentUser() {
     const config = {
         method: 'get',
-        url: '/post/user/current-user',
+        url: '/infra/user/current-user',
         headers: { 'Content-Type': 'application/json' }
     };
     const actionTypeString: string = UserActionType[UserActionType.GET_CURRENT_USER];
