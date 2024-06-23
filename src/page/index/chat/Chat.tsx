@@ -353,7 +353,8 @@ const Chat: React.FC<IChatAskResp> = (props: IChatAskResp) => {
                         content: ""
                     },
                     index: 0,
-                    finish_reason: ""
+                    finish_reason: "",
+                    text: ""
                 }
             ]
         };
